@@ -10,6 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//TODO should we add a Group table? 
+
 model Teacher {
   id             Int        @id @default(autoincrement())
   surname        String
@@ -30,7 +32,7 @@ model Degree {
 
 model Courses {
   id                Int                 @id @default(autoincrement())
-  COD_COURSE        Int
+  COD_COURSE        Int                 @unique
   TITLE_COURSE      String
   RequiredKnowledge RequiredKnowledge[]
 }
