@@ -1,0 +1,8 @@
+# Ignore npm package lock files and repositories recursively
+**/package-lock.json
+**/yarn.lock
+**/node_modules/
+
+# Ignore eventual .env and secrets
+**/.env
+**/.env*
