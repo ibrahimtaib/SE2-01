@@ -1,0 +1,20 @@
+{
+  "name": "services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:init": "sudo docker-compose up -d",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push --skip-generate",
+    "db:init": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
