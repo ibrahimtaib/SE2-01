@@ -39,17 +39,18 @@ model Courses {
 }
 
 model Career {
-  id           Int    @id @default(autoincrement())
-  COD_COURSE   Int
+  id           Int
+  COD_COURSE   Int     @id
   TITLE_COURSE String
   CFU          Int
   grade        Int
   date         Int
   // TODO add student Id here? check with teacher 
+  student      Student @relation(fields: [id], references: [id])
 }
 
 model Student {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   surname         String
   name            String
   gender          String
@@ -57,7 +58,8 @@ model Student {
   email           String
   COD_DEGREE      Int
   ENROLLMENT_YEAR Int
-  degree          Degree @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
+  degree          Degree   @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
+  Career          Career[]
 }
 
 model Proposal {
