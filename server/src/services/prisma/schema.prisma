@@ -11,7 +11,8 @@ datasource db {
 }
 
 //TODO should we add a Group table? 
-
+//TODO should the COD_* be a string? ex: a course code is usually a combination
+// of letters and numbers
 model Teacher {
   id             Int        @id @default(autoincrement())
   surname        String
@@ -23,11 +24,12 @@ model Teacher {
 }
 
 model Degree {
-  id           Int       @id @default(autoincrement())
-  COD_DEGREE   Int       @unique
+  id           Int        @id @default(autoincrement())
+  COD_DEGREE   Int        @unique
   TITLE_DEGREE String
   CFU          Int
   Student      Student[]
+  Proposal     Proposal[]
 }
 
 model Courses {
@@ -38,17 +40,17 @@ model Courses {
 }
 
 model Career {
-  id           Int    @id @default(autoincrement())
-  COD_COURSE   Int
+  id           Int
+  COD_COURSE   Int     @id
   TITLE_COURSE String
   CFU          Int
   grade        Int
   date         Int
-  // TODO add student Id here? check with teacher 
+  student      Student @relation(fields: [id], references: [id])
 }
 
 model Student {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   surname         String
   name            String
   gender          String
@@ -56,7 +58,8 @@ model Student {
   email           String
   COD_DEGREE      Int
   ENROLLMENT_YEAR Int
-  degree          Degree @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
+  degree          Degree   @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
+  Career          Career[]
 }
 
 model Proposal {
@@ -71,9 +74,10 @@ model Proposal {
   notes             String?
   expiration        DateTime
   level             String
-  cdsProgrammes     String
+  cds               Int
   teacher           Teacher             @relation(fields: [supervisor], references: [id])
   requiredKnowledge RequiredKnowledge[]
+  degree            Degree              @relation(fields: [cds], references: [id])
 }
 
 // Joint table between Courses and Proposal
