@@ -23,11 +23,12 @@ model Teacher {
 }
 
 model Degree {
-  id           Int       @id @default(autoincrement())
-  COD_DEGREE   Int       @unique
+  id           Int        @id @default(autoincrement())
+  COD_DEGREE   Int        @unique
   TITLE_DEGREE String
   CFU          Int
   Student      Student[]
+  Proposal     Proposal[]
 }
 
 model Courses {
@@ -71,9 +72,10 @@ model Proposal {
   notes             String?
   expiration        DateTime
   level             String
-  cdsProgrammes     String
+  cds               Int
   teacher           Teacher             @relation(fields: [supervisor], references: [id])
   requiredKnowledge RequiredKnowledge[]
+  degree            Degree              @relation(fields: [cds], references: [id])
 }
 
 // Joint table between Courses and Proposal
