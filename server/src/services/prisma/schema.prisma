@@ -45,7 +45,6 @@ model Career {
   CFU          Int
   grade        Int
   date         Int
-  // TODO add student Id here? check with teacher 
   student      Student @relation(fields: [id], references: [id])
 }
 
