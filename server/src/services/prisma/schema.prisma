@@ -26,11 +26,11 @@ model Teacher {
 model Degree {
   COD_DEGREE   String     @id
   TITLE_DEGREE String
-  CFU          Int
   Student      Student[]
   Proposal     Proposal[]
 }
 
+//TODO This might be useless (irrelevant table)
 model Courses {
   id           Int    @id @default(autoincrement())
   COD_COURSE   Int    @unique
