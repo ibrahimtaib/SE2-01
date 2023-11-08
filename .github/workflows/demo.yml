@@ -87,14 +87,14 @@ jobs:
           cd server/src/tests
           ./badges.sh
 
-      # - name: Download artifacts
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: coverage-artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-artifacts
 
       - name: Generate coverage badges
         run: |
-          npx jest
+          cd server/src/tests
           npx jest-coverage-badges
 
       - name: Upload artifacts
