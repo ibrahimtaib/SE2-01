@@ -38,9 +38,9 @@ jobs:
           cd ../
 
       - name: Run Jest tests
-        run: | 
-        npx jest
-        npx jest-coverage-badges
+        run: |
+          npx jest
+          npx jest-coverage-badges
         env:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
