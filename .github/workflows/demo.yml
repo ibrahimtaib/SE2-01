@@ -38,15 +38,20 @@ jobs:
           cd ../
 
       - name: Run Jest tests
-        run: npx jest
+        run: | 
+        npx jest
+        npx jest-coverage-badges
         env:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
 
-    artifacts:
-      paths:
-        - server/src/tests/coverage/
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-artifacts
+          path: |
+            servers/src/tests/coverage/
 
   badges:
     runs-on: ubuntu-latest
@@ -68,9 +73,17 @@ jobs:
       - name: Generate coverage badges
         run: npx jest-coverage-badges
 
-    when: always
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-artifacts
 
-    artifacts:
-      paths:
-        - server/src/tests/coverage/
-        - server/src/tests/*.svg
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: badges
+          path: |
+            servers/src/tests/coverage/*.svg
+            servers/src/tests/*.svg
+
+    when: always
