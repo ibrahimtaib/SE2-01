@@ -29,6 +29,6 @@
       "src/**/*.js",
       "!./src/tests/**/*.js"
     ],
-    "coverageDirectory": "coverage"
+    "coverageDirectory": "src/tests/coverage"
   }
 }
