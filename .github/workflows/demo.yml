@@ -67,6 +67,9 @@ jobs:
         with:
           node-version: "latest"
 
+      - name: Install dependencies
+        run: npm i
+
       - name: Generate code quality badges
         run: server/src/tests/badges.sh
 
@@ -85,5 +88,3 @@ jobs:
           path: |
             servers/src/tests/coverage/*.svg
             servers/src/tests/*.svg
-
-    when: always
