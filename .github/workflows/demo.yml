@@ -84,8 +84,8 @@ jobs:
 
       - name: Generate code quality badges
         run: |
-          cd server
-          src/tests/badges.sh
+          cd server/src/tests
+          ./badges.sh
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
