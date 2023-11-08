@@ -48,6 +48,7 @@ jobs:
 
       - name: Run Jest tests
         run: |
+          cd server/
           npx jest
           npx jest-coverage-badges
         env:
