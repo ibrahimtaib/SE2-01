@@ -60,7 +60,7 @@ jobs:
         with:
           name: coverage-artifacts
           path: |
-            serverd/src/tests/coverage/
+            server/src/tests/coverage/
 
   badges:
     runs-on: ubuntu-latest
