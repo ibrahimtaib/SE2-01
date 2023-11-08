@@ -1,9 +1,6 @@
 name: CI/CD
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
   test-jest:
@@ -13,10 +10,13 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
           POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout code
@@ -25,17 +25,26 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "latest"
+          node-version: 16.13
 
       - name: Install dependencies
-        run: npm i
+        run: |
+          cd server/
+          npm i
 
       - name: Prepare PostgreSQL
         run: |
+          echo $DATABASE_URL
           cd server/src/services/
           npm run db:push
           npm run db:generate
           cd ../
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
 
       - name: Run Jest tests
         run: |
@@ -51,7 +60,7 @@ jobs:
         with:
           name: coverage-artifacts
           path: |
-            servers/src/tests/coverage/
+            serverd/src/tests/coverage/
 
   badges:
     runs-on: ubuntu-latest
@@ -66,6 +75,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "latest"
+
+      - name: Install dependencies
+        run: |
+          cd server/
+          npm i
 
       - name: Generate code quality badges
         run: server/src/tests/badges.sh
@@ -83,7 +97,5 @@ jobs:
         with:
           name: badges
           path: |
-            servers/src/tests/coverage/*.svg
-            servers/src/tests/*.svg
-
-    when: always
+            server/src/tests/coverage/*.svg
+            server/src/tests/*.svg
