@@ -83,15 +83,17 @@ jobs:
           pip3 install anybadge
 
       - name: Generate code quality badges
-        run: server/src/tests/badges.sh
-
-      - name: Generate coverage badges
-        run: npx jest-coverage-badges
+        run: |
+          cd server
+          src/tests/badges.sh
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: coverage-artifacts
+
+      - name: Generate coverage badges
+        run: npx jest-coverage-badges
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
