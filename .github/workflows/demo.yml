@@ -80,6 +80,7 @@ jobs:
         run: |
           cd server/
           npm i
+          pip3 install anybadge
 
       - name: Generate code quality badges
         run: server/src/tests/badges.sh
