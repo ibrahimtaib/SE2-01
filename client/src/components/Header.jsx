@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from 'react-bootstrap/Navbar';
-import logo from '../assets/logo.svg'
+import logo from '../assets/logo.svg';
 
 
 function Header({ isLoggedIn }) {
@@ -27,14 +26,13 @@ function Header({ isLoggedIn }) {
   }, []);
 
   return (
-    <>
       <header className="header">
-        <nav className={`bg-white w-full flex items-center justify-between flex-wrap p-6 shadow-lg '${isSticky && 'fixed top-0'}'`}>
-          <div className="flex items-center text-black mr-6">
-            <img src={logo} alt="logo" />
-            <Link to="/"><span className="font-semibold text-xl tracking-tight text-slate-800"> <br></br>Thesis Proposals </span></Link>
-
-          </div>
+        <nav className={`bg-white w-full flex items-center justify-between flex-wrap p-4 border-b-2 drop-shadow-xl ${isSticky && 'fixed top-0'}`}>
+            <Link className="flex items-center text-black mr-6" to="/">
+              <img 
+              className='h-10 '
+              src={logo} alt="logo" />
+            </Link>
 
           <div>
             <button
@@ -51,12 +49,8 @@ function Header({ isLoggedIn }) {
             </button>
 
           </div>
-
         </nav>
       </header>
-      
-    </>
-
   )
 }
 
