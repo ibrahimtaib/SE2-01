@@ -1,14 +1,13 @@
-import { useState } from 'react'
+/* eslint-disable react/prop-types */
 import Header from '../components/Header';
 import InsertForm from '../components/InsertForm';
 
 
-function InsertPage() {
-  const [LoggedIn, setLoggedIn] = useState(false);
+function InsertPage({isLoggedIn}) {
 
   return (
     <>
-    <Header></Header>
+    <Header isLoggedIn={isLoggedIn}/>
     <InsertForm />
     </>
   )
