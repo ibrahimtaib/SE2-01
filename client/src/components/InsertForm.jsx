@@ -4,6 +4,19 @@ import Datetime from 'react-datetime';
 
 export default function InsertForm() {
 
+    // TODO: Replace mock data with database data
+    const supervisors = ["Alice Smith", "Bob Johnson", "Carol Brown"];
+
+    const supervisorOptions = supervisors.map((supervisor, index) => (
+        <option key={index}>{supervisor}</option>
+      ));
+
+
+    const isValidDate = (currentDate) => {
+        // Impedisce la selezione di date precedenti a oggi
+        return currentDate.isSameOrAfter(new Date(), 'day');
+    };
+
 
 
 
@@ -30,8 +43,9 @@ export default function InsertForm() {
                                                     name="title"
                                                     id="title"
                                                     autoComplete="title"
-                                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 invalid:ring-red-500"
                                                     placeholder=""
+                                                    required
                                                 />
                                             </div>
                                         </div>
@@ -43,6 +57,7 @@ export default function InsertForm() {
                                         <label className="block text-sm font-medium leading-6 text-gray-900">
                                             Description
                                         </label>
+                                        <p className="mt-3 text-sm leading-6 text-gray-600">Write a short description about the thesis.</p>
                                         <div className="mt-2">
                                             <textarea
                                                 id="description"
@@ -50,10 +65,10 @@ export default function InsertForm() {
                                                 rows={3}
                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 defaultValue={''}
-                                                placeholder="Short description about your thesis..."
+                                                placeholder=""
                                             />
                                         </div>
-                                        <p className="mt-3 text-sm leading-6 text-gray-600">Write a short description about the thesis.</p>
+                                        
                                     </div>
                                 </div>
 
@@ -64,7 +79,7 @@ export default function InsertForm() {
                                         </label>
                                         <div className="mt-2">
                                             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                                                <Datetime timeFormat={false} />
+                                                <Datetime timeFormat={false} isValidDate={isValidDate} dateFormat="DD/MM/YYYY" />
                                             </div>
                                         </div>
                                     </div>
@@ -113,12 +128,9 @@ export default function InsertForm() {
                                         </label>
                                         <div className="mt-2">
                                             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                                                <input
-                                                    type="text"
-                                                    name="supervisor"
-                                                    id="supervisor"
-                                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:leading-6"
-                                                />
+                                                <select className="block appearance-none w-full  border border-gray-400 text-gray-700  rounded leading-tight focus:outline-none focus:border-gray-500" id="job-type" name="job-type">
+                                                    {supervisorOptions}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -197,7 +209,7 @@ export default function InsertForm() {
                                     </div>
                                 </div>
 
-                                
+
 
 
 
