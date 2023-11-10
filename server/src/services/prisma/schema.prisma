@@ -58,8 +58,20 @@ model Student {
   email           String
   COD_DEGREE      String
   ENROLLMENT_YEAR Int
+  applications    Application[]
   degree          Degree   @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
   Career          Career[]
+}
+
+model Application{
+  id                Int      @id @default(autoincrement())
+  date              DateTime
+  status            String
+  comment           String?
+  STUDENT_ID        Int
+  PROPOSAL_ID       Int
+  student           Student   @relation(fields: [STUDENT_ID], references: [id])
+  proposal          Proposal  @relation(fields: [PROPOSAL_ID], references: [id]) 
 }
 
 model Proposal {
@@ -68,6 +80,7 @@ model Proposal {
   supervisor        Int
   coSupervisors     String?
   keywords          String[]
+  applications      Application[]
   type              String
   groups            String[]
   description       String
