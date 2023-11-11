@@ -1,14 +1,16 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({log:["query"]});
 
 module.exports = {
-    getProposalsByLevel: async (level) => {
+
+    getProposalsByCDS: async (cds) => {
+      console.log("dentro alla funzione")
       return new Promise((resolve, reject) =>
-        prisma.proposal
+        prisma.Proposal
           .findMany({
-            where: {
-              level: level,
-            },
+            where:{
+              cds: cds
+            }
           })
           .then((proposals) => {
             return resolve(proposals);
@@ -21,5 +23,7 @@ module.exports = {
           })
       );
     },
+
+
   };
   

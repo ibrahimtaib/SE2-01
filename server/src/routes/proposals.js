@@ -1,14 +1,19 @@
-const coursesController = require("../controllers/proposals");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+const proposalsController = require("../controllers/proposals");
 
-router.get("/", async (req, res) => {
-  coursesController
-    .getCourses()
-    .then((courses) => {
-      res.status(200).json(courses);
-    })
-    .catch((error) => res.status(500).json(error));
-});
+
+router.get("/:cds", async (req, res) => {
+  console.log('Request received');
+    const cds = req.params.cds;
+ 
+    try {
+      const proposals = await proposalsController.getProposalsByCDS(cds);
+      res.status(200).json(proposals);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 module.exports = router;
