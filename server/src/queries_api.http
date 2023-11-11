@@ -1,4 +1,5 @@
 ##
-GET http://localhost:3001/proposals/CDS1 HTTP/1.1
+GET http://localhost:3001/proposals/cds/CDS1 HTTP/1.1
 ###
-
+GET http://localhost:3001/proposals/title/titolo%20proposta%201 HTTP/1.1
+###
