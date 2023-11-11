@@ -4,7 +4,6 @@ const proposalsController = require("../controllers/proposals");
 
 
 router.get("/:cds", async (req, res) => {
-  console.log('Request received');
     const cds = req.params.cds;
  
     try {
