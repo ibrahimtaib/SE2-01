@@ -1,0 +1,11 @@
+##
+GET http://localhost:3001/proposals/cds/CDS1 HTTP/1.1
+###
+GET http://localhost:3001/proposals/title/titolo%20proposta%20 HTTP/1.1
+###
+GET http://localhost:3001/proposals/expiration/2023-11-30 HTTP/1.1
+###
+GET http://localhost:3001/proposals/type/magistrale HTTP/1.1
+###
+GET http://localhost:3001/proposals/cosupervisor/rossi HTTP/1.1
+###
