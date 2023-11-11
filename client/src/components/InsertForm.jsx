@@ -12,8 +12,10 @@ const Types = {
 }
 
 export default function InsertForm() {
+    //TODO: put this states in App.jsx (they are for sure needed somewhere else later in development)
     const [levels, setLevels] = useState(["Bachelor", "Master", "PhD"]);
     const [supervisors, setSupervisors] = useState([]);
+    const [degrees, setDegrees] = useState([]);
 
     const navigateTo = useNavigate();
 
@@ -23,7 +25,7 @@ export default function InsertForm() {
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
-            cds: "0",
+            cds: "0", //TODO: change with effective degree later
             supervisor: parseInt(data.supervisor),
             coSupervisor: parseInt(data.coSupervisor),
             keywords: data.keywords.split(',').map((keyword) => keyword.trim()),
@@ -31,6 +33,7 @@ export default function InsertForm() {
             type: Types.experimental,
         })
         console.log("formdata", data);
+        //TODO: show Proposal added and verify with .then and .catch!
     }
 
     useEffect(() => {
@@ -43,6 +46,15 @@ export default function InsertForm() {
                 )
         }
         getSupervisors();
+        const getDegrees = () => {
+            api.get('/degrees')
+                .then((response) => {
+                    console.log("get degrees", response.data);
+                    setSupervisors(response.data);
+                }
+                )
+        }
+        getDegrees();
     }, [])
 
     return (
