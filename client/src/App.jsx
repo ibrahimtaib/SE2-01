@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import { React, useState, useEffect, useContext } from 'react';
+import { BrowserRouter, Routes, Route, Outlet, useNavigate, Navigate } from 'react-router-dom';
+import { Col, Container, Row, Spinner, Toast } from 'react-bootstrap';
+import DefaultRoute from './components/DefaultRoute';
 import './App.css'
+import { UserContext, MessageContext, DirtyContext } from './Context';
+import MainPage from './pages/MainPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  // This state keeps track if the user is currently logged-in.
+  const [loggedIn, setLoggedIn] = useState(false);
+  // This state contains the user's info.
+  const [user, setUser] = useState(null);
+
+  const [message, setMessage] = useState('');
+
+  const handleErrors = (err) => {
+    let msg = '';
+    if (err.error) msg = err.error;
+    else if (String(err) === "string") msg = String(err);
+    else msg = "Unknown Error";
+    setMessage(msg);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Container fluid className="App p-0">
+        <Routes>
+          <Route path='/' element={<MainPage/>}></Route>
+          <Route path='/*' element={<DefaultRoute />} />
+        </Routes>
+      </Container>
+    </BrowserRouter>
+  );
 }
 
 export default App
