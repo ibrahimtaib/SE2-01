@@ -2,8 +2,20 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const proposalsController = require("../controllers/proposals");
 
+router.get("/title/:searchString", async (req, res) => {
+  const searchString = req.params.searchString;
 
-router.get("/:cds", async (req, res) => {
+  try {
+    const proposals = await proposalsController.getProposalsByTitle(searchString);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+router.get("/cds/:cds", async (req, res) => {
     const cds = req.params.cds;
  
     try {
