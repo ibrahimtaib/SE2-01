@@ -4,7 +4,6 @@ const prisma = new PrismaClient({log:["query"]});
 module.exports = {
 
     getProposalsByCDS: async (cds) => {
-      console.log("dentro alla funzione")
       return new Promise((resolve, reject) =>
         prisma.Proposal
           .findMany({
