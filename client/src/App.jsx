@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Outlet, useNavigate, Navigate } from 'rea
 import { Col, Container, Row, Spinner, Toast } from 'react-bootstrap';
 import DefaultRoute from './components/DefaultRoute';
 import './App.css'
+import API from './API';
 import { UserContext, MessageContext} from './Context';
 import MainPage from './pages/MainPage';
 
@@ -17,6 +18,8 @@ function App() {
 
   const [message, setMessage] = useState('');
 
+  const [ProposalsList, setProposalsList] = useState([]);
+
   const handleErrors = (err) => {
     let msg = '';
     if (err.error) msg = err.error;
@@ -25,11 +28,25 @@ function App() {
     setMessage(msg);
   }
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        API.getAllProposals().then((a) => {
+          setProposalsList(a)
+        })
+          .catch((err) => console.log(err));
+      } catch (err) {
+
+      }
+    };
+    init();
+  }, []);
+
   return (
     <BrowserRouter>
       <Container fluid className="App p-0">
         <Routes>
-          <Route path='/' element={<MainPage/>}></Route>
+          <Route path='/' element={<MainPage ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>}></Route>
           <Route path='/*' element={<DefaultRoute />} />
         </Routes>
       </Container>
