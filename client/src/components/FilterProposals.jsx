@@ -73,4 +73,28 @@ function RightSide() {
     );
 }
 
+const MyDatePicker = () => {
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    useEffect(() => {
+        setSelectedDate(dayjs().toDate());
+    }, []);
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    };
+
+    return (
+        <>
+            <br/>
+            <DatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy" // Modifica il formato della data come desiderato
+                className="form-control"
+            />
+        </>
+    );
+};
+
 export default FilterProposals;
