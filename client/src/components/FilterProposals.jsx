@@ -62,4 +62,15 @@ function LeftSide() {
     );
 }
 
+function RightSide() {
+    return (
+        <>
+            <ProposalCard></ProposalCard>
+            <ProposalCard></ProposalCard>
+            <ProposalCard></ProposalCard>
+            <ProposalCard></ProposalCard>
+        </>
+    );
+}
+
 export default FilterProposals;
