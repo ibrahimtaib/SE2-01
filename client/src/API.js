@@ -66,8 +66,21 @@ async function getAllProposals() {
       throw proposals;
     }
   }
+
+  async function getAllCds() {
+    const response = await fetch(`${URL}proposals/cds`); // Attendere che la Promise si risolva
+    const cdsList = await response.json(); // Attendere che la Promise si risolva
+    console.log(cdsList)
+    if (response.ok) {
+      return cdsList.map((e) => ({
+        title:e,
+      }));
+    } else {
+      throw cdsList;
+    }
+  }
   
   
 
-  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor};
+  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor, getAllCds};
 export default API;
