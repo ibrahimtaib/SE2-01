@@ -20,4 +20,46 @@ function FilterProposals() {
     );
 }
 
+function LeftSide() {
+    return (
+        <>
+            <Form>
+                <Form.Group className="mb-3">
+                    <Form.Label>Insert Title</Form.Label>
+                    <Form.Control placeholder="Title" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Insert Teacher</Form.Label>
+                    <Form.Control placeholder="Teacher" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Insert Supervisor</Form.Label>
+                    <Form.Control placeholder="Supervisor" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Insert Co-Supervisor</Form.Label>
+                    <Form.Control placeholder="Co-Supervisor" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Insert Level</Form.Label>
+                    <Form.Select>
+                        <option>Disabled select</option>
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Insert CDS</Form.Label>
+                    <Form.Select>
+                        <option>Disabled select</option>
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Select a Expiration Date</Form.Label>
+                    <MyDatePicker></MyDatePicker>
+                </Form.Group>
+                <Button type="submit">Submit</Button>
+            </Form>
+        </>
+    );
+}
+
 export default FilterProposals;
