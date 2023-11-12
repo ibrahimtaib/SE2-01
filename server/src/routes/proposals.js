@@ -2,6 +2,24 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const proposalsController = require("../controllers/proposals");
 
+router.get("/cds", async (req, res) => {
+  proposalsController
+    .getAllCds()
+    .then((cdsList) => {
+      res.status(200).json(cdsList);
+    })
+    .catch((error) => res.status(500).json(error));
+});
+
+router.get("/", async (req, res) => {
+  proposalsController
+    .getProposals()
+    .then((proposals) => {
+      res.status(200).json(proposals);
+    })
+    .catch((error) => res.status(500).json(error));
+});
+
 router.get("/title/:searchString", async (req, res) => {
   const searchString = req.params.searchString;
 
