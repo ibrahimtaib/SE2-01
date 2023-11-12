@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Outlet, useNavigate, Navigate } from 'rea
 import { Col, Container, Row, Spinner, Toast } from 'react-bootstrap';
 import DefaultRoute from './components/DefaultRoute';
 import './App.css'
-import { UserContext, MessageContext, DirtyContext } from './Context';
+import { UserContext, MessageContext} from './Context';
 import MainPage from './pages/MainPage';
 
 function App() {
