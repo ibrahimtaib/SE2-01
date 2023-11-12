@@ -1,48 +1,51 @@
-const degreesController = require("../controllers/degrees");
+const { getDegrees } = require('../../controllers/degrees.js');
+const { PrismaClient } = require('@prisma/client');
 
-// Mocking the PrismaClient and its method
-jest.mock("@prisma/client", () => {
-  const prismaMock = {
-    Degree: {
-      findMany: jest.fn(),
-    },
-  };
-  return { PrismaClient: jest.fn(() => prismaMock) };
-});
+// Mocking PrismaClient
+jest.mock('@prisma/client', () => ({
+    PrismaClient: jest.fn(() => ({
+      degree: {
+        findMany: jest.fn(() => [{ id: 1, COD_DEGREE: 123, TITLE_DEGREE: 'Example Degree', CFU: 3 }]),
+      },
+    })),
+  }));
 
-describe('Degrees Controller Tests', () => {
-  beforeEach(() => {
-    // Clear all instances and calls to constructor and all methods
+describe('getDegrees function', () => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('getDegrees function - Successful Scenario', async () => {
-    const mockDegrees = [{ id: 1, COD_COURSE: 101, TITLE_COURSE: 'Example Course' }];
-    const expected = mockDegrees;
+  it('should resolve with degrees from the database', async () => {
+    const mockedDegrees = [
+      { id: 1, COD_DEGREE: 123, TITLE_DEGREE: 'Example Degree',CFU: 3 },
+      // Add more mocked degrees as needed for thorough testing
+    ];
+    const mockFindMany = jest.fn().mockResolvedValue(mockedDegrees);
+    PrismaClient.mockImplementation(() => ({
+      degree: {
+        findMany: mockFindMany,
+      },
+    }));
 
-    // Mocking the Prisma query response
-    const prismaMock = new degreesController.PrismaClient();
-    prismaMock.Degree.findMany.mockResolvedValue(mockDegrees);
-
-    const result = await degreesController.getDegrees();
-    expect(result).toEqual(expected);
-    // Verifying the method is called
-    expect(prismaMock.Degree.findMany).toHaveBeenCalled();
+    const result = await getDegrees();
+    expect(result).toEqual(mockedDegrees);
+    expect(mockFindMany).toHaveBeenCalled();
   });
 
-  test('getDegrees function - Error Scenario', async () => {
-    const error = 'Database Error';
-    
-    // Mocking the Prisma query to simulate an error
-    const prismaMock = new degreesController.PrismaClient();
-    prismaMock.Degree.findMany.mockRejectedValue(error);
+  it('should reject with an error if there is a database error', async () => {
+    const mockedError = new Error('Database error');
+    const mockFindMany = jest.fn().mockRejectedValue(mockedError);
+    PrismaClient.mockImplementation(() => ({
+      degree: {
+        findMany: mockFindMany,
+      },
+    }));
 
     try {
-      await degreesController.getDegrees();
-    } catch (e) {
-      expect(e).toEqual({ error: 'An error occurred while querying the database for teachers' });
-      // Verifying the method is called
-      expect(prismaMock.Degree.findMany).toHaveBeenCalled();
+      await getDegrees();
+    } catch (error) {
+      expect(error).toEqual({ error: "An error occurred while querying the database for teachers" });
     }
+    expect(mockFindMany).toHaveBeenCalled();
   });
 });
