@@ -51,10 +51,10 @@ module.exports = {
           error: "Proposal has already expired!",
         });
       }
-      if (proposal.applications.length > 0) {
+      if (proposal.applications.length > 0 || proposal.archived) {
         return reject({
           status: 400,
-          error: "The proposal has already been attributed",
+          error: "The proposal is no longer available",
         });
       }
 
