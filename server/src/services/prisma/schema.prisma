@@ -50,7 +50,7 @@ model Career {
 }
 
 model Student {
-  id              Int      @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   surname         String
   name            String
   gender          String
@@ -59,23 +59,23 @@ model Student {
   COD_DEGREE      String
   ENROLLMENT_YEAR Int
   applications    Application[]
-  degree          Degree   @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
+  degree          Degree        @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
   Career          Career[]
 }
 
-model Application{
-  id                Int      @id @default(autoincrement())
-  date              DateTime
-  status            String
-  comment           String?
-  STUDENT_ID        Int
-  PROPOSAL_ID       Int
-  student           Student   @relation(fields: [STUDENT_ID], references: [id])
-  proposal          Proposal  @relation(fields: [PROPOSAL_ID], references: [id]) 
+model Application {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @default(now())
+  status      String
+  comment     String?
+  STUDENT_ID  Int
+  PROPOSAL_ID Int
+  student     Student  @relation(fields: [STUDENT_ID], references: [id])
+  proposal    Proposal @relation(fields: [PROPOSAL_ID], references: [id])
 }
 
 model Proposal {
-  id                Int      @id @default(autoincrement())
+  id                Int           @id @default(autoincrement())
   title             String
   supervisor        Int
   coSupervisors     String?
@@ -88,7 +88,7 @@ model Proposal {
   expiration        DateTime
   level             String
   cds               String
-  teacher           Teacher  @relation(fields: [supervisor], references: [id])
+  teacher           Teacher       @relation(fields: [supervisor], references: [id])
   requiredKnowledge String
-  degree            Degree   @relation(fields: [cds], references: [COD_DEGREE])
+  degree            Degree        @relation(fields: [cds], references: [COD_DEGREE])
 }
