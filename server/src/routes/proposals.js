@@ -44,11 +44,35 @@ router.get("/cosupervisor/:surname", async (req, res) => {
   }
 });
 
+router.get("/supervisor/:surname", async (req, res) => {
+  const surname = req.params.surname;
+
+  try {
+    const proposals = await proposalsController.getProposalsBySupervisor(surname);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.get("/type/:type", async (req, res) => {
   const type = req.params.type;
 
   try {
     const proposals = await proposalsController.getProposalsByType(type);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/type/:level", async (req, res) => {
+  const level = req.params.level;
+
+  try {
+    const proposals = await proposalsController.getProposalsByLevel(level);
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
