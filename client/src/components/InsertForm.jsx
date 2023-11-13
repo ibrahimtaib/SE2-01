@@ -22,6 +22,7 @@ export default function InsertForm() {
     const { register, formState: { errors }, handleSubmit } = useForm()
 
     const onSubmit = (data) => {
+        //TODO: fix and trim
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
@@ -50,7 +51,7 @@ export default function InsertForm() {
             api.get('/degrees')
                 .then((response) => {
                     console.log("get degrees", response.data);
-                    setSupervisors(response.data);
+                    setDegrees(response.data);
                 }
                 )
         }
@@ -133,16 +134,18 @@ export default function InsertForm() {
 
             <div className="flex flex-col gap-y-1">
                 <label className="text-sm font-medium leading-6 text-gray-900">
-                    Programme
+                    Programme/Degree
                 </label>
                 {errors.cds?.type === "required" && (
                         <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
                     )}
-                <input
+                <select
                     {...register("cds", { required: true })}
                     id="cds"
                     className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2"
-                />
+                >
+                    {degrees.map(degree => <option key={degree.COD_DEGREE} value={degree.COD_DEGREE}>{degree.TITLE_DEGREE}</option>)}
+                </select>
             </div>
 
 
