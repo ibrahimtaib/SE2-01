@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import './ApplyForm.css'
-import Header from './Header.jsx'
+// import Header from './Header.jsx'
 import { Container, Row, Col, Form } from 'react-bootstrap';
 
 function ApplyForm() {
@@ -14,7 +14,7 @@ function ApplyForm() {
 
   return (
     <>
-    <Header/>
+    {/* <Header/> */}
     <div className='container-apply-form'>
       <h1 className='title-apply-form'>Apply to: Thesis Proposal</h1>
       <h3 id="supervisor-apply-form">Supervisor: Mario Rossi</h3>
