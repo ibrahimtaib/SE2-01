@@ -3,6 +3,43 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 module.exports = {
 
+  getAllCds: async () => {
+    return new Promise((resolve, reject) =>
+      prisma.Degree
+        .findMany({
+          select: {
+            TITLE_DEGREE: true,
+          },
+        })
+        .then((cds) => {
+          return resolve(cds.map((cd) => cd.TITLE_DEGREE));
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database for cds",
+          });
+        })
+    );
+  },
+  
+
+  getProposals: async () => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany()
+        .then((proposals) => {
+          return resolve(proposals);
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database for proposals",
+          });
+        })
+    );
+  },
+
   getProposalsByTitle: async (searchString) => {
     //const searchWords = searchString.split(' '); 
     return new Promise((resolve, reject) => {
@@ -31,6 +68,7 @@ module.exports = {
     return new Promise((resolve, reject) =>
       prisma.Proposal
         .findMany({
+<<<<<<< HEAD
           where: {
             coSupervisors: {
               contains: surname,
@@ -99,9 +137,7 @@ module.exports = {
     });
   },
   
-  
-  
-  
+
 
   getProposalsByExpirationDate: async (expirationDate) => {
     return new Promise((resolve, reject) =>

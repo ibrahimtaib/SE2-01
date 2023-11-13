@@ -7,15 +7,12 @@ import Header from '../components/Header'
 import NavBar from '../components/NavBar'
 import FilterProposals from '../components/FilterProposals'
 
-function MainPage({user}) {
-  const [myUser, setMyUser] = useState(user);
-  const [LoggedIn, setLoggedIn] = useState(false)
-
+function MainPage(props) {
   return (
         <>
           <Header/>
           <NavBar/>
-          <FilterProposals/>
+          <FilterProposals ProposalsList={props.ProposalsList} setProposalsList={props.setProposalsList}/>
         </>
   )
 }
