@@ -1,35 +1,83 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({log:["query"]});
+const prisma = require("./prisma.js");
 
 module.exports = {
   /**
-   * Function that returns all courses in the database.
+   * Function that creates an application in the database.
    * @param {}
-   * @returns {Promise<[{id: Number, COD_COURSE: Number, TITLE_COURSE: String}]>}
+   * @returns {}
    */
 
   createApplication: async (body) => {
-    const { date,status,comment,STUDENT_ID,PROPOSAL_ID,student,proposal} = body;
-    return new Promise((resolve, reject) =>
-        prisma.Application.create({
-        data:{
-            date,
-            status,
+    const { comment, STUDENT_ID, PROPOSAL_ID } = body;
+    return new Promise(async (resolve, reject) => {
+      // Fetch student
+      const student = await prisma.student.findUnique({
+        where: {
+          id: STUDENT_ID,
+        },
+      });
+      // Fetch proposal
+      const proposal = await prisma.proposal.findUnique({
+        where: {
+          id: PROPOSAL_ID,
+        },
+        include: {
+          applications: {
+            where: {
+              status: "accepted",
+            },
+          },
+        },
+      });
+
+      if (student == null || proposal == null) {
+        return reject({
+          status: 500,
+          error: "An error occurred",
+        });
+      }
+      // Check student is suitable
+      if (student.COD_DEGREE != proposal.COD_DEGREE) {
+        return reject({
+          status: 400,
+          error: "Student cannot apply to this proposal!",
+        });
+      }
+      // Check proposal is valid
+      if (proposal.expiration > Date.now()) {
+        return reject({
+          status: 400,
+          error: "Proposal has already expired!",
+        });
+      }
+      if (proposal.applications.length > 0) {
+        return reject({
+          status: 400,
+          error: "The proposal has already been attributed",
+        });
+      }
+
+      // Create application
+      prisma.application
+        .create({
+          data: {
+            status: "pending",
             comment,
             STUDENT_ID,
             PROPOSAL_ID,
-            student,proposal
-           }
+          },
         })
         .then((application) => {
-            return resolve(application);
+          resolve(application);
         })
         .catch((error) => {
           console.error(error);
-          return reject({
+          reject({
+            status: 500,
             error: "An error occurred while creating Application",
           });
-        })
-    );
+        });
+    });
   },
 };
