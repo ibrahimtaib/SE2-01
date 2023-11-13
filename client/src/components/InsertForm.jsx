@@ -4,11 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import api, { addPage } from "../api/api";
 
 const Types = {
-    experimental: "experimental",
-    abroad: "abroad",
-    literature: "literature",
-    theoretical: "theoretical",
-    development: "development"
+    experimental: "Experimental",
+    nrd: "Non-research dissertation",
 }
 
 export default function InsertForm() {
@@ -26,14 +23,13 @@ export default function InsertForm() {
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
-            cds: "0", //TODO: change with effective degree later
             supervisor: parseInt(data.supervisor),
             coSupervisor: parseInt(data.coSupervisor),
             keywords: data.keywords.split(',').map((keyword) => keyword.trim()),
             groups: [],
             type: Types.experimental,
         })
-        console.log("formdata", data);
+        //console.log("formdata", data);
         //TODO: show Proposal added and verify with .then and .catch!
     }
 
@@ -95,7 +91,7 @@ export default function InsertForm() {
                     defaultValue={''}
                     placeholder="Short description about the thesis..."
                 />
-                
+
             </div>
 
             <div className="flex justify-between items-center">
@@ -103,7 +99,7 @@ export default function InsertForm() {
                     <label className=" text-sm font-medium leading-6 text-gray-900" htmlFor='expiration-date'>
                         Expiration date
                     </label>
-                    
+
                     <input
                         {...register("expiration", { required: true })}
                         type='date'
@@ -111,7 +107,7 @@ export default function InsertForm() {
                         className=" w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 border border-gray-400 text-gray-700  leading-tight focus:outline-none focus:border-gray-500"
                         min={new Date().toISOString().split('T')[0]}
                     />
-                    
+
                 </div>
 
                 <div className="flex flex-col gap-y-1 w-2/5">
@@ -137,8 +133,8 @@ export default function InsertForm() {
                     Programme/Degree
                 </label>
                 {errors.cds?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
-                    )}
+                    <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                )}
                 <select
                     {...register("cds", { required: true })}
                     id="cds"
@@ -148,14 +144,36 @@ export default function InsertForm() {
                 </select>
             </div>
 
+            <div className="flex flex-col gap-y-1">
+                <label className="text-sm font-medium leading-6 text-gray-900">
+                    Type
+                </label>
+                {errors.type?.type === "required" && (
+                    <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                )}
+                <select
+                    {...register("level", { required: true })}
+                    className="w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 border border-gray-400 text-gray-700  leading-tight focus:outline-none focus:border-gray-500"
+                    id="level"
+                    name="level"
+                >
+                    {Object.entries(Types).map(([key, value]) => (
+                        <option key={key} value={key}>
+                            {value}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+
 
             <div className="flex flex-col gap-y-1">
                 <label className="text-sm font-medium leading-6 text-gray-900">
                     Supervisor
                 </label>
                 {errors.supervisor?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
-                    )}
+                    <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                )}
                 <select
                     {...register("supervisor", { required: true })}
                     id="supervisor"
@@ -169,14 +187,13 @@ export default function InsertForm() {
                 <label className="block text-sm font-medium leading-6 text-gray-900">
                     Co-Supervisors
                 </label>
-                
-                <select
-                    {...register("coSupervisor", { required: true })}
-                    id="coSupervisor"
+
+                <input
+                    {...register("coSupervisors", { required: false })}
+                    id="coSupervisors"
                     className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2"
-                >
-                    {supervisors.map(supervisor => <option key={supervisor.id} value={supervisor.id}>{supervisor.name} {supervisor.surname}</option>)}
-                </select>
+                />
+                <p className="mt-3 text-sm leading-6 text-gray-600">Write the co-supervisors (if any) separated by a comma (,)</p>
             </div>
 
             <div className="flex flex-col gap-y-1">
@@ -184,8 +201,8 @@ export default function InsertForm() {
                     Required knowledge
                 </label>
                 {errors.requiredKnowledge?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
-                    )}
+                    <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                )}
                 <input
                     {...register("requiredKnowledge", { required: true })}
                     id="requiredKnowledge"
@@ -197,7 +214,7 @@ export default function InsertForm() {
                 <label className="block text-sm font-medium leading-6 text-gray-900">
                     Notes - <span className="italic font-normal">Optional</span>
                 </label>
-                
+
                 <textarea
                     {...register("notes", { required: false })}
                     id="notes"
@@ -213,9 +230,9 @@ export default function InsertForm() {
                     Keywords
                 </label>
                 {errors.keywords?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
-                    )}
-                
+                    <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                )}
+
                 <input
                     {...register("keywords", { required: true })}
                     id="keywords"
