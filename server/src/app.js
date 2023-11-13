@@ -4,8 +4,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const router = require("./routes/router.js");
 const app = express();
+const allowedOrigins = ["http://localhost:5174", "http://localhost:5173"]; //Changed it to make it work
 
-app.use(cors());
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(helmet());
 app.use(express.json({ limit: "50mb" }));
 // Assign routes

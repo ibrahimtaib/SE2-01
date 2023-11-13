@@ -38,7 +38,9 @@ module.exports = {
         });
       }
       // Check student is suitable
-      if (student.COD_DEGREE != proposal.COD_DEGREE) {
+      if (student.COD_DEGREE != proposal.cds) {
+        console.error(student);
+        console.error(proposal);
         return reject({
           status: 400,
           error: "Student cannot apply to this proposal!",
