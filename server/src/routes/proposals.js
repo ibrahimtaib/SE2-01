@@ -56,6 +56,28 @@ router.get("/supervisor/:surname", async (req, res) => {
   }
 });
 
+router.get("/keywords/:keywords", async (req, res) => {
+  const keywords = req.params.keywords;
+  try {
+    const proposals = await proposalsController.getProposalsByKeywords(keywords);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/groups/:groups", async (req, res) => {
+  const groups = req.params.groups;
+  try {
+    const proposals = await proposalsController.getProposalsByGroups(groups);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.get("/type/:type", async (req, res) => {
   const type = req.params.type;
 
@@ -68,11 +90,11 @@ router.get("/type/:type", async (req, res) => {
   }
 });
 
-router.get("/type/:level", async (req, res) => {
-  const level = req.params.level;
+router.get("/expiration/:date", async (req, res) => {
+  const date = req.params.date;
 
   try {
-    const proposals = await proposalsController.getProposalsByLevel(level);
+    const proposals = await proposalsController.getProposalsByExpirationDate(date);
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
@@ -80,11 +102,11 @@ router.get("/type/:level", async (req, res) => {
   }
 });
 
-router.get("/expiration/:date", async (req, res) => {
-  const date = req.params.date;
+router.get("/level/:level", async (req, res) => {
+  const level = req.params.level;
 
   try {
-    const proposals = await proposalsController.getProposalsByExpirationDate(date);
+    const proposals = await proposalsController.getProposalsByLevel(level);
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);

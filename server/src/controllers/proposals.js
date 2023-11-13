@@ -62,7 +62,7 @@ module.exports = {
 
   getProposalsByTitle: async (searchString) => {
     //const searchWords = searchString.split(' ');
-
+  
     return new Promise((resolve, reject) => {
       prisma.Proposal
         .findMany({
@@ -90,7 +90,10 @@ module.exports = {
       prisma.Proposal
         .findMany({
           where: {
-            coSupervisors: surname,
+            coSupervisors: {
+              contains: surname,
+              mode: "insensitive",
+            }
           }
         })
         .then((proposals) => {
@@ -139,45 +142,55 @@ module.exports = {
     }
   },
 
-  getProposalsByType: async (type) => {
-    return new Promise((resolve, reject) =>
-      prisma.Proposal
-        .findMany({
-          where: {
-            type: type
-          }
-        })
-        .then((proposals) => {
-          return resolve(proposals);
-        })
-        .catch((error) => {
-          console.error(error);
-          return reject({
-            error: "An error occurred while querying the database",
-          });
-        })
-    );
-  },
 
-  getProposalsByLevel: async (level) => {
-    return new Promise((resolve, reject) =>
+  getProposalsByKeywords: async (keywords) => {
+    const separatedKeywords = keywords.split(',').map(keyword => keyword.trim().toLowerCase());
+  
+    return new Promise((resolve, reject) => {
       prisma.Proposal
-        .findMany({
-          where: {
-            level: level
-          }
-        })
+        .findMany()
         .then((proposals) => {
-          return resolve(proposals);
+          const filteredProposals = proposals.filter(proposal => {
+            const proposalKeywords = proposal.keywords.map(keyword => keyword.toLowerCase());
+            return separatedKeywords.every(keyword => proposalKeywords.includes(keyword));
+          });
+  
+          resolve(filteredProposals);
         })
         .catch((error) => {
           console.error(error);
-          return reject({
+          reject({
             error: "An error occurred while querying the database",
           });
-        })
-    );
+        });
+    });
   },
+  
+  
+
+  getProposalsByGroups: async (groups) => {
+    const separatedGroups = groups.split(',').map(group => group.trim().toLowerCase());
+    console.log(separatedGroups)
+    return new Promise((resolve, reject) => {
+      prisma.Proposal
+        .findMany()
+        .then((proposals) => {
+          const filteredProposals = proposals.filter(proposal => {
+            const proposalGroups = proposal.groups.map(group => group.toLowerCase());
+            return separatedGroups.some(group => proposalGroups.includes(group));
+          });
+  
+          resolve(filteredProposals);
+        })
+        .catch((error) => {
+          console.error(error);
+          reject({
+            error: "An error occurred while querying the database",
+          }); 
+});
+    });
+  },
+  
 
 
   getProposalsByExpirationDate: async (expirationDate) => {
@@ -201,6 +214,51 @@ module.exports = {
         })
     );
   },
+  
+getProposalsByLevel: async (level) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany({
+          where: {
+            level: {
+              equals: level,
+              mode: "insensitive",
+            }
+          }
+        })
+        .then((proposals) => {
+          return resolve(proposals);
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database",
+          });
+        })
+    );
+  },
+
+      getProposalsByExpirationDate: async (expirationDate) => {
+      return new Promise((resolve, reject) =>
+        prisma.Proposal
+          .findMany({
+            where: {
+              expiration: {
+                lte: new Date(expirationDate),
+              },
+            },
+          })
+          .then((proposals) => {
+            return resolve(proposals);
+          })
+          .catch((error) => {
+            console.error(error);
+            return reject({
+              error: "An error occurred while querying the database",
+            });
+          })
+      );
+    },
 
   getProposalsByCDS: async (cds) => {
     return new Promise((resolve, reject) =>
