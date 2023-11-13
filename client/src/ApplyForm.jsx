@@ -3,30 +3,31 @@ import { useForm } from 'react-hook-form';
 import './ApplyForm.css'
 // import Header from './Header.jsx'
 import { Container, Row, Col, Form } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
-function ApplyForm() {
-  const { register, handleSubmit } = useForm();
-
-  const onSubmit = (data) => {
+function ApplyForm({proposal}) {
+  const { register, handleSubmit, formState } = useForm();
+  //TODO fetch from auth 
+  const student = {name: "Probo E Approvo", email: "eeeee@eeeeee.eee"}
+  const onSubmit = async (data) => {
     console.log(data);
-    // You can perform any further actions here
+    // TODO Api call
   };
-
   return (
     <>
     {/* <Header/> */}
     <div className='container-apply-form'>
-      <h1 className='title-apply-form'>Apply to: Thesis Proposal</h1>
-      <h3 id="supervisor-apply-form">Supervisor: Mario Rossi</h3>
+      <h1 className='title-apply-form'>Apply to: {proposal.title}</h1>
+      <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name}</h3>
       <div className="student-information-apply-form">
-        <span>Student Name: Name LastName</span>
-        <span>Student Email: Email</span>
+        <span><strong>Student Name</strong>: {student.name}</span>
+        <span><strong>Student Email</strong>: {student.email}</span>
       </div>
       <div className='input-apply-form'>
         <label htmlFor="textarea-apply-form">Message to the supervisor:</label>
-        <textarea id="textarea-apply-form" placeholder='Write here' className='textarea-apply-form'></textarea>
+        <textarea id="textarea-apply-form" {...register('comment')} placeholder='Write here' className='textarea-apply-form'></textarea>
       </div>
-      <button id='button-apply-form'>Submit Application</button>
+      <button disabled={formState.isSubmitting} id='button-apply-form' onClick={handleSubmit(onSubmit)}>Submit Application</button>
     </div>
     </>
   );

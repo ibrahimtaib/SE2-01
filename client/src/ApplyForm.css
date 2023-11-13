@@ -47,7 +47,9 @@
   resize: vertical;
 }
 
-#button-apply-form {
-  background-color: blue;
+#button-apply-form  {
   margin-top: 2rem;
+}
+#button-apply-form:enabled {
+  background-color: blue;
 }
