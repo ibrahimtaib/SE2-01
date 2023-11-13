@@ -5,7 +5,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px gray solid;
   background-color: white;
   color: black;
 }
@@ -52,4 +51,9 @@
 }
 #button-apply-form:enabled {
   background-color: blue;
+}
+.alert {
+  position: absolute;
+  width: 30%;
+  z-index: 4;
 }
