@@ -22,7 +22,27 @@ module.exports = {
         })
     );
   },
-  
+
+  getAllTypes: async () => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposals
+        .findMany({
+          select: {
+            type: true,
+          },
+        })
+        .then((cds) => {
+          return resolve(cds.map((cd) => cd.TITLE_DEGREE));
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database for cds",
+          });
+        })
+    );
+  },
+
 
   getProposals: async () => {
     return new Promise((resolve, reject) =>
@@ -41,7 +61,6 @@ module.exports = {
   },
 
   getProposalsByTitle: async (searchString) => {
-    //const searchWords = searchString.split(' '); 
     return new Promise((resolve, reject) => {
       prisma.Proposal
         .findMany({
@@ -85,6 +104,40 @@ module.exports = {
           });
         })
     );
+  },
+
+  getProposalsBySupervisor: async (surname) => {
+    try {
+      // Trova l'insegnante con il cognome specificato
+      const teachers = await prisma.Teacher.findMany({
+        where: {
+          surname: {
+            contains: surname,
+            mode: "insensitive",
+          }
+        },
+      });
+  
+      // Se l'insegnante non è stato trovato, restituisci un array vuoto
+      if (!teachers) {
+        throw new Error("An error occurred while querying the database");;
+      }
+  
+      const teacherIds = teachers.map((teacher) => teacher.id);
+      // Trova le proposte associate all'insegnante
+      const proposals = await prisma.Proposal.findMany({
+        where: {
+          supervisor: {
+            in:teacherIds,
+          },
+        },
+      });
+  
+      return proposals;
+    } catch (error) {
+      console.error(error);
+      throw new Error("An error occurred while querying the database");
+    }
   },
 
 
@@ -131,8 +184,8 @@ module.exports = {
           console.error(error);
           reject({
             error: "An error occurred while querying the database",
-          });
-        });
+          }); 
+      });
     });
   },
   
@@ -159,8 +212,8 @@ module.exports = {
         })
     );
   },
-
-  getProposalsByLevel: async (level) => {
+  
+getProposalsByLevel: async (level) => {
     return new Promise((resolve, reject) =>
       prisma.Proposal
         .findMany({
@@ -182,7 +235,6 @@ module.exports = {
         })
     );
   },
-
 
   getProposalsByCDS: async (cds) => {
     return new Promise((resolve, reject) =>

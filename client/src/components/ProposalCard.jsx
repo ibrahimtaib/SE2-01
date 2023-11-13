@@ -26,6 +26,8 @@ function ProposalCard(props) {
           ))}
           <br/><b>Type</b>: {props.proposal.Type}
           <br/><b>Cds</b>: {props.proposal.Cds}
+          <br/><b>Notes:</b>: {props.proposal.Notes}
+          <br/><b>Required Knowledge</b>: {props.proposal.RequiredKnowledge}
         </Card.Text>
         <div className="d-flex justify-content-between">
           <Button variant="outline-secondary" onClick={toggleVisibility}>

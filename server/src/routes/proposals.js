@@ -44,6 +44,18 @@ router.get("/cosupervisor/:surname", async (req, res) => {
   }
 });
 
+router.get("/supervisor/:surname", async (req, res) => {
+  const surname = req.params.surname;
+
+  try {
+    const proposals = await proposalsController.getProposalsBySupervisor(surname);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.get("/keywords/:keywords", async (req, res) => {
   const keywords = req.params.keywords;
   try {
@@ -59,6 +71,18 @@ router.get("/groups/:groups", async (req, res) => {
   const groups = req.params.groups;
   try {
     const proposals = await proposalsController.getProposalsByGroups(groups);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/type/:type", async (req, res) => {
+  const type = req.params.type;
+
+  try {
+    const proposals = await proposalsController.getProposalsByType(type);
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);

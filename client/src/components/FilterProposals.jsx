@@ -26,7 +26,11 @@ function LeftSide(props) {
 
     const [cosupervisor, setCosupervisor] = useState("");
 
+    const [supervisor, setSupervisor] = useState("");
+
     const [click, setClick] = useState(false);
+
+    const [clickReset, setClickReset] = useState(false);
 
     const [cdsList, setCdsList] = useState([]);
 
@@ -36,7 +40,7 @@ function LeftSide(props) {
                 API.getAllCds().then((a) => {
                     setCdsList(a)
                 })
-                .catch((err) => console.log(err));
+                    .catch((err) => console.log(err));
             } catch (err) {
             }
         };
@@ -51,8 +55,16 @@ function LeftSide(props) {
         setCosupervisor(e.target.value);
     };
 
-    const handleSubmit = () => {
+    const handleSupervisorChange = (e) => {
+        setSupervisor(e.target.value);
+    };
+
+    const handleFilter = () => {
         setClick(true);
+    };
+
+    const handleReset = () => {
+        setClickReset(true);
     };
 
     useEffect(() => {
@@ -78,6 +90,16 @@ function LeftSide(props) {
                     } catch (err) {
                         setClick(false)
                     }
+                } else if(supervisor !== ""){
+                    try {
+                        API.getProposalsBySupervisor(supervisor).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
                 }
             };
             init();
@@ -91,29 +113,49 @@ function LeftSide(props) {
                     <Form.Label>Filter by Title</Form.Label>
                     <Form.Control placeholder="Title" value={title} onChange={handleTitleChange} />
                 </Form.Group>
+                {/*
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Teacher</Form.Label>
                     <Form.Control placeholder="Teacher" />
                 </Form.Group>
+                */}
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Supervisor</Form.Label>
-                    <Form.Control placeholder="Supervisor" />
+                    <Form.Control placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Co-Supervisor</Form.Label>
                     <Form.Control placeholder="Co-Supervisor" value={cosupervisor} onChange={handleCosupervisorChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
+                    <Form.Label>Filter by Keywords</Form.Label>
+                    <Form.Control placeholder="Keywords separeted by ,"/>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Filter by Groups</Form.Label>
+                    <Form.Control placeholder="Groups"/>
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>Filter by Level</Form.Label>
-                    <Form.Select>
-                        <option>Disabled select</option>
+                    <Form.Select defaultValue="">
+                        <option value="" disabled hidden>
+                            Seleziona
+                        </option>
+                        {
+                            cdsList.map((proposal, index) => (
+                                <option key={index}>{proposal.title}</option>
+                            ))
+                        }
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by CDS</Form.Label>
-                    <Form.Select>
+                    <Form.Select defaultValue="">
+                        <option value="" disabled hidden>
+                            Seleziona
+                        </option>
                         {
-                            cdsList.map((proposal, index) =>(
+                            cdsList.map((proposal, index) => (
                                 <option key={index}>{proposal.title}</option>
                             ))
                         }
@@ -121,15 +163,25 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Type</Form.Label>
-                    <Form.Select>
-                        <option>Disabled select</option>
+                    <Form.Select defaultValue="">
+                        <option value="" disabled hidden>
+                            Seleziona
+                        </option>
+                        {
+                            cdsList.map((proposal, index) => (
+                                <option key={index}>{proposal.title}</option>
+                            ))
+                        }
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Select a Expiration Date</Form.Label>
                     <MyDatePicker></MyDatePicker>
                 </Form.Group>
-                <Button type="submit" onClick={handleSubmit}>Filter</Button>
+                <Form.Group className="mb-3 d-flex justify-content-start ">
+                    <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
+                    <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
+                </Form.Group>
             </Form>
         </>
     );
