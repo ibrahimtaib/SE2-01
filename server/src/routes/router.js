@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const proposalsRouter = require("./proposals");
+const proposalsRouter = require("./proposals")
 
+router.use('/proposals', proposalsRouter)
 // Status 404 if the route is not found
 
 
