@@ -1,0 +1,25 @@
+.navbar-orange {
+    background-color: #ff6600; /* Arancione scuro */
+  }
+
+  .ml-3 {
+    margin-left: 20px; /* O qualsiasi altra spaziatura desiderata */
+  }
+
+  .nascondi {
+    display: none;
+  }
+
+  .custom-padding {
+    padding-left: 40px; /* Sostituisci con il valore di padding desiderato */
+    padding-right: 40px; /* Sostituisci con il valore di padding desiderato */
+    padding-top: 20px; /* Sostituisci con il valore di padding desiderato */
+  }
+
+:root {
+    background-color: rgba(248,248,249,255);
+}
+
+.sans-serif {
+    font-family: sans-serif;
+}

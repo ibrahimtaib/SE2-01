@@ -32,7 +32,6 @@ export default function InsertForm() {
             coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()), //TODO: Fix in database or here sending of cosupervisors
             keywords: keywords.map((keyword) => keyword.trim()),
             groups: [],
-            type: Types.experimental,
         })
         //console.log("formdata", data);
         //TODO: show Proposal added and verify with .then and .catch!
@@ -64,9 +63,9 @@ export default function InsertForm() {
 
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-white w-full max-w-3xl mx-auto text-left flex flex-col gap-y-10 px-4 py-6"
+            className="bg-white w-full max-w-3xl mx-auto text-left flex flex-col gap-y-10 px-4 py-6 drop-shadow-lg"
         >
-            <h1 className="font-sans text-2xl font-bold tracking-tight text-gray-900">New Proposal</h1>
+            <h1 className="sans-serif text-4xl font-bold tracking-tight text-gray-900">New Proposal</h1>
             <div className="flex flex-col gap-y-1">
                 <label className="text-base font-semibold leading-7 text-gray-900" htmlFor='title'>
                     Title
@@ -165,7 +164,7 @@ export default function InsertForm() {
                     name="type"
                 >
                     {Object.entries(Types).map(([key, value]) => (
-                        <option key={key} value={key}>
+                        <option key={key} value={value}>
                             {value}
                         </option>
                     ))}
@@ -246,7 +245,7 @@ export default function InsertForm() {
                 </button>
                 <button
                     type="submit"
-                    className="rounded-md bg-slate-800 hover:bg-slate-700 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="rounded-md bg-blue-900 hover:bg-blue-800 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     Add
                 </button>
