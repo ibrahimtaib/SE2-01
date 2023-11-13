@@ -61,8 +61,6 @@ module.exports = {
   },
 
   getProposalsByTitle: async (searchString) => {
-    //const searchWords = searchString.split(' ');
-  
     return new Promise((resolve, reject) => {
       prisma.Proposal
         .findMany({
@@ -187,7 +185,7 @@ module.exports = {
           reject({
             error: "An error occurred while querying the database",
           }); 
-});
+      });
     });
   },
   
@@ -237,28 +235,6 @@ getProposalsByLevel: async (level) => {
         })
     );
   },
-
-      getProposalsByExpirationDate: async (expirationDate) => {
-      return new Promise((resolve, reject) =>
-        prisma.Proposal
-          .findMany({
-            where: {
-              expiration: {
-                lte: new Date(expirationDate),
-              },
-            },
-          })
-          .then((proposals) => {
-            return resolve(proposals);
-          })
-          .catch((error) => {
-            console.error(error);
-            return reject({
-              error: "An error occurred while querying the database",
-            });
-          })
-      );
-    },
 
   getProposalsByCDS: async (cds) => {
     return new Promise((resolve, reject) =>
