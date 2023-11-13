@@ -7,7 +7,7 @@ const api = axios.create({
 });
 
 
-export const addPage = async (application) => {
+export const addApplication = async (application) => {
   try {
     const response = await api.post('/applications/', application);
     return response.data;
