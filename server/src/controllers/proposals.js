@@ -68,7 +68,6 @@ module.exports = {
     return new Promise((resolve, reject) =>
       prisma.Proposal
         .findMany({
-<<<<<<< HEAD
           where: {
             coSupervisors: {
               contains: surname,
