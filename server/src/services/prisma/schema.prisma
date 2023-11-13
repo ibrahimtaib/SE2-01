@@ -88,6 +88,7 @@ model Proposal {
   expiration        DateTime
   level             String
   cds               String
+  archived          Boolean
   teacher           Teacher       @relation(fields: [supervisor], references: [id])
   requiredKnowledge String
   degree            Degree        @relation(fields: [cds], references: [COD_DEGREE])
