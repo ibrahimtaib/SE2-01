@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import api, { addPage } from "../api/api";
+import Tagify from '@yaireo/tagify';
 
 const Types = {
     experimental: "Experimental",
@@ -9,23 +10,27 @@ const Types = {
 }
 
 export default function InsertForm() {
-    //TODO: put this states in App.jsx (they are for sure needed somewhere else later in development)
+    //TODO: IMPORTANT!! Put this states in App.jsx (they are for sure needed somewhere else later in development)
     const [levels, setLevels] = useState(["Bachelor", "Master", "PhD"]);
     const [supervisors, setSupervisors] = useState([]);
     const [degrees, setDegrees] = useState([]);
+    const [keywords, setKeywords] = useState([]);
+    const [cosupervisors, setCosupervisors] = useState([]);
 
     const navigateTo = useNavigate();
 
     const { register, formState: { errors }, handleSubmit } = useForm()
+    const inputRef = useRef(null);
+
+
 
     const onSubmit = (data) => {
-        //TODO: fix and trim
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
             supervisor: parseInt(data.supervisor),
-            coSupervisor: parseInt(data.coSupervisor),
-            keywords: data.keywords.split(',').map((keyword) => keyword.trim()),
+            coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()), //TODO: Fix in database or here sending of cosupervisors
+            keywords: keywords.map((keyword) => keyword.trim()),
             groups: [],
             type: Types.experimental,
         })
@@ -43,6 +48,7 @@ export default function InsertForm() {
                 )
         }
         getSupervisors();
+
         const getDegrees = () => {
             api.get('/degrees')
                 .then((response) => {
@@ -55,11 +61,12 @@ export default function InsertForm() {
     }, [])
 
     return (
+
         <form
             onSubmit={handleSubmit(onSubmit)}
             className="bg-white w-full max-w-3xl mx-auto text-left flex flex-col gap-y-10 px-4 py-6"
         >
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">New Proposal</h1>
+            <h1 className="font-sans text-2xl font-bold tracking-tight text-gray-900">New Proposal</h1>
             <div className="flex flex-col gap-y-1">
                 <label className="text-base font-semibold leading-7 text-gray-900" htmlFor='title'>
                     Title
@@ -152,10 +159,10 @@ export default function InsertForm() {
                     <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
                 )}
                 <select
-                    {...register("level", { required: true })}
-                    className="w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 border border-gray-400 text-gray-700  leading-tight focus:outline-none focus:border-gray-500"
-                    id="level"
-                    name="level"
+                    {...register("type", { required: true })}
+                    className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2"
+                    id="type"
+                    name="type"
                 >
                     {Object.entries(Types).map(([key, value]) => (
                         <option key={key} value={key}>
@@ -187,13 +194,7 @@ export default function InsertForm() {
                 <label className="block text-sm font-medium leading-6 text-gray-900">
                     Co-Supervisors
                 </label>
-
-                <input
-                    {...register("coSupervisors", { required: false })}
-                    id="coSupervisors"
-                    className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2"
-                />
-                <p className="mt-3 text-sm leading-6 text-gray-600">Write the co-supervisors (if any) separated by a comma (,)</p>
+                <CosupervisorsInput setCosupervisors={setCosupervisors} />
             </div>
 
             <div className="flex flex-col gap-y-1">
@@ -233,13 +234,7 @@ export default function InsertForm() {
                     <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
                 )}
 
-                <input
-                    {...register("keywords", { required: true })}
-                    id="keywords"
-                    placeholder="Keyword1, Keyword2, Keyword3"
-                    className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2"
-                />
-                <p className="mt-3 text-sm leading-6 text-gray-600">Write the keywords separated by a comma (,)</p>
+                <KeywordsInput setKeywords={setKeywords} />
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -259,4 +254,85 @@ export default function InsertForm() {
         </form>
     )
 }
+
+
+function CosupervisorsInput(props) {
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        const tagify = new Tagify(inputRef.current, {
+            enforceWhitelist: false,
+        });
+
+        tagify.on('add', (e) => {
+            props.setCosupervisors((prevCosupervisors) => [...prevCosupervisors, e.detail.data.value]);
+            console.log('Cosupervisor added:', e.detail.data.value);
+        });
+
+        tagify.on('remove', (e) => {
+            const removedCosupervisor = e.detail.data.value;
+            // Remove the tag from the state (props.cosupervisors)
+            props.setKeywords((prevCosupervisors) =>
+                prevCosupervisors.filter((tag) => tag !== removedCosupervisor)
+            );
+            console.log('Cosupervisor removed:', removedCosupervisor);
+        });
+        
+
+        return () => {
+            tagify.destroy();
+        };
+    }, []);
+
+    return (
+        <div>
+            <input ref={inputRef} 
+                id="keywords"
+                className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2 taginput"
+                type="text"
+                placeholder="Type co-supervisors (if any) and press Enter"
+            />
+        </div>
+    );
+};
+
+function KeywordsInput(props) {
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        const tagify = new Tagify(inputRef.current, {
+            enforceWhitelist: false,
+        });
+
+        tagify.on('add', (e) => {
+            props.setKeywords((prevKeywords) => [...prevKeywords, e.detail.data.value]);
+            console.log('Tag added:', e.detail.data.value);
+        });
+
+        tagify.on('remove', (e) => {
+            const removedKeyword = e.detail.data.value;
+            // Remove the tag from the state (props.cosupervisors)
+            props.setKeywords((prevCosupervisors) =>
+                prevCosupervisors.filter((tag) => tag !== removedKeyword)
+            );
+            console.log('Keyword removed:', removedKeyword);
+        });
+
+        return () => {
+            tagify.destroy();
+        };
+    }, []);
+
+    return (
+        <div>
+            <input ref={inputRef} required
+                id="keywords"
+                className="p-2 w-full border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 rounded-md shadow-sm ring-offset-2 ring-2 taginput"
+                type="text"
+                placeholder="Type keywords and press Enter"
+            />
+        </div>
+    );
+};
+
 
