@@ -102,7 +102,16 @@ async function getAllProposals() {
     }
   }
   
+  async function getApplicationsByTeacherId(teacherId) {
+    try {
+      const response = await axios.get(`${URL}applications/${teacherId}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error("An error occurred while fetching applications");
+    }
+  }  
   
 
-  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds};
+  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds, getApplicationsByTeacherId};
 export default API;
