@@ -27,7 +27,7 @@ function Main() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const applicationsData = await API.getApplicationsByTeacherId();  
+        const applicationsData = await API.getApplicationsByTeacherId(1);  
         setApplications(applicationsData);
       } catch (error) {
         console.error(error);

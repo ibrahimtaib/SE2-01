@@ -1,17 +1,43 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const proposalsController = require("../controllers/applications");
+const proposalsApplication = require("../controllers/applications");
 
-router.get("/applications/:teacherId", async (req, res) => {
+router.get("/:teacherId/", async (req, res) => {
   const teacherId = req.params.teacherId;
 
   try {
-    const applications = await proposalsController.getApplicationsByTeacherId(teacherId);
+    const applications = await proposalsApplication.getApplicationsStudentsProposalsDegreesByTeacherId(teacherId);
     res.status(200).json(applications);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+router.get("/proposal/:proposalId", async (req, res) => {
+  const proposalId = req.params.proposalId;
+
+  try {
+    const proposal = await proposalsApplication.getProposalById(proposalId);
+    res.status(200).json(proposal);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/student/:studentId", async (req, res) => {
+  const studentId = req.params.studentId;
+
+  try {
+    const student = await proposalsApplication.getStudentById(studentId);
+    res.status(200).json(student);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 module.exports = router;
