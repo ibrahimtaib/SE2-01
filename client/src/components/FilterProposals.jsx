@@ -48,6 +48,12 @@ function LeftSide(props) {
 
     const [type, setType] = useState("");
 
+    const [date, setDate]= useState("");
+
+    const [selectedDate, setSelectedDate] = useState("");
+
+    const [filter, setFilter]=useState([]);
+
     useEffect(() => {
         if (clickReset) {
             const init = async () => {
@@ -117,6 +123,18 @@ function LeftSide(props) {
 
     const handleFilter = () => {
         event.preventDefault();
+        const flt=[
+            {type: 'title', value: title},
+            {type: 'supervisor', value: supervisor},
+            {type: 'cosupervisor', value: cosupervisor},
+            {type: 'keywords', value: keywords},
+            {type: 'groups', value: groups},
+            {type: 'expirationDate', value: date},
+            {type: 'level', value: level},
+            {type: 'type', value: type},
+            {type: 'cds', value: cds},
+        ]
+        setFilter(flt);
         setClick(true);
     };
 
@@ -130,6 +148,9 @@ function LeftSide(props) {
         setLevel("");
         setCds("");
         setType("");
+        setDate("");
+        setSelectedDate(null); // Imposta il DatePicker a vuoto
+        setDate("");
         setClickReset(true);
     };
 
@@ -143,7 +164,7 @@ function LeftSide(props) {
                             setClick(false)
                         })
                             .catch((err) => console.log(err));
-                    } catch (err) {
+                    } catch (err) {s
                         setClick(false)
                     }
                 } else if (cosupervisor !== "") {
@@ -216,7 +237,18 @@ function LeftSide(props) {
                     } catch (err) {
                         setClick(false)
                     }
+                }else if (date !== "") {
+                    try {
+                        API.getProposalsByExpirationDate(date).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
                 }
+
             };
             init();
         }
@@ -288,7 +320,7 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Select a Expiration Date</Form.Label>
-                    <MyDatePicker></MyDatePicker>
+                    <MyDatePicker date={date} setDate={setDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate}></MyDatePicker>
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex justify-content-start ">
                     <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
@@ -305,7 +337,6 @@ function RightSide(props) {
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return null; // O qualsiasi altra cosa vuoi restituire quando la lista è vuota
     }
-
     return (
         <>
             {props.ProposalsList.map((proposal, index) => (
@@ -316,24 +347,27 @@ function RightSide(props) {
 }
 
 
-const MyDatePicker = () => {
-    const [selectedDate, setSelectedDate] = useState("");
-    console.log(selectedDate);
-    useEffect(() => {
-        //setSelectedDate(dayjs().toDate());
-    }, []);
-
+const MyDatePicker = (props) => {
+    const formatDate = (date) => {
+        if (!date) return "";
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${year}-${month}-${day}`;
+      };
     const handleDateChange = (date) => {
-        setSelectedDate(date);
+        props.setSelectedDate(date)
+        props.setDate(formatDate(date))
     };
-
+    
     return (
         <>
             <br />
             <DatePicker
-                selected={selectedDate}
+                selected={props.selectedDate}
                 onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy" // Modifica il formato della data come desiderato
+                placeholderText="YYYY-MM-DD"
+                dateFormat="yyyy-MM-dd" // Modifica il formato della data come desiderato
                 className="form-control"
             />
         </>
