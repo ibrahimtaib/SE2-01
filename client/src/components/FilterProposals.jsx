@@ -28,6 +28,10 @@ function LeftSide(props) {
 
     const [supervisor, setSupervisor] = useState("");
 
+    const [keywords, setKeywords] = useState("");
+
+    const [groups, setGroups] = useState("");
+
     const [click, setClick] = useState(false);
 
     const [clickReset, setClickReset] = useState(false);
@@ -35,17 +39,21 @@ function LeftSide(props) {
     const [cdsList, setCdsList] = useState([]);
 
     useEffect(() => {
-        const init = async () => {
-            try {
-                API.getAllCds().then((a) => {
-                    setCdsList(a)
-                })
+        if (clickReset) {
+            const init = async () => {
+                try {
+                  API.getAllProposals().then((a) => {
+                    props.setProposalsList(a)
+                    setClickReset(false);
+                  })
                     .catch((err) => console.log(err));
-            } catch (err) {
-            }
-        };
-        init();
-    }, []);
+                } catch (err) {
+                    setClickReset(false);
+                }
+              };
+              init();
+        }
+    }, [clickReset]);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -59,11 +67,26 @@ function LeftSide(props) {
         setSupervisor(e.target.value);
     };
 
+    const handleKeywordsChange = (e) => {
+        setKeywords(e.target.value);
+    };
+
+    const handleGroupsChange = (e) => {
+        setGroups(e.target.value);
+    };
+
     const handleFilter = () => {
+        event.preventDefault();
         setClick(true);
     };
 
     const handleReset = () => {
+        event.preventDefault();
+        setTitle("");
+        setCosupervisor("");
+        setSupervisor("");
+        setKeywords("");
+        setGroups("");
         setClickReset(true);
     };
 
@@ -90,9 +113,29 @@ function LeftSide(props) {
                     } catch (err) {
                         setClick(false)
                     }
-                } else if(supervisor !== ""){
+                } else if (supervisor !== "") {
                     try {
                         API.getProposalsBySupervisor(supervisor).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
+                } else if (keywords !== "") {
+                    try {
+                        API.getProposalsByKeywords(keywords).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
+                }  else if (groups !== "") {
+                    try {
+                        API.getProposalsByGroups(groups).then((a) => {
                             props.setProposalsList(a)
                             setClick(false)
                         })
@@ -129,11 +172,11 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Keywords</Form.Label>
-                    <Form.Control placeholder="Keywords separeted by ,"/>
+                    <Form.Control placeholder="Keywords separeted by ," value={keywords} onChange={handleKeywordsChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Groups</Form.Label>
-                    <Form.Control placeholder="Groups"/>
+                    <Form.Control placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Level</Form.Label>
