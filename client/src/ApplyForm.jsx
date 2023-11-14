@@ -3,18 +3,23 @@ import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import DismissableAlert from './DismissableAlert.jsx';
 import './ApplyForm.css'
+import applicationApi from './api/api.js';
 // import Header from './Header.jsx'
 
 function ApplyForm({proposal}) {
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   //TODO fetch from auth 
-  const student = {name: "Signor E", email: "eeeee@eeeeee.eee"}
+  const student = {name: "Signor E", email: "eeeee@eeeeee.eee", id: 4}
+
   const onSubmit = async (data) => {
-    console.log(data);
-    setShowAlert(true)
-    // TODO Api call
+      applicationApi.addApplication({
+      STUDENT_ID: student.id,
+      PROPOSAL_ID: proposal.id,
+      comment: data.comment.trim()
+    }).catch(() => setShowAlert(true))
   };
+
   return (
     <>
     <div className='container-apply-form'>
