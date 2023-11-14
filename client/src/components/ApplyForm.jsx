@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, {useState} from 'react';
+import {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import DismissableAlert from './DismissableAlert.jsx';
 import './ApplyForm.css'
 import applicationApi from '../api/api.js';
-// import Header from './Header.jsx'
+import { useHistory } from 'react-router-dom';
 
 function ApplyForm({proposal}) {
+  const history = useHistory();
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   //TODO fetch from auth 
@@ -17,7 +18,10 @@ function ApplyForm({proposal}) {
       STUDENT_ID: student.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
-    }).catch(() => setShowAlert(true))
+    }).then(
+      /// TODO: redirect to application page
+      history.push("/")
+    ).catch(() => setShowAlert(true))
   };
 
   return (
