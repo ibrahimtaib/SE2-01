@@ -1,7 +1,13 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({ log: ["query"] });
+const prisma = require("./prisma");
 
 module.exports = {
+
+   /**
+   * Function that returns all courses in the database.
+   * @param {}
+   * @returns {Promise<[{id: Number, COD_COURSE: Number, TITLE_COURSE: String}]>}
+   */
 
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
@@ -309,7 +315,7 @@ getProposalsByLevel: async (level) => {
 
     for (const filter of filters) {
       let proposals = [];
-
+  
       switch (filter.type) {
         case 'title':
           proposals = await proposalsController.getProposalsByTitle(filter.value);
@@ -317,20 +323,41 @@ getProposalsByLevel: async (level) => {
         case 'cosupervisor':
           proposals = await proposalsController.getProposalsByCosupervisor(filter.value);
           break;
-
+        case 'supervisor':
+          proposals = await proposalsController.getProposalsBySupervisor(filter.value);
+          break;
+        case 'keywords':
+          proposals = await proposalsController.getProposalsByKeywords(filter.value);
+          break;
+        case 'groups':
+          proposals = await proposalsController.getProposalsByGroups(filter.value);
+          break;
+        case 'expirationDate':
+          proposals = await proposalsController.getProposalsByExpirationDate(filter.value);
+          break;
+        case 'level':
+          proposals = await proposalsController.getProposalsByLevel(filter.value);
+          break;
+        case 'type':
+          proposals = await proposalsController.getProposalsByType(filter.value);
+          break;
+        case 'cds':
+          proposals = await proposalsController.getProposalsByCDS(filter.value);
+          break;  
         default:
           break;
       }
-
+  
       if (result.length === 0) {
         result = proposals;
       } else {
         result = result.filter(proposal => proposals.some(p => p.id === proposal.id));
       }
     }
-
+  
     return result;
   },
+  
 
 
 
