@@ -25,7 +25,6 @@ module.exports = {
       // If verification is successful, return the decoded user information
       next();
     } catch (error) {
-      console.log(error);
       // If verification fails, return an error message
       res.status(401).send({
         message: "Unauthorized!",
