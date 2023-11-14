@@ -9,14 +9,12 @@ module.exports = {
    */
   getDegrees: async () => {
     return new Promise((resolve, reject) => {
-      console.error("getDegrees");
       prisma.degree
         .findMany()
         .then((degrees) => {
           return resolve(degrees);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for teachers",
           });
