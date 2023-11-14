@@ -1,7 +1,8 @@
 const prisma = require("../controllers/prisma");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const dotenv = require("dotenv").config();
 
+const SECRET_KEY = dotenv("SECRET_KEY");
 module.exports = {
   /**
    * Function that generates a token for a user. If the user is neither a student nor a teacher, returns null.
@@ -29,12 +30,12 @@ module.exports = {
       if (!teacher) {
         return null;
       }
-      const token = jwt.sign(teacher, process.env.SECRET_KEY, {
+      const token = jwt.sign(teacher, SECRET_KEY, {
         expiresIn: 86400, // 24 hours
       });
       return token;
     }
-    const token = jwt.sign(student, process.env.SECRET_KEY, {
+    const token = jwt.sign(student, SECRET_KEY, {
       expiresIn: 86400, // 24 hours
     });
     return token;
