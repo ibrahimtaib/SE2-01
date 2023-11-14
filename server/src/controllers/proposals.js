@@ -28,20 +28,45 @@ module.exports = {
       prisma.Proposals
         .findMany({
           select: {
-            type: true,
+            coSupervisors: true,
           },
         })
-        .then((cds) => {
-          return resolve(cds.map((cd) => cd.TITLE_DEGREE));
-        })
+        .then(
+          console.log(coSupervisors)
+        )
         .catch((error) => {
           console.error(error);
           return reject({
-            error: "An error occurred while querying the database for cds",
+            error: "An error occurred while querying the database for type",
           });
         })
     );
   },
+
+  getAllLevels: async () => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposals
+        .findMany({
+          select: {
+            level: true,
+          },
+        })
+        .then((levels) => {
+          // Utilizza un set per garantire l'unicità dei valori
+          const uniqueLevels = new Set(levels.map((lv) => lv.level));
+          // Converti il set in un array
+          const uniqueLevelsArray = Array.from(uniqueLevels);
+          return resolve(uniqueLevelsArray);
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database for level",
+          });
+        })
+    );
+  },
+  
 
 
   getProposals: async () => {
