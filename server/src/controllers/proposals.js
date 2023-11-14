@@ -279,5 +279,34 @@ getProposalsByLevel: async (level) => {
     );
   },
 
+  filterProposals: async (filters) => {
+    let result = [];
+
+    for (const filter of filters) {
+      let proposals = [];
+
+      switch (filter.type) {
+        case 'title':
+          proposals = await proposalsController.getProposalsByTitle(filter.value);
+          break;
+        case 'cosupervisor':
+          proposals = await proposalsController.getProposalsByCosupervisor(filter.value);
+          break;
+
+        default:
+          break;
+      }
+
+      if (result.length === 0) {
+        result = proposals;
+      } else {
+        result = result.filter(proposal => proposals.some(p => p.id === proposal.id));
+      }
+    }
+
+    return result;
+  },
+
+
 
 };
