@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import DismissableAlert from './DismissableAlert.jsx';
 import './ApplyForm.css'
-import applicationApi from './api/api.js';
+import applicationApi from '../api/api.js';
 // import Header from './Header.jsx'
 
 function ApplyForm({proposal}) {

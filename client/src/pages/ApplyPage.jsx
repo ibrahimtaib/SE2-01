@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
-import ApplyForm from './ApplyForm'
-// import Header from './Header';
-// import NavBar from './NavBar';
+import ApplyForm from '../components/ApplyForm'
+import Header from '../components/Header';
+import NavBar from '../components/NavBar';
+import { useParams } from 'react-router-dom';
 
-function ApplyPage({proposalId}) {
-  const [proposal, setProposal] = useState(null)
+function ApplyPage() {
+  const [proposal, setProposal] = useState(undefined)
+  const {proposalId} = useParams()
   useEffect(() => {
     //TODO api call to fetch proposal
     console.log("useEffect")
@@ -14,10 +16,10 @@ function ApplyPage({proposalId}) {
   }, [])
 
   console.log(proposal)
-  return proposal == null ? (<></>):(
+  return proposal == undefined ? (<></>):(
     <>
-    {/* <Header/>
-    <NavBar/> */}
+    <Header/>
+    <NavBar/>
     <ApplyForm proposal={proposal}/>
     </>
   )
