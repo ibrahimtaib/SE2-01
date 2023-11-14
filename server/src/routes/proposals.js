@@ -11,6 +11,22 @@ router.get("/cds", async (req, res) => {
     .catch((error) => res.status(500).json(error));
 });
 
+router.get("/types", async (req, res) => {
+  proposalsController.getAllTypes().then((typeList) => {
+      res.status(200).json(typeList);
+    })
+    .catch((error) => res.status(500).json(error));
+});
+
+router.get("/levels", async (req, res) => {
+  proposalsController
+    .getAllLevels()
+    .then((levelList) => {
+      res.status(200).json(levelList);
+    })
+    .catch((error) => res.status(500).json(error));
+});
+
 router.get("/", async (req, res) => {
   proposalsController
     .getProposals()
