@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
 
 function NavBar() {
     return (
@@ -13,6 +14,7 @@ function NavBar() {
               <Nav.Link href="#CV">CV</Nav.Link>
             </Nav>
           </Navbar.Collapse>
+          <Button variant="outline-light" className="mr-3" style={{ marginRight: '10px' }}>Log In</Button>
         </Navbar>
       );
 }

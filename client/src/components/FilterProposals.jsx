@@ -38,22 +38,56 @@ function LeftSide(props) {
 
     const [cdsList, setCdsList] = useState([]);
 
+    const [typeList, setTypeList] = useState([]);
+
+    const [levelList, setLevelList] = useState([]);
+
+    const [level, setLevel] = useState("");
+
+    const [cds, setCds] = useState("");
+
+    const [type, setType] = useState("");
+
+    const [date, setDate]= useState("");
+
+    const [selectedDate, setSelectedDate] = useState("");
+
+    const [filter, setFilter]=useState([]);
+
     useEffect(() => {
         if (clickReset) {
             const init = async () => {
                 try {
-                  API.getAllProposals().then((a) => {
-                    props.setProposalsList(a)
-                    setClickReset(false);
-                  })
-                    .catch((err) => console.log(err));
+                    API.getAllProposals().then((a) => {
+                        props.setProposalsList(a)
+                        setClickReset(false);
+                    })
+                        .catch((err) => console.log(err));
                 } catch (err) {
                     setClickReset(false);
                 }
-              };
-              init();
+            };
+            init();
         }
     }, [clickReset]);
+
+    useEffect(() => {
+        const init = async () => {
+            try {
+                API.getAllCds().then((a) => {
+                    setCdsList(a)
+                }).catch((err) => console.log(err));
+                API.getAllTypes().then((a) => {
+                    setTypeList(a)
+                }).catch((err) => console.log(err));
+                API.getAllLevels().then((a) => {
+                    setLevelList(a)
+                }).catch((err) => console.log(err));
+            } catch (err) {
+            }
+        };
+        init();
+    }, []);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -75,8 +109,32 @@ function LeftSide(props) {
         setGroups(e.target.value);
     };
 
+    const handleLevelSelectedChange = (event) => {
+        setLevel(event.target.value);
+    };
+
+    const handleTypeSelectedChange = (event) => {
+        setType(event.target.value);
+    };
+
+    const handleCdsSelectedChange = (event) => {
+        setCds(event.target.value);
+    };
+
     const handleFilter = () => {
         event.preventDefault();
+        const flt=[
+            {type: 'title', value: title},
+            {type: 'supervisor', value: supervisor},
+            {type: 'cosupervisor', value: cosupervisor},
+            {type: 'keywords', value: keywords},
+            {type: 'groups', value: groups},
+            {type: 'expirationDate', value: date},
+            {type: 'level', value: level},
+            {type: 'type', value: type},
+            {type: 'cds', value: cds},
+        ]
+        setFilter(flt);
         setClick(true);
     };
 
@@ -87,6 +145,12 @@ function LeftSide(props) {
         setSupervisor("");
         setKeywords("");
         setGroups("");
+        setLevel("");
+        setCds("");
+        setType("");
+        setDate("");
+        setSelectedDate(null); // Imposta il DatePicker a vuoto
+        setDate("");
         setClickReset(true);
     };
 
@@ -100,7 +164,7 @@ function LeftSide(props) {
                             setClick(false)
                         })
                             .catch((err) => console.log(err));
-                    } catch (err) {
+                    } catch (err) {s
                         setClick(false)
                     }
                 } else if (cosupervisor !== "") {
@@ -133,7 +197,7 @@ function LeftSide(props) {
                     } catch (err) {
                         setClick(false)
                     }
-                }  else if (groups !== "") {
+                } else if (groups !== "") {
                     try {
                         API.getProposalsByGroups(groups).then((a) => {
                             props.setProposalsList(a)
@@ -143,7 +207,48 @@ function LeftSide(props) {
                     } catch (err) {
                         setClick(false)
                     }
+                } else if (level !== "") {
+                    try {
+                        API.getProposalsByLevel(level).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
+                }else if (cds !== "") {
+                    try {
+                        API.getProposalsByCds(cds).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
+                }else if (type !== "") {
+                    try {
+                        API.getProposalsByType(type).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
+                }else if (date !== "") {
+                    try {
+                        API.getProposalsByExpirationDate(date).then((a) => {
+                            props.setProposalsList(a)
+                            setClick(false)
+                        })
+                            .catch((err) => console.log(err));
+                    } catch (err) {
+                        setClick(false)
+                    }
                 }
+
             };
             init();
         }
@@ -176,50 +281,46 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Groups</Form.Label>
-                    <Form.Control placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange}/>
+                    <Form.Control placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Level</Form.Label>
-                    <Form.Select defaultValue="">
-                        <option value="" disabled hidden>
-                            Seleziona
-                        </option>
-                        {
-                            cdsList.map((proposal, index) => (
-                                <option key={index}>{proposal.title}</option>
-                            ))
-                        }
+                    <Form.Select value={level} onChange={handleLevelSelectedChange}>
+                        <option value="" disabled>Seleziona</option>
+                        {levelList.map((proposal, index) => (
+                            <option key={index} value={proposal.title}>
+                                {proposal.title}
+                            </option>
+                        ))}
                     </Form.Select>
+
+
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by CDS</Form.Label>
-                    <Form.Select defaultValue="">
-                        <option value="" disabled hidden>
-                            Seleziona
-                        </option>
-                        {
-                            cdsList.map((proposal, index) => (
-                                <option key={index}>{proposal.title}</option>
-                            ))
-                        }
+                    <Form.Select value={cds} onChange={handleCdsSelectedChange}>
+                        <option value="" disabled>Seleziona</option>
+                        {cdsList.map((proposal, index) => (
+                            <option key={index} value={proposal.cod}>
+                                {proposal.title}
+                            </option>
+                        ))}
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Type</Form.Label>
-                    <Form.Select defaultValue="">
-                        <option value="" disabled hidden>
-                            Seleziona
-                        </option>
-                        {
-                            cdsList.map((proposal, index) => (
-                                <option key={index}>{proposal.title}</option>
-                            ))
-                        }
+                    <Form.Select value={type} onChange={handleTypeSelectedChange}>
+                        <option value="" disabled>Seleziona</option>
+                        {typeList.map((proposal, index) => (
+                            <option key={index} value={proposal.title}>
+                                {proposal.title}
+                            </option>
+                        ))}
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Select a Expiration Date</Form.Label>
-                    <MyDatePicker></MyDatePicker>
+                    <MyDatePicker date={date} setDate={setDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate}></MyDatePicker>
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex justify-content-start ">
                     <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
@@ -236,7 +337,6 @@ function RightSide(props) {
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return null; // O qualsiasi altra cosa vuoi restituire quando la lista è vuota
     }
-
     return (
         <>
             {props.ProposalsList.map((proposal, index) => (
@@ -247,24 +347,27 @@ function RightSide(props) {
 }
 
 
-const MyDatePicker = () => {
-    const [selectedDate, setSelectedDate] = useState(null);
-
-    useEffect(() => {
-        setSelectedDate(dayjs().toDate());
-    }, []);
-
+const MyDatePicker = (props) => {
+    const formatDate = (date) => {
+        if (!date) return "";
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${year}-${month}-${day}`;
+      };
     const handleDateChange = (date) => {
-        setSelectedDate(date);
+        props.setSelectedDate(date)
+        props.setDate(formatDate(date))
     };
-
+    
     return (
         <>
             <br />
             <DatePicker
-                selected={selectedDate}
+                selected={props.selectedDate}
                 onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy" // Modifica il formato della data come desiderato
+                placeholderText="YYYY-MM-DD"
+                dateFormat="yyyy-MM-dd" // Modifica il formato della data come desiderato
                 className="form-control"
             />
         </>
