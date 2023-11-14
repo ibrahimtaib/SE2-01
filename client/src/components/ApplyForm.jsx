@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import {useState} from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import DismissableAlert from './DismissableAlert.jsx';
-import './ApplyForm.css'
+import { useNavigate } from 'react-router-dom';
 import applicationApi from '../api/api.js';
-import { useHistory } from 'react-router-dom';
+import './ApplyForm.css';
+import DismissableAlert from './DismissableAlert.jsx';
 
 function ApplyForm({proposal}) {
-  const history = useHistory();
+  const navigateTo = useNavigate();
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   //TODO fetch from auth 
@@ -20,7 +20,7 @@ function ApplyForm({proposal}) {
       comment: data.comment.trim()
     }).then(
       /// TODO: redirect to application page
-      history.push("/")
+      navigateTo("/")
     ).catch(() => setShowAlert(true))
   };
 
