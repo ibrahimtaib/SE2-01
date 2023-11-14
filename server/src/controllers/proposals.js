@@ -236,6 +236,29 @@ getProposalsByLevel: async (level) => {
     );
   },
 
+  getProposalsByType: async (type) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany({
+          where: {
+            type: {
+              equals: type,
+              mode: "insensitive",
+            }
+          }
+        })
+        .then((proposals) => {
+          return resolve(proposals);
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database",
+          });
+        })
+    );
+  },
+
   getProposalsByCDS: async (cds) => {
     return new Promise((resolve, reject) =>
       prisma.Proposal

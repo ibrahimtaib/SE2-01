@@ -41,7 +41,9 @@ async function getAllProposals() {
         Groups:e.groups,
         Level:e.level,
         Type:e.type,
-        Description:e.description
+        Description:e.description,
+        Notes: e.notes,
+        RequiredKnowledge: e.requiredKnowledge
       }));
     } else {
       throw proposals;
@@ -62,7 +64,9 @@ async function getAllProposals() {
         Groups:e.groups,
         Level:e.level,
         Type:e.type,
-        Description:e.description
+        Description:e.description,
+        Notes: e.notes,
+        RequiredKnowledge: e.requiredKnowledge
       }));
     } else {
       throw proposals;
@@ -83,7 +87,9 @@ async function getAllProposals() {
         Groups:e.groups,
         Level:e.level,
         Type:e.type,
-        Description:e.description
+        Description:e.description,
+        Notes: e.notes,
+        RequiredKnowledge: e.requiredKnowledge
       }));
     } else {
       throw proposals;
@@ -101,8 +107,53 @@ async function getAllProposals() {
       throw cdsList;
     }
   }
+
+  async function getProposalsByKeywords(keywords) {
+    const response = await fetch(`${URL}proposals/keywords/${keywords}`); // Attendere che la Promise si risolva
+    const proposals = await response.json(); // Attendere che la Promise si risolva
+    if (response.ok) {
+      return proposals.map((e) => ({
+        Supervisor:e.supervisor,
+        Cds:e.cds,
+        Teacher:e.supervisor,
+        Title: e.title,
+        CoSupervisor: e.coSupervisors,
+        Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
+        Groups:e.groups,
+        Level:e.level,
+        Type:e.type,
+        Description:e.description,
+        Notes: e.notes,
+        RequiredKnowledge: e.requiredKnowledge
+      }));
+    } else {
+      throw proposals;
+    }
+  }
   
+  async function getProposalsByGroups(groups) {
+    const response = await fetch(`${URL}proposals/groups/${groups}`); // Attendere che la Promise si risolva
+    const proposals = await response.json(); // Attendere che la Promise si risolva
+    if (response.ok) {
+      return proposals.map((e) => ({
+        Supervisor:e.supervisor,
+        Cds:e.cds,
+        Teacher:e.supervisor,
+        Title: e.title,
+        CoSupervisor: e.coSupervisors,
+        Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
+        Groups:e.groups,
+        Level:e.level,
+        Type:e.type,
+        Description:e.description,
+        Notes: e.notes,
+        RequiredKnowledge: e.requiredKnowledge
+      }));
+    } else {
+      throw proposals;
+    }
+  }
   
 
-  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds};
+  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds, getProposalsByKeywords, getProposalsByGroups};
 export default API;
