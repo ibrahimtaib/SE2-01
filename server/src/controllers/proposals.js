@@ -25,19 +25,19 @@ module.exports = {
 
   getAllTypes: async () => {
     return new Promise((resolve, reject) =>
-      prisma.Proposals
+      prisma.Proposal
         .findMany({
           select: {
-            coSupervisors: true,
+            type: true,
           },
         })
-        .then(
-          console.log(coSupervisors)
-        )
+        .then((types) => {
+          return resolve(types.map((ty) => ty.type));
+        })
         .catch((error) => {
           console.error(error);
           return reject({
-            error: "An error occurred while querying the database for type",
+            error: "An error occurred while querying the database for cds",
           });
         })
     );
