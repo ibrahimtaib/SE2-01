@@ -6,13 +6,9 @@ module.exports = {
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
       prisma.Degree
-        .findMany({
-          select: {
-            TITLE_DEGREE: true,
-          },
-        })
+        .findMany()
         .then((cds) => {
-          return resolve(cds.map((cd) => cd.TITLE_DEGREE));
+          return resolve(cds);
         })
         .catch((error) => {
           console.error(error);
@@ -25,15 +21,19 @@ module.exports = {
 
   getAllTypes: async () => {
     return new Promise((resolve, reject) =>
-      prisma.Proposals
+      prisma.Proposal
         .findMany({
           select: {
-            coSupervisors: true,
+            type: true,
           },
         })
-        .then(
-          console.log(coSupervisors)
-        )
+        .then((types) => {
+          // Utilizza un set per garantire l'unicità dei valori
+          const uniqueTypes = new Set(types.map((tp) => tp.type));
+          // Converti il set in un array
+          const uniqueTypesArray = Array.from(uniqueTypes);
+          return resolve(uniqueTypesArray);
+        })
         .catch((error) => {
           console.error(error);
           return reject({
@@ -45,7 +45,7 @@ module.exports = {
 
   getAllLevels: async () => {
     return new Promise((resolve, reject) =>
-      prisma.Proposals
+      prisma.Proposal
         .findMany({
           select: {
             level: true,
