@@ -5,8 +5,10 @@ import "react-datetime/css/react-datetime.css";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import API from './API';
 import DefaultRoute from './components/DefaultRoute';
+import ApplyPage from './pages/ApplyPage';
 import InsertPage from './pages/InsertPage';
 import MainPage from './pages/MainPage';
+
 
 import './App.css';
 
@@ -53,6 +55,7 @@ function App() {
         <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />}/>
         <Route path='/applications/*' element={<ApplicationsPage />} />
         <Route path="/students/:id" element={<StudentDetailsPage />} />
+        <Route path="proposals/:proposalId/apply" element={<ApplyPage/>}/>
         <Route path='/*' element={<DefaultRoute />} />
       </Routes>
     </BrowserRouter>
@@ -60,4 +63,4 @@ function App() {
 }
 
 
-export default App;
+export default App

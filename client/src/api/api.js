@@ -16,4 +16,18 @@ export const addPage = async (proposal) => {
   }
 };
 
-export default api;
+
+
+const applicationApi = {
+  addApplication: async (application) => {
+    try {
+      const response = await api.post("/applications/", application);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
+export default api;/* eslint-disable no-useless-catch */
+export default applicationApi;
