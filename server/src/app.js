@@ -4,6 +4,10 @@ const cors = require("cors");
 const helmet = require("helmet");
 const router = require("./routes/router.js");
 const app = express();
+
+const dotenv = require('dotenv');
+dotenv.config(); // Load the environment variables
+
 const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5174']; //Changed it to make it work
 
 app.use(cors({origin: allowedOrigins, credentials:true}));

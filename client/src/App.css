@@ -1,13 +1,17 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
 .navbar-orange {
     background-color: #ff6600; /* Arancione scuro */
   }
 
-  .ml-3 {
-    margin-left: 20px; /* O qualsiasi altra spaziatura desiderata */
-  }
-
   .nascondi {
     display: none;
+  }
+
+  .ml-3 {
+    margin-left: 20px; /* O qualsiasi altra spaziatura desiderata */
   }
 
   .custom-padding {

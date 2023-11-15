@@ -4,6 +4,7 @@ const proposalsRouter = require("./proposals");
 const teachersRouter = require('./teachers');
 const degreesRouter = require('./degrees')
 
+router.use('/proposals', proposalsRouter)
 // Status 404 if the route is not found
 
 

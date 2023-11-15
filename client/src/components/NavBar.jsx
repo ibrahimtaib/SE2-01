@@ -1,4 +1,4 @@
-import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
@@ -13,23 +13,8 @@ function NavBar() {
               <Nav.Link href="#CV">CV</Nav.Link>
             </Nav>
           </Navbar.Collapse>
-          <div>
-            {/* <button
-              className="bg-slate-800 hover:bg-slate-700 text-white py-2 px-4 rounded-full mr-3 font-semibold"
-              onClick={() => { navigateTo('/add') }}
-            >
-              New Proposal
-            </button> */}
-            <button
-              className="bg-white text-gray-700 hover:text-gray-900 py-2 px-4 rounded-full mr-3 border-solid border border-gray-600 font-semibold"
-              onClick={() => { navigateTo('/login') }}
-            >
-              Sign In
-            </button>
-
-          </div>
+          <Button variant="outline-light" className="mr-3" style={{ marginRight: '10px' }}>Log In</Button>
         </Navbar>
-
       );
 }
 
