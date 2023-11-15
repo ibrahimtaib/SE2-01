@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap';
 
 import FilterProposals from '../components/FilterProposals';
 import Header from '../components/Header';
-import NavBar from '../components/Navbar';
+import NavBar from '../components/NavBar';
 
 function MainPage(props) {
   return (

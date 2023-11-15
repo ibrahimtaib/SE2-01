@@ -1,9 +1,12 @@
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { React, useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ProposalCard(props) {
     const [isVisible, setIsVisible] = useState(false);
+    const navigateTo = useNavigate();
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -11,7 +14,7 @@ function ProposalCard(props) {
 
   return (
     <Card className="text-left m-3">
-      <Card.Header>{props.proposal.Teacher}</Card.Header>
+      <Card.Header>{props.proposal.Teacher.name}</Card.Header>
       <Card.Body>
         <Card.Title>{props.proposal.Title}</Card.Title>
         <Card.Text>
@@ -33,7 +36,9 @@ function ProposalCard(props) {
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
           </Button>
-          <Button variant="success">
+          <Button 
+          onClick={() => navigateTo(`/proposals/${props.proposal.id}/apply`) }
+          variant="success">
             Apply
           </Button>
         </div>

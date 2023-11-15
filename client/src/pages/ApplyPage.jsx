@@ -1,21 +1,23 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react';
-import ApplyForm from '../components/ApplyForm'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import API from '../API';
+import ApplyForm from '../components/ApplyForm';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
-import { useParams } from 'react-router-dom';
 
 function ApplyPage() {
   const [proposal, setProposal] = useState(undefined)
   const {proposalId} = useParams()
   useEffect(() => {
-    //TODO api call to fetch proposal
-    console.log("useEffect")
-    const fetchedProposal = {supervisor: {name: "Mario Rossi"}, title: "How to make a thesis management project", id: 12 }
-    setProposal(fetchedProposal)
+    const fetchProposal = async ()=> {
+      const response = await API.getProposalById(proposalId)
+      console.log("getProposalById", response.proposal)
+      const fetchedProposal = {...response.proposal, supervisor: response.proposal.teacher}
+      setProposal(fetchedProposal)
+    }
+    fetchProposal();
   }, [])
 
-  console.log(proposal)
   return proposal == undefined ? (<></>):(
     <>
     <Header/>

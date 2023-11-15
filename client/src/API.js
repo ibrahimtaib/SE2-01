@@ -8,6 +8,7 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
+        id:e.id,
         Supervisor:e.supervisor,
         Cds:e.cds,
         Teacher:e.supervisor,
@@ -335,12 +336,15 @@ async function getAllProposals() {
 }
 
 
-const API = {getAllProposals,
-   getProposalsByTitle,
+const API = {
+  getAllProposals,
+  getProposalsByTitle,
   getProposalsByCosupervisor,
   getProposalsBySupervisor,
-  getAllCds, getApplicationsByTeacherId,
-  getProposalById, getExamAndStudentById,
+  getAllCds, 
+  getApplicationsByTeacherId,
+  getProposalById, 
+  getExamAndStudentById,
   getProposalsByKeywords, 
   getProposalsByGroups, 
   getAllTypes, 

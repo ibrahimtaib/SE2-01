@@ -11,6 +11,7 @@ import API from '../API';
 import ProposalCard from './ProposalCard';
 
 function FilterProposals(props) {
+    console.log("FilterProposals", props.ProposalsList)
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
