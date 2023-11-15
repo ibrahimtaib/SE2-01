@@ -10,8 +10,7 @@ module.exports = {
         .then((cds) => {
           return resolve(cds);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database for cds",
           });
@@ -32,8 +31,7 @@ module.exports = {
           const uniqueTypesArray = Array.from(uniqueTypes);
           return resolve(uniqueTypesArray);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database for cds",
           });
@@ -228,7 +226,7 @@ module.exports = {
           },
         })
         .then((proposals) => {
-            const filteredProposals = proposals.filter(proposal => {
+          const filteredProposals = proposals.filter(proposal => {
             const proposalKeywords = proposal.keywords.map(keyword => keyword.toLowerCase());
             return separatedKeywords.every(keyword => proposalKeywords.includes(keyword));
           });
@@ -424,22 +422,22 @@ module.exports = {
       let cdsFilter = filter.cds;
       let levelFilter = filter.level;
       let typeFilter = filter.type;
-      let titleFilter= filter.title;
-      let supervisorFilter= filter.supervisor;
-      let coSupervisorFilter= filter.coSupervisor;
-      let keywordsFilter=filter.keywords;
-      let groupsFilter=filter.groups;
-      let expirationFilter=filter.expiration;
-      
+      let titleFilter = filter.title;
+      let supervisorFilter = filter.supervisor;
+      let coSupervisorFilter = filter.coSupervisor;
+      let keywordsFilter = filter.keywords;
+      let groupsFilter = filter.groups;
+      let expirationFilter = filter.expiration;
+
       let filteredProposals; // Dichiaro la variabile fuori dal blocco if
-      
+
       if (cdsFilter) {
         filteredProposals = await module.exports.getProposalsByCDS(cdsFilter);
       }
-      
+
       if (levelFilter) {
         let levelProposals = await module.exports.getProposalsByLevel(levelFilter);
-      
+
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
@@ -456,7 +454,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          typeProposals.some((typeProposal) => typeProposal.id === proposal.id)
+            typeProposals.some((typeProposal) => typeProposal.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -469,7 +467,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          titleProposals.some((titleProposal) => titleProposal.id === proposal.id)
+            titleProposals.some((titleProposal) => titleProposal.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -482,7 +480,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          supervisorProposals.some((supervisorProposal) => supervisorProposal.id === proposal.id)
+            supervisorProposals.some((supervisorProposal) => supervisorProposal.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -495,7 +493,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          coSupervisorProposals.some((coSupervisorProposal) => coSupervisorProposal.id === proposal.id)
+            coSupervisorProposals.some((coSupervisorProposal) => coSupervisorProposal.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -508,7 +506,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          keywordsProposals.some((keywordsProposals) => keywordsProposals.id === proposal.id)
+            keywordsProposals.some((keywordsProposals) => keywordsProposals.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -521,7 +519,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          groupsProposals.some((groupsProposals) => groupsProposals.id === proposal.id)
+            groupsProposals.some((groupsProposals) => groupsProposals.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -534,7 +532,7 @@ module.exports = {
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
-          expirationProposals.some((expirationProposals) => expirationProposals.id === proposal.id)
+            expirationProposals.some((expirationProposals) => expirationProposals.id === proposal.id)
           );
         } else {
           // Se filteredProposals non esiste, assegna semplicemente levelProposals
@@ -546,9 +544,6 @@ module.exports = {
       console.error(error);
       throw new Error("An error occurred while filtering proposals");
     }
-  },
+  }
 
-
-
-
-
+};
