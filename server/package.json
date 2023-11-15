@@ -29,10 +29,7 @@
       "src/**/*.js",
       "!./src/tests/**/*.js"
     ],
-    "coverageDirectory": "src/tests/coverage"
+    "coverageDirectory": "src/tests/coverage",
     "dev": "nodemon src/server.js"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
   }
 }
