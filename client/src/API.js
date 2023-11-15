@@ -295,8 +295,6 @@ async function getAllProposals() {
       }
   }
   
-
-  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds, getProposalsByKeywords, getProposalsByGroups, getAllTypes, getAllLevels, getProposalsByLevel, getProposalsByCds, getProposalsByType, getProposalsByExpirationDate, filterProposals};
   
   async function getApplicationsByTeacherId(teacherId) {
     const response = await fetch(`${URL}applications/${teacherId}`);
@@ -337,5 +335,20 @@ async function getAllProposals() {
 }
 
 
-  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds, getApplicationsByTeacherId, getProposalById, getExamAndStudentById};
+const API = {getAllProposals,
+   getProposalsByTitle,
+  getProposalsByCosupervisor,
+  getProposalsBySupervisor,
+  getAllCds, getApplicationsByTeacherId,
+  getProposalById, getExamAndStudentById,
+  getProposalsByKeywords, 
+  getProposalsByGroups, 
+  getAllTypes, 
+  getAllLevels, 
+  getProposalsByLevel, 
+  getProposalsByCds, 
+  getProposalsByType, 
+  getProposalsByExpirationDate, 
+  filterProposals
+};
 export default API;

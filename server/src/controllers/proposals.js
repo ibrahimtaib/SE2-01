@@ -96,8 +96,6 @@ module.exports = {
         })
     );
   },
-  
-
 
   getProposals: async () => {
     return new Promise((resolve, reject) =>
@@ -219,8 +217,6 @@ module.exports = {
     });
   },
   
-  
-
   getProposalsByGroups: async (groups) => {
     const separatedGroups = groups.split(',').map(group => group.trim().toLowerCase());
     console.log(separatedGroups)
@@ -244,8 +240,6 @@ module.exports = {
     });
   },
   
-
-
   getProposalsByExpirationDate: async (expirationDate) => {
     return new Promise((resolve, reject) =>
       prisma.Proposal
@@ -268,7 +262,7 @@ module.exports = {
     );
   },
   
-getProposalsByLevel: async (level) => {
+  getProposalsByLevel: async (level) => {
     return new Promise((resolve, reject) =>
       prisma.Proposal
         .findMany({
@@ -357,6 +351,4 @@ getProposalsByLevel: async (level) => {
         })
     );
 },
-
-
 };

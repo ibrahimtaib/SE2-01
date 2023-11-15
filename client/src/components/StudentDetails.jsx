@@ -1,36 +1,46 @@
-import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+/* eslint-disable react/prop-types */
+import ListGroup from 'react-bootstrap/ListGroup';
+import { Link, useLocation } from 'react-router-dom';
+
+import Button from 'react-bootstrap/Button';
+
+const Item = ({ label, value }) => ( 
+  <div
+  style={{
+    display: "flex",
+    flexDirection: "row",
+  }}>
+    <h5 className="text-gray-400 text-xs">{label}:</h5>
+    <span style={{marginLeft: "15px"}}
+    >{value}</span>
+  </div>
+);
 
 const ProposalDetails = () => {
   const location = useLocation();
   const { student } = location.state || {};
 
   if (!student) {
-    return <div>Dati mancanti o non validi.</div>;
+    return <div>Data is missing Or not valid!</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto mt-8">
-      <Link to="/applications" className="text-indigo-500 hover:text-indigo-700 flex items-center mb-4 text-center">
-        <FontAwesomeIcon icon={faArrowLeft} className="mr-2" style={{ marginTop: '40px', marginLeft: '50px'}} />
-        Back
-      </Link>
-
-      <h1 className="text-3xl font-bold text-indigo-800 mb-6 text-center">Student Details</h1>
 
       <div className="card border-indigo-500 shadow-md rounded p-6 mb-6">
         <div className="card-body text-center">
-          <ul className="list-none">
-            <li className="list-item"><span className="font-semibold">Name:</span> {student.student.name} {student.student.surname}</li>
-            <li className="list-item"><span className="font-semibold">Email:</span> {student.student.email}</li>
-            <li className="list-item"><span className="font-semibold">Gender:</span> {student.student.gender}</li>
-            <li className="list-item"><span className="font-semibold">Nationality:</span> {student.student.nationality}</li>
-            <li className="list-item"><span className="font-semibold">Degree:</span> {student.student.degree.TITLE_DEGREE}</li>
-            <li className="list-item"><span className="font-semibold">Degree Code:</span> {student.student.COD_DEGREE}</li>
-            <li className="list-item"><span className="font-semibold">Enrollment Year:</span> {student.student.ENROLLMENT_YEAR}</li>
-          </ul>
+        <ListGroup as="ul">
+          <ListGroup.Item as="li" >
+          <h1 className="text-3xl font-bold text-indigo-800 mb-6 text-center">Student Details</h1>
+          </ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Name"} value={student.student.name} /></ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Email"} value={student.student.email} /></ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Gender"} value={student.student.gender} /></ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Nationality"} value={student.student.nationality} /></ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Degree"} value={student.student.TITLE_DEGREE} /></ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Degree Code"} value={student.student.COD_DEGREE} /></ListGroup.Item>
+          <ListGroup.Item as="li"><Item label={"Enrollment Year"} value={student.student.ENROLLMENT_YEAR} /></ListGroup.Item>
+        </ListGroup>
 
           <div className="overflow-y-auto max-h-32">
             <table className="table w-full">
@@ -57,6 +67,13 @@ const ProposalDetails = () => {
             </table>
           </div>
         </div>
+        <Link 
+        style={{padding: "20px"}}
+        to="/applications">
+        <Button
+        variant="dark"
+        >Go Back</Button>
+      </Link>
       </div>
     </div>
   );

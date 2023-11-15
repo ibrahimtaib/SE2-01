@@ -139,7 +139,6 @@ router.get("/level/:level", async (req, res) => {
   }
 });
 
-
 router.get("/cds/:cds", async (req, res) => {
     const cds = req.params.cds;
     try {
@@ -149,9 +148,7 @@ router.get("/cds/:cds", async (req, res) => {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  });
+});
 
 
-
->>>>>>>>> Temporary merge branch 2
 module.exports = router;

@@ -2,7 +2,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 
-import React from 'react';
 
 const Header = () => {
   return (

@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import API from '../API';  
+import { useNavigate } from 'react-router-dom';
+import API from '../API';
 
-const ProposalList = ({ data }) => {
-  const [applications, setApplications] = useState([]);
+const ProposalList = ({ applications , loading }) => {
   const [hoveredTitle, setHoveredTitle] = useState(null);
   const [hoveredStudent, setHoveredStudent] = useState(null);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setApplications(data);
-      setLoading(false);
-    }
-  }, [data]);
 
   const handleApplicationAction = (applicationId, studentId, action) => {
     console.log(`Application ID: ${applicationId}, Student ID: ${studentId}, Action: ${action}`);
@@ -55,7 +48,7 @@ const ProposalList = ({ data }) => {
         try {
           const studentDetails = await API.getExamAndStudentById(student.id);
   
-          navigate(`/applications/student/${student.id}`, {
+          navigate(`/students/${student.id}`, {
             state: {
               student: studentDetails.student, 
             },
@@ -135,7 +128,7 @@ const ProposalList = ({ data }) => {
                 }
                 className="bg-success text-white px-3 py-1 rounded hover:bg-green-600 transition duration-300 mx-2" 
               >
-                Accetta
+                Accept
               </Button>
               <Button
                 onClick={() =>
@@ -143,7 +136,7 @@ const ProposalList = ({ data }) => {
                 }
                 className="bg-danger text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
               >
-                Rifiuta
+                Refuse
               </Button>
             </Col>
           </Row>
