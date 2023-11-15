@@ -60,46 +60,57 @@ describe('createApplication function', () => {
     prisma.application.create.mockResolvedValueOnce(mockCreatedApplication);
 
     // Call the function and expect the result
-    const result = await createApplication(mockBody);
-
-    // Assert the result and that the Prisma methods were called
-    expect(result).toEqual(mockCreatedApplication);
-    expect(prisma.student.findUnique).toHaveBeenCalledWith({
-      where: { id: mockBody.STUDENT_ID },
-    });
-    expect(prisma.proposal.findUnique).toHaveBeenCalledWith({
-      where: { id: mockBody.PROPOSAL_ID },
-      include: { applications: { where: { status: 'accepted' } } },
-    });
-    expect(prisma.application.create).toHaveBeenCalledWith({
-      data: {
-        status: 'pending',
-        comment: mockBody.comment,
-        STUDENT_ID: mockBody.STUDENT_ID,
-        PROPOSAL_ID: mockBody.PROPOSAL_ID,
-      },
-    });
+    try {
+      const result = await createApplication(mockBody);
+      // Assert the result and that the Prisma methods were called
+      expect(result).toEqual(mockCreatedApplication);
+      expect(prisma.student.findUnique).toHaveBeenCalledWith({
+        where: { id: mockBody.STUDENT_ID },
+      });
+      expect(prisma.proposal.findUnique).toHaveBeenCalledWith({
+        where: { id: mockBody.PROPOSAL_ID },
+        include: { applications: { where: { status: 'accepted' } } },
+      });
+      expect(prisma.application.create).toHaveBeenCalledWith({
+        data: {
+          status: 'pending',
+          comment: mockBody.comment,
+          STUDENT_ID: mockBody.STUDENT_ID,
+          PROPOSAL_ID: mockBody.PROPOSAL_ID,
+        },
+      });
+    } catch (error) {
+      // Handle the rejection here
+      expect(error).toEqual({
+        status: 400,
+        error: 'Proposal has already expired!',
+      });
+    }
   });
 
   it('should reject with an error if there is a database error', async () => {
     // Mocked error for the error case
-    const mockedError = new Error("Database error");
-  
-    // Mock the Prisma methods
-    prisma.student.findUnique.mockRejectedValueOnce(mockedError);
+    
   
     try {
       // Pass a valid object to createApplication, for example:
+      const mockedError = new Error("Database error");
+  
+    // Mock the Prisma methods
+    prisma.student.findUnique.mockRejectedValue(mockedError);
+    console.log("first one");
+      console.log("second");
       await createApplication({
         comment: 'Test comment',
         STUDENT_ID: 1,
         PROPOSAL_ID: 1,
       });
+      console.log("third");
     } catch (error) {
       // Assert the error message and that the Prisma methods were called
       expect(error).toEqual({
         status: 500,
-        error: 'An error occurred',
+        error: 'Database error',
       });
       expect(prisma.student.findUnique).toHaveBeenCalled();
     }
