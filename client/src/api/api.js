@@ -8,12 +8,11 @@ const api = axios.create({
 
 const applicationApi = {
   addApplication: async (application) => {
-    try {
-      const response = await api.post("/applications/", application);
-      return response.data;
-    } catch (error) {
-      throw error;
+    const response = await api.post("/applications/", application);
+    if (response.status === 500) {
+      throw new Error("Internal Server Error");
     }
+    return response;
   },
 };
 

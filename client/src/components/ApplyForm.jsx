@@ -10,6 +10,7 @@ function ApplyForm({proposal}) {
   const navigateTo = useNavigate();
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
+  const [messageAlert, setMessageAlert] = useState("");
   //TODO fetch from auth 
   const student = {name: "Signor E", email: "eeeee@eeeeee.eee", id: 4}
 
@@ -18,16 +19,23 @@ function ApplyForm({proposal}) {
       STUDENT_ID: student.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
-    }).then(
-      /// TODO: redirect to application page
-      navigateTo("/")
-    ).catch(() => setShowAlert(true))
+    }).then((res) => {
+      if (res.status === 200 || res.status === 201)
+      {
+        navigateTo("/");
+      }
+      setMessageAlert(res.data.error);
+      setShowAlert(true);
+    }).catch(() => {
+      setMessageAlert("There was an error while submitting your application, please try again in a few moments.")
+      setShowAlert(true)
+    })
   };
 
   return (
     <>
     <div className='container-apply-form'>
-    <DismissableAlert showAlert={showAlert} setShowAlert={setShowAlert} heading={"Sorry!"} message={"There was an error while submitting your application, please try again in a few moments or log in again if the problem persists."}/>
+    <DismissableAlert showAlert={showAlert} setShowAlert={setShowAlert} heading={"Sorry!"} message={messageAlert}/>
       <h1 className='title-apply-form'>Apply to: {proposal.title}</h1>
       <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name}</h3>
 
