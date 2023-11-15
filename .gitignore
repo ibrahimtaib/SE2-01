@@ -8,3 +8,6 @@
 
 # Ignore postgres
 **/postgres
+
+# Ignore coverage 
+**/coverage/
