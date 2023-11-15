@@ -3,12 +3,6 @@ const prisma = require("./prisma");
 
 module.exports = {
 
-  /**
-  * Function that returns all courses in the database.
-  * @param {}
-  * @returns {Promise<[{id: Number, COD_COURSE: Number, TITLE_COURSE: String}]>}
-  */
-
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
       prisma.Degree
@@ -547,16 +541,7 @@ module.exports = {
           filteredProposals = expirationProposals;
         }
       }
-    
       return filteredProposals;
-
-      /* 
-      else {
-
-        const allProposals = await prisma.Proposal.findMany();
-        return allProposals;
-      }
-      */
     } catch (error) {
       console.error(error);
       throw new Error("An error occurred while filtering proposals");
@@ -567,4 +552,3 @@ module.exports = {
 
 
 
-};

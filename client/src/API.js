@@ -258,7 +258,6 @@ async function getAllProposals() {
   }
 
   async function getProposalsByExpirationDate(date) {
-    console.log(date)
     const response = await fetch(`${URL}proposals/expiration/${date}`); // Attendere che la Promise si risolva
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
@@ -295,7 +294,6 @@ async function getAllProposals() {
   
       if (response.ok) {
         const result = await response.json();
-        console.log('Proposal submitted successfully:', result);
         return result.map((e) => ({
             Supervisor:e.teacher.surname,
             Cds:e.cds,
