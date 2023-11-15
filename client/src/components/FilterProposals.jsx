@@ -1,14 +1,14 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import ProposalCard from './ProposalCard';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import dayjs from 'dayjs';
 import API from '../API';
-import { React, useState, useEffect, useContext } from 'react';
+import ProposalCard from './ProposalCard';
 
 function FilterProposals(props) {
     return (
@@ -73,18 +73,18 @@ function LeftSide(props) {
 
     useEffect(() => {
         const init = async () => {
-            try {
-                API.getAllCds().then((a) => {
-                    setCdsList(a)
-                }).catch((err) => console.log(err));
-                API.getAllTypes().then((a) => {
-                    setTypeList(a)
-                }).catch((err) => console.log(err));
-                API.getAllLevels().then((a) => {
-                    setLevelList(a)
-                }).catch((err) => console.log(err));
-            } catch (err) {
-            }
+            API.getAllCds().then((a) => {
+                setCdsList(a)
+            }).catch((err) => console.log(err));
+
+            API.getAllTypes().then((a) => {
+                setTypeList(a)
+            }).catch((err) => console.log(err));
+            
+            API.getAllLevels().then((a) => {
+                setLevelList(a)
+            }).catch((err) => console.log(err));
+            
         };
         init();
     }, []);

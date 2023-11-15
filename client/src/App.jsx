@@ -1,8 +1,6 @@
+/* eslint-disable no-unused-vars */
 import "@yaireo/tagify/dist/tagify.css";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
 import "react-datetime/css/react-datetime.css";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -17,6 +15,7 @@ import './App.css';
 function App() {
 
   // This state keeps track if the user is currently logged-in.
+  // eslint-disable-next-line no-unused-vars
   const [loggedIn, setLoggedIn] = useState(false);
   // This state contains the user's info.
   const [user, setUser] = useState(null);
@@ -35,14 +34,11 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
-      try {
         API.getAllProposals().then((a) => {
           setProposalsList(a)
         })
-          .catch((err) => console.log(err));
-      } catch (err) {
-
-      }
+        .catch((err) => console.log("error fetching proposals", err));
+  
     };
     init();
   }, []);
@@ -51,10 +47,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />}/>
-        <Container fluid className="App p-0">
           <Route path='/' element={<MainPage ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>}></Route>
           <Route path='/*' element={<DefaultRoute />} />
-        </Container>
       </Routes>
     </BrowserRouter>
   );

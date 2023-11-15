@@ -8,7 +8,6 @@ router.use('/proposals', proposalsRouter)
 // Status 404 if the route is not found
 
 
-router.use('/proposals', proposalsRouter)
 router.use('/teachers', teachersRouter)
 router.use('/degrees', degreesRouter)
 router.use("*", (req, res) => [res.status(404).send("Endpoint not found")]);

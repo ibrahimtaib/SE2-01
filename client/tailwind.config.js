@@ -4,12 +4,13 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  prefix:'tw-',
+  corePlugins:{
+    preflight:false
+  },
   theme: {
     extend: {},
 
   },
-  plugins: [
-    require('@tailwindcss/forms')
-  ],
 }
 

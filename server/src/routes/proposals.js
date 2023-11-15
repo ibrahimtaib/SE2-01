@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const proposalsController = require("../controllers/proposals");
 
+router.post("/", async (req, res) => {
+  proposalsController
+    .createProposal(req.body)
+    .then((proposal) => {
+      res.status(200).json(proposal);
+    })
+    .catch((error) => res.status(500).json(error));
+});
+
 router.get("/cds", async (req, res) => {
   proposalsController
     .getAllCds()

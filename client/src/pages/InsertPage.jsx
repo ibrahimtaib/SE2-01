@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
+import 'tailwindcss/tailwind.css';
+
 import Header from '../components/Header';
-import InsertForm from '../components/InsertForm';
+import InsertForm2 from '../components/InsertForm2';
 import NavBar from '../components/Navbar';
 
 
@@ -8,11 +10,9 @@ function InsertPage({isLoggedIn}) {
 
   return (
     <>
-    <Header isLoggedIn={isLoggedIn}/>
-    <NavBar></NavBar>
-    <br></br>
-    <InsertForm />
-    <br></br>
+    <Header/>
+    <NavBar/>
+    <InsertForm2 />
     </>
   )
 }
