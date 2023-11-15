@@ -11,7 +11,7 @@ async function getAllProposals() {
         id:e.id,
         Supervisor:e.supervisor,
         Cds:e.cds,
-        Teacher:e.supervisor,
+        Teacher:e.teacher,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),

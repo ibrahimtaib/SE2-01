@@ -100,7 +100,12 @@ module.exports = {
   getProposals: async () => {
     return new Promise((resolve, reject) =>
       prisma.Proposal
-        .findMany()
+        .findMany({
+          include: {
+            teacher: true,
+            degree: true,
+          },
+        })
         .then((proposals) => {
           return resolve(proposals);
         })

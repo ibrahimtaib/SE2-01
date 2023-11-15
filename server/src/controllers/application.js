@@ -34,25 +34,18 @@ module.exports = {
       if (student == null || proposal == null) {
         return reject({
           status: 500,
-          error: "An error occurred",
+          error: "no student found",
         });
       }
       // Check student is suitable
-      if (student.COD_DEGREE != proposal.cds) {
-        console.error(student);
-        console.error(proposal);
-        return reject({
-          status: 400,
-          error: "Student cannot apply to this proposal!",
-        });
-      }
+      /*
       // Check proposal is valid
       if (proposal.expiration > Date.now()) {
         return reject({
           status: 400,
           error: "Proposal has already expired!",
         });
-      }
+      }*/
       if (proposal.applications.length > 0 || proposal.archived) {
         return reject({
           status: 400,

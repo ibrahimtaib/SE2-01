@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -171,7 +172,7 @@ function LeftSide(props) {
                             setClick(false)
                         })
                             .catch((err) => console.log(err));
-                    } catch (err) {s
+                    } catch (err) {
                         setClick(false)
                     }
                 } else if (cosupervisor !== "") {

@@ -12,17 +12,21 @@ function ApplyForm({proposal}) {
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   //TODO fetch from auth 
-  const student = {name: "Signor E", email: "eeeee@eeeeee.eee", id: 4}
+  const student = {name: "Signor", email: "eeeee@eeeeee.eee", id: 2}
 
   const onSubmit = async (data) => {
-      addApplication({
+    try {
+    const res = addApplication({
       STUDENT_ID: student.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
-    }).then(
-      /// TODO: redirect to application page
-      navigateTo("/")
-    ).catch(() => setShowAlert(true))
+      })
+    console.log("application added", res)
+    navigateTo("/")
+    }catch(err){
+      console.log("error adding application", err)
+      setShowAlert(true)
+    }
   };
 
   return (
