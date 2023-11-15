@@ -83,7 +83,7 @@ describe('createApplication function', () => {
 
   it('should reject with an error if there is a database error', async () => {
     // Mocked error for the error case
-    const mockedError = new Error('An error occurred');
+    const mockedError = new Error("Database error");
   
     // Mock the Prisma methods
     prisma.student.findUnique.mockRejectedValueOnce(mockedError);
@@ -92,7 +92,7 @@ describe('createApplication function', () => {
       // Pass a valid object to createApplication, for example:
       await createApplication({
         comment: 'Test comment',
-        STUDENT_ID: null,
+        STUDENT_ID: 1,
         PROPOSAL_ID: 1,
       });
     } catch (error) {
