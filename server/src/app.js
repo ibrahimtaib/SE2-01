@@ -8,7 +8,7 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config(); // Load the environment variables
 
-const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5174']; //Changed it to make it work
+const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5174', 'http://localhost:5173']; //Changed it to make it work
 
 app.use(cors({origin: allowedOrigins, credentials:true}));
 

@@ -78,6 +78,12 @@ function LeftSide(props) {
                 setCdsList(a)
             }).catch((err) => console.log(err));
 
+            API.getAllProposals().then((a) => {
+                props.setProposalsList(a)
+                setClickReset(false);
+            })
+                .catch((err) => console.log(err));
+
             API.getAllTypes().then((a) => {
                 setTypeList(a)
             }).catch((err) => console.log(err));
