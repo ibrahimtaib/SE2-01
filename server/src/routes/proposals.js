@@ -142,7 +142,6 @@ router.get("/level/:level", async (req, res) => {
 
 router.get("/cds/:cds", async (req, res) => {
     const cds = req.params.cds;
- 
     try {
       const proposals = await proposalsController.getProposalsByCDS(cds);
       res.status(200).json(proposals);
@@ -154,4 +153,5 @@ router.get("/cds/:cds", async (req, res) => {
 
 
 
+>>>>>>>>> Temporary merge branch 2
 module.exports = router;

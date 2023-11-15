@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-catch */
-import axios from 'axios';
 import dayjs from 'dayjs';
 
 const URL = 'http://localhost:3001/';
@@ -298,4 +297,45 @@ async function getAllProposals() {
   
 
   const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds, getProposalsByKeywords, getProposalsByGroups, getAllTypes, getAllLevels, getProposalsByLevel, getProposalsByCds, getProposalsByType, getProposalsByExpirationDate, filterProposals};
+  
+  async function getApplicationsByTeacherId(teacherId) {
+    const response = await fetch(`${URL}applications/${teacherId}`);
+    const res = await response.json();
+    if (response.ok) {
+      return res;
+    } else {
+      throw 0;
+    }
+  }  
+  
+  async function getProposalById(proposalId) {
+    const response = await fetch(`${URL}applications/proposal/${proposalId}`);
+    const data = await response.json();
+  
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to fetch proposal');
+    }
+  }
+
+  async function getExamAndStudentById(studentId) {
+    try {
+        const studentResponse = await fetch(`${URL}applications/student/${studentId}`);
+        const studentData = await studentResponse.json();
+
+        if (!studentResponse.ok) {
+            throw new Error(studentData.error || 'Failed to fetch student information');
+        }
+
+        return {
+            student: studentData,
+        };
+    } catch (error) {
+        throw new Error(`An error occurred: ${error.message}`);
+    }
+}
+
+
+  const API = {getAllProposals, getProposalsByTitle, getProposalsByCosupervisor,getProposalsBySupervisor, getAllCds, getApplicationsByTeacherId, getProposalById, getExamAndStudentById};
 export default API;

@@ -2,6 +2,25 @@
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useState } from 'react';
 import "react-datetime/css/react-datetime.css";
+import { BrowserRouter, useNavigate } from 'react-router-dom';
+import './App.css';
+import ApplicationsList from './components/BrowseApplications';
+import Header from './components/Header';
+import NavBar from './components/NavBar';
+import ProposalDetails from './components/ProposalDetails';
+import StudentDetails from './components/StudentDetails';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Main />
+    </BrowserRouter>
+  )
+}
+
+function Main() {
+  const [applications, setApplications] = useState([]);
+  const navigate = useNavigate();
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import API from './API';
@@ -33,6 +52,13 @@ function App() {
   }
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const applicationsData = await API.getApplicationsByTeacherId(1);  
+        setApplications(applicationsData);
+      } catch (error) {
+        console.error(error);
+      }
     const init = async () => {
         API.getAllProposals().then((a) => {
           setProposalsList(a)
@@ -40,10 +66,23 @@ function App() {
         .catch((err) => console.log("error fetching proposals", err));
   
     };
-    init();
-  }, []);
 
+    fetchData();
+  }, []);
+  
   return (
+    <>
+      <Header />
+      <NavBar />
+      
+      <Routes>
+        <Route path="/applications/"  element={<ApplicationsList data={applications} />} />
+        <Route path="/applications/proposal/:id" element={<ProposalDetails />} />
+        <Route path="/applications/student/:id" element={<StudentDetails />} />
+      </Routes>
+    </>
+  );
+}
     <BrowserRouter>
       <Routes>
         <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />}/>
@@ -55,4 +94,4 @@ function App() {
 }
 
 
-export default App
+export default App;

@@ -16,11 +16,3 @@
     padding-right: 40px; /* Sostituisci con il valore di padding desiderato */
     padding-top: 20px; /* Sostituisci con il valore di padding desiderato */
   }
-
-:root {
-    background-color: rgba(248,248,249,255);
-}
-
-.sans-serif {
-    font-family: sans-serif;
-}
