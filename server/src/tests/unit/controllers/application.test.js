@@ -3,29 +3,28 @@ const { application } = require("../../../controllers/application.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
+const { createApplication } = require("../../../controllers/application.js");
 
-// Mocking the prisma module
-jest.mock('../../../controllers/prisma.js', () => {
-  const { PrismaClient } = require('@prisma/client');
-  return {
-    __esModule: true,
-    PrismaClient: jest.fn(() => new PrismaClient()),
-  };
-});
+// Mocking PrismaClient
+jest.mock('../../../controllers/prisma.js', () => ({
+  student: {
+    findUnique: jest.fn(() => {}),
+  },
+  proposal: {
+    findUnique: jest.fn(() => {}),
+  },
+  application: {
+    create: jest.fn(() => {}),
+  },
+}));
 
-describe('createApplication', () => {
-  let prisma;
-
-  beforeAll(() => {
-    prisma = new PrismaClient();
+describe('createApplication function', () => {
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 
-  afterAll(async () => {
-    await prisma.$disconnect();
-  });
-
-  it('should create an application successfully', async () => {
-    // Mocking the necessary data for the test
+  it('should resolve with the created application', async () => {
+    // Mocked data for the successful case
     const mockBody = {
       comment: 'Test comment',
       STUDENT_ID: 1,
@@ -41,21 +40,30 @@ describe('createApplication', () => {
     const mockProposal = {
       id: 1,
       cds: 'someDegreeCode',
-      expiration: new Date(Date.now() + 1000000), // Set a future expiration date
+      expiration: new Date(Date.now() - 1000000), // Set a future expiration date
       applications: [], // Assuming no applications yet
       archived: false,
       // Add other necessary fields for proposal
     };
 
-    // Mock the prisma methods
-    prisma.student.findUnique.mockResolvedValue(mockStudent);
-    prisma.proposal.findUnique.mockResolvedValue(mockProposal);
-    prisma.application.create.mockResolvedValue({/* mock application data */});
+    const mockCreatedApplication = {
+      id: 123,
+      status: 'pending',
+      comment: mockBody.comment,
+      STUDENT_ID: mockBody.STUDENT_ID,
+      PROPOSAL_ID: mockBody.PROPOSAL_ID,
+    };
 
-    // Execute the function
+    // Mock the Prisma methods
+    prisma.student.findUnique.mockResolvedValueOnce(mockStudent);
+    prisma.proposal.findUnique.mockResolvedValueOnce(mockProposal);
+    prisma.application.create.mockResolvedValueOnce(mockCreatedApplication);
+
+    // Call the function and expect the result
     const result = await createApplication(mockBody);
 
-    // Assertions
+    // Assert the result and that the Prisma methods were called
+    expect(result).toEqual(mockCreatedApplication);
     expect(prisma.student.findUnique).toHaveBeenCalledWith({
       where: { id: mockBody.STUDENT_ID },
     });
@@ -71,11 +79,29 @@ describe('createApplication', () => {
         PROPOSAL_ID: mockBody.PROPOSAL_ID,
       },
     });
-
-    // Add more assertions as needed based on your specific logic
-    expect(result).toBeDefined();
-    // Add more expectations based on the result
   });
 
-  // Add more test cases for different scenarios, edge cases, and error cases
+  it('should reject with an error if there is a database error', async () => {
+    // Mocked error for the error case
+    const mockedError = new Error('An error occurred');
+  
+    // Mock the Prisma methods
+    prisma.student.findUnique.mockRejectedValueOnce(mockedError);
+  
+    try {
+      // Pass a valid object to createApplication, for example:
+      await createApplication({
+        comment: 'Test comment',
+        STUDENT_ID: null,
+        PROPOSAL_ID: 1,
+      });
+    } catch (error) {
+      // Assert the error message and that the Prisma methods were called
+      expect(error).toEqual({
+        status: 500,
+        error: 'An error occurred',
+      });
+      expect(prisma.student.findUnique).toHaveBeenCalled();
+    }
+  });
 });
