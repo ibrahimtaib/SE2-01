@@ -110,7 +110,7 @@ describe('createApplication function', () => {
       // Assert the error message and that the Prisma methods were called
       expect(error).toEqual({
         status: 500,
-        error: 'Database error',
+        error: 'An error occurred while creating Application',
       });
       expect(prisma.student.findUnique).toHaveBeenCalled();
     }

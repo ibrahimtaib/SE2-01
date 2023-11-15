@@ -7,7 +7,6 @@ router.post("/", async (req, res) => {
   applicationController
     .createApplication(req.body)
     .then((application) => {
-      console.log("QUA");
       res.status(200).json(application);
     })
     .catch((error) => {
