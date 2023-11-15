@@ -11,7 +11,7 @@ function ProposalCard(props) {
 
   return (
     <Card className="text-left m-3">
-      <Card.Header>{props.proposal.Teacher}</Card.Header>
+      <Card.Header>Prof. {props.proposal.Teacher}</Card.Header>
       <Card.Body>
         <Card.Title>{props.proposal.Title}</Card.Title>
         <Card.Text>
@@ -25,7 +25,7 @@ function ProposalCard(props) {
             <span key={index}><br/><b>Group {index + 1}</b>: {group}</span>
           ))}
           <br/><b>Type</b>: {props.proposal.Type}
-          <br/><b>Cds</b>: {props.proposal.Cds}
+          <br/><b>Cds</b>: {props.proposal.titleDegree}
           <br/><b>Notes:</b>: {props.proposal.Notes}
           <br/><b>Required Knowledge</b>: {props.proposal.RequiredKnowledge}
         </Card.Text>

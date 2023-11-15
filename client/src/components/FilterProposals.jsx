@@ -123,17 +123,17 @@ function LeftSide(props) {
 
     const handleFilter = () => {
         event.preventDefault();
-        const flt=[
-            {type: 'title', value: title},
-            {type: 'supervisor', value: supervisor},
-            {type: 'cosupervisor', value: cosupervisor},
-            {type: 'keywords', value: keywords},
-            {type: 'groups', value: groups},
-            {type: 'expirationDate', value: date},
-            {type: 'level', value: level},
-            {type: 'type', value: type},
-            {type: 'cds', value: cds},
-        ]
+        const flt={
+            title:title,
+            coSupervisor:cosupervisor,
+            level:level,
+            type:type,
+            cds:cds,
+            expiration:date,
+            keywords:keywords,
+            groups:groups,
+            supervisor:supervisor
+        }
         setFilter(flt);
         setClick(true);
     };
@@ -157,98 +157,18 @@ function LeftSide(props) {
     useEffect(() => {
         if (click) {
             const init = async () => {
-                if (title !== "") {
-                    try {
-                        API.getProposalsByTitle(title).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {s
+                try {
+                    API.filterProposals(filter).then((a) => {
+                        props.setProposalsList(a)
                         setClick(false)
-                    }
-                } else if (cosupervisor !== "") {
-                    try {
-                        API.getProposalsByCosupervisor(cosupervisor).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
+                    })
+                    .catch((err) => {
+                        console.log(err)
                         setClick(false)
-                    }
-                } else if (supervisor !== "") {
-                    try {
-                        API.getProposalsBySupervisor(supervisor).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                } else if (keywords !== "") {
-                    try {
-                        API.getProposalsByKeywords(keywords).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                } else if (groups !== "") {
-                    try {
-                        API.getProposalsByGroups(groups).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                } else if (level !== "") {
-                    try {
-                        API.getProposalsByLevel(level).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                }else if (cds !== "") {
-                    try {
-                        API.getProposalsByCds(cds).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                }else if (type !== "") {
-                    try {
-                        API.getProposalsByType(type).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                }else if (date !== "") {
-                    try {
-                        API.getProposalsByExpirationDate(date).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
+                    });
+                } catch (err) {
+                    setClick(false)
                 }
-
             };
             init();
         }
