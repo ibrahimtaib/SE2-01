@@ -400,8 +400,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });
