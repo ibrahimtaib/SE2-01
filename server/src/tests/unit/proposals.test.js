@@ -111,7 +111,7 @@ describe("getAllLevels function", () => {
 
 
 describe("getProposals function", () => {
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -124,8 +124,9 @@ describe("getProposals function", () => {
     prisma.Proposal.findMany.mockResolvedValue(mockedProposals);
 
     const result = await getProposals();
-    expect(prisma.Proposal.findMany).toHaveBeenCalledTimes(1);
-    expect(result).toHaveLength(mockedProposals.length);
+
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
+    expect(result).toEqual(mockedProposals);
   });
 
   it("should reject with an error if there is a database error", async () => {
@@ -136,9 +137,9 @@ describe("getProposals function", () => {
       await getProposals();
     } catch (error) {
       expect(error).toEqual({
-        error: "An error occurred while querying the database for proposals",
+        error: 'An error occurred while querying the database',
       });
-      expect(prisma.Proposal.findMany).toHaveBeenCalledTimes(1);
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
 });

@@ -63,8 +63,8 @@ module.exports = {
 
 
   getProposals: async () => {
-    try {
-      const proposals = await prisma.proposal.findMany({
+    return new Promise((resolve, reject) => {
+      prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
@@ -75,14 +75,20 @@ module.exports = {
             select: {
               TITLE_DEGREE: true,
             }
-          },  
+          },
         },
-      });
-      return proposals;
-    } catch (error) {
-      throw new Error("An error occurred while querying the database");
-    }
+      })
+      .then((proposals) => {
+        resolve(proposals);
+      })
+      .catch(() => {
+        return reject({
+          error: "An error occurred while querying the database",
+        });
+      })
+    });
   },
+  
 
 
 
