@@ -179,7 +179,7 @@ function LeftSide(props) {
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Title</Form.Label>
-                    <Form.Control placeholder="Title" value={title} onChange={handleTitleChange} />
+                    <Form.Control name="title" placeholder="Title" value={title} onChange={handleTitleChange} />
                 </Form.Group>
                 {/*
                 <Form.Group className="mb-3">
@@ -189,24 +189,24 @@ function LeftSide(props) {
                 */}
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Supervisor</Form.Label>
-                    <Form.Control placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
+                    <Form.Control name="supervisor" placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Co-Supervisor</Form.Label>
-                    <Form.Control placeholder="Co-Supervisor" value={cosupervisor} onChange={handleCosupervisorChange} />
+                    <Form.Control name="cosupervisor" placeholder="Co-Supervisor" value={cosupervisor} onChange={handleCosupervisorChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Keywords</Form.Label>
-                    <Form.Control placeholder="Keywords separeted by ," value={keywords} onChange={handleKeywordsChange} />
+                    <Form.Control name="keywords" placeholder="Keywords separeted by ," value={keywords} onChange={handleKeywordsChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Groups</Form.Label>
-                    <Form.Control placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange} />
+                    <Form.Control name="groups" placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Level</Form.Label>
                     <Form.Select value={level} onChange={handleLevelSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
+                        <option name="level" value="" disabled>Seleziona</option>
                         {levelList.map((proposal, index) => (
                             <option key={index} value={proposal.title}>
                                 {proposal.title}
@@ -219,7 +219,7 @@ function LeftSide(props) {
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by CDS</Form.Label>
                     <Form.Select value={cds} onChange={handleCdsSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
+                        <option name="cds" value="" disabled>Seleziona</option>
                         {cdsList.map((proposal, index) => (
                             <option key={index} value={proposal.cod}>
                                 {proposal.title}
@@ -230,7 +230,7 @@ function LeftSide(props) {
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Type</Form.Label>
                     <Form.Select value={type} onChange={handleTypeSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
+                        <option name="type" value="" disabled>Seleziona</option>
                         {typeList.map((proposal, index) => (
                             <option key={index} value={proposal.title}>
                                 {proposal.title}
