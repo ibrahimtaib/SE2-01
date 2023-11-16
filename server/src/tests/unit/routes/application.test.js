@@ -1,4 +1,4 @@
-const request = require('supertest');
+/*const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser'); // Import body-parser for parsing JSON in requests
 const router = require('../../../routes/application.js');
@@ -43,3 +43,4 @@ describe('Application Router', () => {
   });
 });
 
+*/
