@@ -138,7 +138,7 @@ export default function InsertForm() {
     const [serverError, setServerError] = useState(false);
     const [successfullySent, setSuccesfullySent] = useState(false);
 
-    const navigate = useNavigate();
+    const navigateTo = useNavigate();
 
     const { register, formState: { errors }, handleSubmit } = useForm()
     const inputRef = useRef(null);
@@ -148,7 +148,7 @@ export default function InsertForm() {
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
-            supervisor: parseInt(data.supervisor),
+            supervisor: 1,
             coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()), //TODO: Fix in database or here sending of cosupervisors
             keywords: keywords.map((keyword) => keyword.trim()),
             groups: [],
@@ -157,7 +157,7 @@ export default function InsertForm() {
             setSuccesfullySent(true);
             setTimeout(() => {
 
-                navigate('/');
+                navigateTo('/');
             }, 7500);
 
         })
@@ -313,7 +313,7 @@ export default function InsertForm() {
 
 
 
-                <div style={styles.container}>
+                {/* <div style={styles.container}>
                     <label style={styles.label}>
                         Supervisor
                     </label>
@@ -327,7 +327,7 @@ export default function InsertForm() {
                     >
                         {supervisors.map(supervisor => <option key={supervisor.id} value={supervisor.id}>{supervisor.name} {supervisor.surname}</option>)}
                     </select>
-                </div>
+                </div> */}
 
                 <div style={styles.container}>
                     <label style={styles.label}>

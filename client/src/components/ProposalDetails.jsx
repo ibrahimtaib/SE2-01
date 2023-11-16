@@ -18,61 +18,58 @@ const ProposalDetails = () => {
       <div className="max-w-2xl mx-auto bg-white overflow-hidden shadow-sm rounded-lg p-6 mb-6 text-center">
         <h1 className="text-3xl font-bold text-indigo-800 mb-6">Proposal Details</h1>
 
-      <Card style={{textAlign:"left"}}>
-        <Card.Header>{proposal.teacher.name}</Card.Header>
-        <ListGroup variant="flush">
-          <ListGroup.Item><p className="text-black mb-2">
-              <span className="font-semibold">Title:</span> <span style={{color: 'gray'}}>{proposal.title}</span>
+        <Card style={{ textAlign: "left" }}>
+          <Card.Header>{proposal.teacher.name} {proposal.teacher.surname}</Card.Header>
+          <ListGroup variant="flush">
+            <ListGroup.Item><p className="text-black mb-2">
+              <span className="font-semibold">Title:</span> <span style={{ color: 'gray' }}>{proposal.title}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="text-black mb-2">
-              <span className="font-semibold">Supervisor:</span> <span style={{color: 'gray'}}>{proposal.teacher.name} {proposal.teacher.surname}</span>
+            <ListGroup.Item><p className="text-black mb-2">
+              <span className="font-semibold">Co-supervisors:</span> <span style={{ color: 'gray' }}>{proposal.coSupervisors ? proposal.coSupervisors : "None"}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="text-black mb-2">
-              <span className="font-semibold">Co-supervisors:</span> <span style={{color: 'gray'}}>{proposal.coSupervisors}</span>
+            <ListGroup.Item><p className="text-black mb-2">
+              <span className="font-semibold">Type:</span> <span style={{ color: 'gray' }}> {proposal.type}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="text-black mb-2">
-              <span className="font-semibold">Type:</span> <span style={{color: 'gray'}}> {proposal.type}</span>
+            <ListGroup.Item><p className="text-black mb-2">
+              <span className="font-semibold">Level:</span> <span style={{ color: 'gray' }}> {proposal.level}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="text-black mb-2">
-              <span className="font-semibold">Level:</span> <span style={{color: 'gray'}}> {proposal.level}</span>
+            <ListGroup.Item><p className="mb-2">
+              <span className="font-semibold">Description:</span> <span style={{ color: 'gray' }}>{proposal.description}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="mb-2">
-              <span className="font-semibold">Description:</span> <span style={{color: 'gray'}}>{proposal.description}</span>
+            <ListGroup.Item>
+              <p className="mb-2">
+                <span className="font-semibold">Notes:</span> <span style={{ color: 'gray' }}>{proposal.notes}</span>
+              </p>
+            </ListGroup.Item>
+            <ListGroup.Item> <p className="mb-2">
+              <span className="font-semibold">Expiration Date:</span> <span style={{ color: 'gray' }}>{proposal.expiration}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item>
-            <p className="mb-2">
-              <span className="font-semibold">Notes:</span> <span style={{color: 'gray'}}>{proposal.notes}</span>
-            </p>
-          </ListGroup.Item>
-          <ListGroup.Item> <p className="mb-2">
-              <span className="font-semibold">Expiration Date:</span> <span style={{color: 'gray'}}>{proposal.expiration}</span>
+            <ListGroup.Item><p className="mb-2">
+              <span className="font-semibold">Groups:</span> <span style={{ color: 'gray' }}>{proposal.groups.join(', ')}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="mb-2">
-              <span className="font-semibold">Groups:</span> <span style={{color: 'gray'}}>{proposal.groups.join(', ')}</span>
+            <ListGroup.Item><p className="mb-2">
+              <span className="font-semibold">Required Knowledge:</span><span style={{ color: 'gray' }}> {proposal.requiredKnowledge}</span>
             </p></ListGroup.Item>
-          <ListGroup.Item><p className="mb-2">
-              <span className="font-semibold">Required Knowledge:</span><span style={{color: 'gray'}}> {proposal.requiredKnowledge}</span>
-            </p></ListGroup.Item>
-          
-        </ListGroup>
-    </Card>
+
+          </ListGroup>
+        </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="text-indigo-600 mx-auto">
-            
+
           </div>
 
           <div className="text-black mx-auto">
-            
+
           </div>
         </div>
-        <Link 
-        style={{padding: "20px"}}
-        to="/applications">
-        <Button
-        variant="dark"
-        >Go Back</Button>
-      </Link>
+        <Link
+          style={{ padding: "20px" }}
+          to="/applications">
+          <Button
+            variant="dark"
+          >Go Back</Button>
+        </Link>
       </div>
     </div>
   );

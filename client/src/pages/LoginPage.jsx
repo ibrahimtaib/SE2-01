@@ -7,12 +7,12 @@ const mockUser = {
     id: 1,
     name: 'John Doe',
     email: 'john.doe@polito.it',
-    role: 'student',
+    role: 'teacher',
     };
 
 const LoginPage = ({setUser}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('s123456@studenti.polito.it');
+  const [password, setPassword] = useState('123456');
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 

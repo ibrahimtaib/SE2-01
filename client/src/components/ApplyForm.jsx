@@ -12,7 +12,7 @@ function ApplyForm({proposal}) {
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   //TODO fetch from auth 
-  const student = {name: "Signor", email: "eeeee@eeeeee.eee", id: 2}
+  const student = {name: "Marco Rossi", email: "s123456@studenti.polito.it", id: 2}
 
   const onSubmit = async (data) => {
     try {
@@ -34,7 +34,7 @@ function ApplyForm({proposal}) {
     <div className='container-apply-form'>
     <DismissableAlert showAlert={showAlert} setShowAlert={setShowAlert} heading={"Sorry!"} message={"There was an error while submitting your application, please try again in a few moments or log in again if the problem persists."}/>
       <h1 className='title-apply-form'>Apply for: {proposal.title}</h1>
-      <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name}</h3>
+      <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name} {proposal.supervisor.surname}</h3>
 
       <div 
             style={{borderRadius: '5px', border: '1px solid #ccc', padding: '10px'}}

@@ -15,6 +15,7 @@ function ApplicationsPage() {
             try {
               const applicationsData = await API.getApplicationsByTeacherId(1);  
               setApplications(applicationsData);
+              console.log(applicationsData);
               setLoading(false);
             } catch (error) {
               console.error(error);

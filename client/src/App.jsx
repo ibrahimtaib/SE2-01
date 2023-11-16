@@ -41,32 +41,36 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
-        API.getAllProposals().then((a) => {
-          setProposalsList(a)
-        })
+      API.getAllProposals().then((a) => {
+        setProposalsList(a)
+      })
         .catch((err) => console.log("error fetching proposals", err));
-  
+
     };
 
     init();
   }, []);
-  
+
   return (
     <BrowserRouter>
       <Header />
-      <NavBar user={user}/>
+      <NavBar user={user} />
       <Routes>
-      < Route
-        exact 
-        path="/"
-        element={
-          user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>}
+        < Route
+          exact
+          path="/"
+          element={
+            user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
         />
-        <Route path="/login" element={<LoginPage setUser={setUser}/>}/>
-        <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />}/>
-        <Route path='/applications/*' element={<ApplicationsPage />} />
+        <Route path="/login" element={<LoginPage setUser={setUser} />} />
+        <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />} />
+        <Route
+          exact
+          path='/applications/*'
+          element={user === undefined ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <ApplicationsPage /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+        />
         <Route path="/students/:id" element={<StudentDetailsPage />} />
-        <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user}/>}/>
+        <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user} />} />
         <Route path='/*' element={<DefaultRoute />} />
       </Routes>
     </BrowserRouter>

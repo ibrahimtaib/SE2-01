@@ -14,14 +14,13 @@ function ProposalCard(props) {
 
   return (
     <Card className="text-left m-3">
-      <Card.Header>{props.proposal.Teacher.name}</Card.Header>
+      <Card.Header>{props.proposal.Teacher.name} {props.proposal.Teacher.surname}</Card.Header>
       <Card.Body>
         <Card.Title>{props.proposal.Title}</Card.Title>
         <Card.Text>
           {props.proposal.Description}
         </Card.Text>
         <Card.Text className={isVisible ? '' : 'nascondi'}>
-          <b>Supervisor</b>: {props.proposal.Supervisor}
           <br/><b>Co-Supervisor</b>: {props.proposal.CoSupervisor}
           <br/><b>Level</b>: {props.proposal.Level} 
           {props.proposal.Groups.map((group, index) => (
