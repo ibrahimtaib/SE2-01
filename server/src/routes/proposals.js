@@ -143,9 +143,8 @@ router.get("/cds/:cds", async (req, res) => {
     }
   });
 
-  router.get("/filter", async (req, res) => {
+  router.post("/filter", async (req, res) => { 
     const filters = req.body.filters; 
-
     try {
       const filteredProposals = await proposalsController.filterProposals(filters);
       res.status(200).json(filteredProposals);
@@ -154,6 +153,7 @@ router.get("/cds/:cds", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
+  
   
 
 

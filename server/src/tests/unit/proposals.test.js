@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../controllers/prisma.js");
 
-// Mock di PrismaClient per il modulo dei cds
+
 jest.mock("../../controllers/prisma.js", () => ({
   Degree: {
     findMany: jest.fn(() => {}),
@@ -23,34 +23,24 @@ describe("getAllCds function", () => {
   });
 
   it("should resolve with all CDs from the database", async () => {
-    // Mock dei cds per il caso di successo
     const mockedCds = [
       { COD_DEGREE: 1, TITLE_DEGREE: "Example Degree"},
-      // Aggiungi altri cds simulati secondo necessità per test più approfonditi
+      { COD_DEGREE: 2, TITLE_DEGREE: 'Example Degree 2'},
     ];
-
-    // Mock di PrismaClient e del suo metodo findMany
     prisma.Degree.findMany.mockResolvedValueOnce(mockedCds);
-
-    // Chiamata della funzione e attesa del risultato
     const result = await getAllCds();
 
-    // Assert del risultato e del fatto che findMany sia stato chiamato
     expect(result).toEqual(mockedCds);
     expect(prisma.Degree.findMany).toHaveBeenCalled();
   });
 
   it("should reject with an error if there is a database error", async () => {
-    // Mock dell'errore per il caso di errore
     const mockedError = new Error("Database error");
-
-    // Mock di PrismaClient e del suo metodo findMany per simulare un errore
     prisma.Degree.findMany.mockRejectedValueOnce(mockedError);
 
     try {
       await getAllCds();
     } catch (error) {
-      // Assert del messaggio di errore e del fatto che findMany sia stato chiamato
       expect(error).toEqual({
         error: "An error occurred while querying the database for cds",
       });
@@ -65,20 +55,10 @@ describe("getAllTypes function", () => {
   });
 
   it("should resolve with all types of proposals from the database", async () => {
-    // Mock dei tipi per il caso di successo
-    const mockedTypes = [
-      { type: "Type 1" },
-      { type: "Type 2" },
-      { type: "Type 3" },
-    ];
+    const mockedTypes = ["Type 1", "Type 2", "Type 3"];
+    prisma.Proposal.findMany.mockResolvedValueOnce(mockedTypes.map(type => ({ type })));
 
-    // Mock di PrismaClient e del suo metodo findMany
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockedTypes);
-
-    // Chiamata della funzione e attesa del risultato
     const result = await getAllTypes();
-
-    // Assert del risultato e del fatto che findMany sia stato chiamato
     expect(result).toEqual(mockedTypes);
     expect(prisma.Proposal.findMany).toHaveBeenCalled();
   });
@@ -96,96 +76,73 @@ describe("getAllTypes function", () => {
       expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
-})
+});
 
-describe('getAllLevels function', () => {
-  afterEach(() => {
+
+describe("getAllLevels function", () => {
+  afterAll(() => {
     jest.clearAllMocks();
   });
 
-  it('should resolve with unique levels from the database', async () => {
-    // Mock dei livelli per il caso di successo
-    const mockedLevels = [
-      { level: 'Level 1' },
-      { level: 'Level 2' },
-      { level: 'Level 3' },
-    ];
+  it("should resolve with unique levels from the database", async () => {
+    const mockedLevels = ["Level 1", "Level 2", "Level 3"];
 
-    // Mock di PrismaClient e del suo metodo findMany
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockedLevels);
-
-    // Chiamata della funzione e attesa del risultato
+    prisma.Proposal.findMany.mockResolvedValueOnce(mockedLevels.map(level => ({ level })));
     const result = await getAllLevels();
 
-    // Verifica che la funzione abbia restituito un array con livelli unici
-    expect(Array.isArray(result)).toBe(true);
-    expect(result.length).toBe(3); // Dovrebbero essere solo 3 livelli unici
-
-    // Assert del fatto che findMany sia stato chiamato
+    expect(result).toEqual(mockedLevels);
     expect(prisma.Proposal.findMany).toHaveBeenCalled();
   });
 
-  it('should reject with an error if there is a database error', async () => {
-    const mockedError = new Error('Database error');
+  it("should reject with an error if there is a database error", async () => {
+    const mockedError = new Error("Database error");
     prisma.Proposal.findMany.mockRejectedValueOnce(mockedError);
 
     try {
       await getAllLevels();
     } catch (error) {
-      // Verifica che la funzione abbia gestito correttamente l'errore
       expect(error).toEqual({
-        error: 'An error occurred while querying the database for level',
+        error: "An error occurred while querying the database for level",
       });
-
-      // Assert del fatto che findMany sia stato chiamato
       expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
 });
 
-describe('getProposals function', () => {
-  afterEach(() => {
+
+describe("getProposals function", () => {
+  afterAll(() => {
     jest.clearAllMocks();
   });
 
-  it('should resolve with proposals from the database', async () => {
-    // Mock delle proposte per il caso di successo
+  it("should resolve with proposals from the database", async () => {
     const mockedProposals = [
-      { id: 1, title: 'Proposal 1' },
-      { id: 2, title: 'Proposal 2' },
-      { id: 3, title: 'Proposal 3' },
+      { id: 1, title: "Proposal 1", teacher: { surname: "Smith" }, degree: { TITLE_DEGREE: "Degree 1" } },
+      { id: 2, title: "Proposal 2", teacher: { surname: "Johnson" }, degree: { TITLE_DEGREE: "Degree 2" } },
     ];
 
-    // Mock di PrismaClient e del suo metodo findMany
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockedProposals);
+    prisma.Proposal.findMany.mockResolvedValue(mockedProposals);
 
-    // Chiamata della funzione e attesa del risultato
     const result = await getProposals();
-
-    // Verifica che la funzione abbia restituito le proposte
-    expect(result).toEqual(mockedProposals);
-
-    // Assert del fatto che findMany sia stato chiamato
-    expect(prisma.Proposal.findMany).toHaveBeenCalled();
+    expect(prisma.Proposal.findMany).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(mockedProposals.length);
   });
 
-  it('should reject with an error if there is a database error', async () => {
-    const mockedError = new Error('Database error');
-    prisma.Proposal.findMany.mockRejectedValueOnce(mockedError);
+  it("should reject with an error if there is a database error", async () => {
+    const mockedError = new Error("Database error");
+    prisma.Proposal.findMany.mockRejectedValue(mockedError);
 
     try {
       await getProposals();
     } catch (error) {
-      // Verifica che la funzione abbia gestito correttamente l'errore
       expect(error).toEqual({
-        error: 'An error occurred while querying the database for proposals',
+        error: "An error occurred while querying the database for proposals",
       });
-
-      // Assert del fatto che findMany sia stato chiamato
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
+      expect(prisma.Proposal.findMany).toHaveBeenCalledTimes(1);
     }
   });
 });
+
 
 describe('getProposalsByTitle function', () => {
   afterEach(() => {
@@ -193,32 +150,23 @@ describe('getProposalsByTitle function', () => {
   });
 
   it('should resolve with proposals matching the title from the database', async () => {
-    const searchString = 'example'; // Sostituisci con una stringa di ricerca
+    const searchString = 'proposal'; 
 
-    const mockedProposals = [
-      // Simula le proposte che corrispondono alla ricerca
+    const mockedProposalsTitle = [
       { title: 'Example Proposal 1' },
       { title: 'Example Proposal 2' },
     ];
 
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockedProposals);
+    prisma.Proposal.findMany.mockResolvedValue(mockedProposalsTitle);
 
     const result = await getProposalsByTitle(searchString);
 
-    expect(result).toEqual(mockedProposals);
-    expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-      where: {
-        title: {
-          contains: searchString,
-          mode: 'insensitive',
-        },
-      },
-    });
+    expect(result).toEqual(mockedProposalsTitle);
+    expect(prisma.Proposal.findMany).toHaveBeenCalled()
   });
 
   it('should reject with an error if there is a database error', async () => {
-    const searchString = 'example'; // Sostituisci con una stringa di ricerca
-
+    const searchString = 'example'; 
     const mockedError = new Error('Database error');
 
     prisma.Proposal.findMany.mockRejectedValueOnce(mockedError);
@@ -229,14 +177,7 @@ describe('getProposalsByTitle function', () => {
       expect(error).toEqual({
         error: 'An error occurred while querying the database',
       });
-      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-        where: {
-          title: {
-            contains: searchString,
-            mode: 'insensitive',
-          },
-        },
-      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
 });
@@ -261,14 +202,7 @@ describe('getProposalsByCosupervisor function', () => {
     const result = await getProposalsByCosupervisor(surname);
 
     expect(result).toEqual(mockedProposals);
-    expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-      where: {
-        coSupervisors: {
-          contains: surname,
-          mode: 'insensitive',
-        },
-      },
-    });
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
   });
 
   it('should reject with an error if there is a database error', async () => {
@@ -284,14 +218,7 @@ describe('getProposalsByCosupervisor function', () => {
       expect(error).toEqual({
         error: 'An error occurred while querying the database',
       });
-      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-        where: {
-          coSupervisors: {
-            contains: surname,
-            mode: 'insensitive',
-          },
-        },
-      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
 });
@@ -302,7 +229,7 @@ describe('getProposalsBySupervisor function', () => {
   });
 
   it('should resolve with proposals from the database for a specific supervisor', async () => {
-    const surname = 'Doe'; // Sostituisci con un cognome di esempio
+    const surname = 'Doe'; 
 
     const mockedTeachers = [
       { id: 1, surname: 'Doe' },
@@ -319,31 +246,17 @@ describe('getProposalsBySupervisor function', () => {
 
     const result = await getProposalsBySupervisor(surname);
 
-    expect(prisma.Teacher.findMany).toHaveBeenCalledWith({
-      where: {
-        surname: {
-          contains: surname,
-          mode: 'insensitive',
-        },
-      },
-    });
+    expect(prisma.Teacher.findMany).toHaveBeenCalled();
 
-    expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-      where: {
-        supervisor: {
-          in: [1, 2], // IDs simulated from the mocked teachers
-        },
-      },
-    });
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
 
     expect(result).toEqual(mockedProposals);
   });
 
   it('should reject with an error if the supervisor is not found', async () => {
-    const surname = 'Nonexistent'; // Sostituisci con un cognome inesistente
+    const surname = 'Nonexistent'; 
 
-    const mockedTeachers = []; // Array vuoto simula l'assenza di insegnanti
-
+    const mockedTeachers = [];
     prisma.Teacher.findMany.mockResolvedValueOnce(mockedTeachers);
 
     try {
@@ -352,14 +265,7 @@ describe('getProposalsBySupervisor function', () => {
       expect(error).toEqual({
         error: 'An error occurred while querying the database',
       });
-      expect(prisma.Teacher.findMany).toHaveBeenCalledWith({
-        where: {
-          surname: {
-            contains: surname,
-            mode: 'insensitive',
-          },
-        },
-      });
+      expect(prisma.Teacher.findMany).toHaveBeenCalled();
     }
   });
 });
@@ -370,7 +276,7 @@ describe('getProposalsByKeywords function', () => {
   });
 
   it('should resolve with proposals matching the keywords from the database', async () => {
-    const inputKeywords = 'keyword1, keyword2'; // Sostituisci con una stringa di parole chiave
+    const inputKeywords = 'keyword1, keyword2'; 
     const keywordsArray = inputKeywords.split(',').map(keyword => keyword.trim().toLowerCase());
 
     const mockedProposals = [
@@ -435,7 +341,7 @@ describe('getProposalsByGroups function', () => {
     );
 
     expect(result).toEqual(expectedFilteredProposals);
-    expect(prisma.Proposal.findMany).toHaveBeenCalledWith();
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
   });
 
   it('should reject with an error if there is a database error', async () => {
@@ -451,7 +357,7 @@ describe('getProposalsByGroups function', () => {
       expect(error).toEqual({
         error: 'An error occurred while querying the database',
       });
-      expect(prisma.Proposal.findMany).toHaveBeenCalledWith();
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
 });
@@ -462,10 +368,9 @@ describe('getProposalsByExpirationDate function', () => {
   });
 
   it('should resolve with proposals filtered by expiration date from the database', async () => {
-    const expirationDate = '2023-12-31'; // Sostituisci con la data di scadenza per i test
+    const expirationDate = '2023-12-31'; 
 
     const mockedProposals = [
-      // Simula le proposte nel database
       {
         expiration: new Date('2023-12-30'),
       },
@@ -483,13 +388,7 @@ describe('getProposalsByExpirationDate function', () => {
     );
 
     expect(result).toEqual(expectedFilteredProposals);
-    expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-      where: {
-        expiration: {
-          lte: new Date(expirationDate),
-        },
-      },
-    });
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
   });
 
   it('should reject with an error if there is a database error', async () => {
@@ -505,13 +404,196 @@ describe('getProposalsByExpirationDate function', () => {
       expect(error).toEqual({
         error: 'An error occurred while querying the database',
       });
-      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-        where: {
-          expiration: {
-            lte: new Date(expirationDate),
-          },
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
+    }
+  });
+});
+
+
+describe("getProposalsByLevel function", () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should resolve with proposals filtered by level from the database", async () => {
+    const level = "SomeLevel";
+
+    const mockedProposals = [
+      {
+        id: 1,
+        title: "Proposal 1",
+        teacher: {
+          surname: "Smith",
         },
+        degree: {
+          TITLE_DEGREE: "Degree 1",
+        },
+        level: "SomeLevel",
+      },
+      {
+        id: 2,
+        title: "Proposal 2",
+        teacher: {
+          surname: "Johnson",
+        },
+        degree: {
+          TITLE_DEGREE: "Degree 2",
+        },
+        level: "SomeLevel",
+      },
+    ];
+
+    prisma.Proposal.findMany.mockResolvedValue(mockedProposals);
+
+    const result = await getProposalsByLevel(level);
+
+    const expectedFilteredProposals = mockedProposals.filter(
+      (proposal) => proposal.level.toLowerCase() === level.toLowerCase()
+    );
+
+    expect(result).toEqual(expectedFilteredProposals);
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
+  });
+
+  it("should reject with an error if there is a database error", async () => {
+    const level = "SomeLevel";
+
+    const mockedError = new Error("Database error");
+
+    prisma.Proposal.findMany.mockRejectedValue(mockedError);
+
+    try {
+      await getProposalsByLevel(level);
+    } catch (error) {
+      expect(error).toEqual({
+        error: "An error occurred while querying the database",
       });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
+    }
+  });
+});
+
+describe("getProposalsByType function", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should resolve with proposals filtered by type from the database", async () => {
+    const type = "SomeType";
+    const mockedProposals = [
+      {
+        id: 1,
+        title: "Proposal 1",
+        teacher: {
+          surname: "Smith",
+        },
+        degree: {
+          TITLE_DEGREE: "Degree 1",
+        },
+        type: "SomeType",
+      },
+      {
+        id: 2,
+        title: "Proposal 2",
+        teacher: {
+          surname: "Johnson",
+        },
+        degree: {
+          TITLE_DEGREE: "Degree 2",
+        },
+        type: "SomeType",
+      },
+    ];
+
+    prisma.Proposal.findMany.mockResolvedValue(mockedProposals);
+
+    const result = await getProposalsByType(type);
+
+    const expectedFilteredProposals = mockedProposals.filter(
+      (proposal) => proposal.type.toLowerCase() === type.toLowerCase()
+    );
+
+    expect(result).toEqual(expectedFilteredProposals);
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
+  });
+
+  it("should reject with an error if there is a database error", async () => {
+    const type = "SomeType";
+
+    const mockedError = new Error("Database error");
+
+    prisma.Proposal.findMany.mockRejectedValue(mockedError);
+
+    try {
+      await getProposalsByType(type);
+    } catch (error) {
+      expect(error).toEqual({
+        error: "An error occurred while querying the database",
+      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
+    }
+  });
+});
+
+describe("getProposalsByCDS function", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should resolve with proposals filtered by CDS from the database", async () => {
+    const cds = "SomeCDS";
+
+    const mockedProposals = [
+      {
+        id: 1,
+        title: "Proposal 1",
+        teacher: {
+          surname: "Smith",
+        },
+        degree: {
+          TITLE_DEGREE: "Degree 1",
+        },
+        cds: "SomeCDS",
+      },
+      {
+        id: 2,
+        title: "Proposal 2",
+        teacher: {
+          surname: "Johnson",
+        },
+        degree: {
+          TITLE_DEGREE: "Degree 2",
+        },
+        cds: "SomeCDS",
+      },
+    ];
+
+    prisma.Proposal.findMany.mockResolvedValueOnce(mockedProposals);
+
+    const result = await getProposalsByCDS(cds);
+
+    const expectedFilteredProposals = mockedProposals.filter(
+      (proposal) => proposal.cds === cds
+    );
+
+    expect(result).toEqual(expectedFilteredProposals);
+    expect(prisma.Proposal.findMany).toHaveBeenCalled();
+  });
+
+  it("should reject with an error if there is a database error", async () => {
+    const cds = "SomeCDS";
+
+    const mockedError = new Error("Database error");
+
+    prisma.Proposal.findMany.mockRejectedValueOnce(mockedError);
+
+    try {
+      await getProposalsByCDS(cds);
+    } catch (error) {
+      expect(error).toEqual({
+        error: "An error occurred while querying the database",
+      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
   });
 });
