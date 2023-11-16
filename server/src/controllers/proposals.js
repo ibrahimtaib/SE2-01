@@ -65,27 +65,31 @@ module.exports = {
 
 
   getProposals: async () => {
-    try {
-      const proposals = await prisma.proposal.findMany({
+    return new Promise((resolve, reject) => {
+      prisma.proposal.findMany({
         include: {
           teacher: {
             select: {
               surname: true,
             }
-          },  // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          },
           degree: {
             select: {
               TITLE_DEGREE: true,
             }
-          },  // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          },
         },
+      })
+      .then((proposals) => {
+        resolve(proposals);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(new Error("An error occurred while querying the database for proposals"));
       });
-      return proposals;
-    } catch (error) {
-      console.error(error);
-      throw new Error("An error occurred while querying the database for proposals");
-    }
+    });
   },
+  
 
 
 
