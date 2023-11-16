@@ -1,65 +1,73 @@
-
 // Import necessary modules and functions
-const { proposals } = require("../../../controllers/proposals.js");
+const { applications } = require("../../../controllers/applications.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
 
 // Mocking PrismaClient
 jest.mock('../../../controllers/prisma.js', () => ({
-  Proposal: {
+  Application: {
     findMany: jest.fn(() => {}),
+  },
+  Proposal: {
+    findUnique: jest.fn(() => {}),
+  },
+  student: {
+    findUnique: jest.fn(() => {}),
   },
 }));
 
-describe('Proposals Controller', () => {
+describe('Applications Controller', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
 
-  it('should get all proposals', async () => {
+  it('should get applications, students, proposals, and degrees by teacherId', async () => {
     // Mocked data for the successful case
-    const mockProposals = [
-      { id: 1, title: 'Proposal 1' },
-      { id: 2, title: 'Proposal 2' },
+    const mockTeacherId = '1';
+    const mockApplicationsStudentsProposals = [
+      {
+        application: { id: 1, status: 'pending' },
+        student: { id: 1, name: 'John Doe', degree: { COD_DEGREE: 'ABC123' } },
+        proposal: { id: 1, title: 'Test Proposal', teacher: { id: 1 }, degree: { COD_DEGREE: 'ABC123' } },
+      },
+      // Add more mocked data as needed
     ];
 
     // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
+    prisma.Application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals);
 
     // Call the function and expect the result
     try {
-      const result = await proposals.getProposals();
+      const result = await applications.getApplicationsStudentsProposalsDegreesByTeacherId(mockTeacherId);
       // Assert the result and that the Prisma method was called
-      expect(result).toEqual(mockProposals);
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    } catch (error) {
-      // Handle the rejection here
-      console.error(error);
-    }
-  });
-
-  it('should get proposals by title', async () => {
-    // Mocked data for the successful case
-    const mockTitle = 'Test';
-    const mockProposals = [
-      { id: 1, title: 'Test Proposal 1' },
-      { id: 2, title: 'Test Proposal 2' },
-    ];
-
-    // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
-
-    // Call the function and expect the result
-    try {
-      const result = await proposals.getProposalsByTitle(mockTitle);
-      // Assert the result and that the Prisma method was called
-      expect(result).toEqual(mockProposals);
-      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
+      expect(result).toEqual(mockApplicationsStudentsProposals.map((application) => ({
+        application,
+        student: {
+          ...application.student,
+          degree: application.student.degree, 
+        },
+        proposal: application.proposal,
+      })));
+      expect(prisma.Application.findMany).toHaveBeenCalledWith({
         where: {
-          title: {
-            contains: mockTitle,
-            mode: "insensitive",
+          proposal: {
+            teacher: {
+              id: parseInt(mockTeacherId),
+            },
+          },
+        },
+        include: {
+          proposal: {
+            include: {
+              teacher: true,
+              degree: true,
+            },
+          },
+          student: {
+            include: {
+              degree: true,
+            },
           },
         },
       });
@@ -69,40 +77,35 @@ describe('Proposals Controller', () => {
     }
   });
 
-  it('should get proposals by supervisor', async () => {
+  it('should get proposal by proposalId', async () => {
     // Mocked data for the successful case
-    const mockSurname = 'Smith';
-    const mockTeachers = [
-      { id: 1 },
-      { id: 2 },
-    ];
-    const mockProposals = [
-      { id: 1, supervisor: 1 },
-      { id: 2, supervisor: 2 },
-    ];
+    const mockProposalId = '1';
+    const mockProposal = {
+      id: 1,
+      title: 'Test Proposal',
+      teacher: { id: 1 },
+      degree: { COD_DEGREE: 'ABC123' },
+    };
 
-    // Mock the Prisma methods
-    prisma.Teacher.findMany.mockResolvedValueOnce(mockTeachers);
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
+    // Mock the Prisma method
+    prisma.Proposal.findUnique.mockResolvedValueOnce(mockProposal);
 
     // Call the function and expect the result
     try {
-      const result = await proposals.getProposalsBySupervisor(mockSurname);
-      // Assert the result and that the Prisma methods were called
-      expect(result).toEqual(mockProposals);
-      expect(prisma.Teacher.findMany).toHaveBeenCalledWith({
-        where: {
-          surname: {
-            contains: mockSurname,
-            mode: "insensitive",
-          },
-        },
+      const result = await applications.getProposalById(mockProposalId);
+      // Assert the result and that the Prisma method was called
+      expect(result).toEqual({
+        proposal: mockProposal,
+        teacher: mockProposal.teacher,
+        degree: mockProposal.degree,
       });
-      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
+      expect(prisma.Proposal.findUnique).toHaveBeenCalledWith({
         where: {
-          supervisor: {
-            in: [1, 2],
-          },
+          id: parseInt(mockProposalId),
+        },
+        include: {
+          teacher: true,
+          degree: true,
         },
       });
     } catch (error) {
@@ -111,122 +114,44 @@ describe('Proposals Controller', () => {
     }
   });
 
-  it('should get proposals by keywords', async () => {
+  it('should get student by studentId', async () => {
     // Mocked data for the successful case
-    const mockKeywords = 'keyword1, keyword2';
-    const mockProposals = [
-      { id: 1, keywords: ['keyword1', 'keyword2'] },
-      { id: 2, keywords: ['keyword2', 'keyword3'] },
-    ];
+    const mockStudentId = '1';
+    const mockStudent = {
+      id: 1,
+      name: 'John Doe',
+      applications: [{ id: 1, status: 'pending' }],
+      degree: { COD_DEGREE: 'ABC123' },
+      Career: [{ id: 1, COD_COURSE: 'C001' }],
+    };
 
     // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
+    prisma.student.findUnique.mockResolvedValueOnce(mockStudent);
 
     // Call the function and expect the result
     try {
-      const result = await proposals.getProposalsByKeywords(mockKeywords);
+      const result = await applications.getStudentById(mockStudentId);
       // Assert the result and that the Prisma method was called
-      expect(result).toEqual([mockProposals[0]]);
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
+      expect(result).toEqual({
+        student: mockStudent,
+      });
+      expect(prisma.student.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: parseInt(mockStudentId),
+        },
+        include: {
+          applications: true,
+          degree: true,
+          Career: true,
+        },
+      });
     } catch (error) {
       // Handle the rejection here
       console.error(error);
     }
   });
 
-  it('should get proposals by groups', async () => {
-    // Mocked data for the successful case
-    const mockGroups = 'group1, group2';
-    const mockProposals = [
-      { id: 1, groups: ['group1', 'group2'] },
-      { id: 2, groups: ['group2', 'group3'] },
-    ];
-
-    // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
-
-    // Call the function and expect the result
-    try {
-      const result = await proposals.getProposalsByGroups(mockGroups);
-      // Assert the result and that the Prisma method was called
-      expect(result).toEqual([mockProposals[0]]);
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    } catch (error) {
-      // Handle the rejection here
-      console.error(error);
-    }
-  });
-
-  it('should get proposals by expiration date', async () => {
-    // Mocked data for the successful case
-    const mockExpirationDate = '2023-12-01T00:00:00.000Z';
-    const mockProposals = [
-      { id: 1, expiration: new Date('2023-11-01T00:00:00.000Z') },
-      { id: 2, expiration: new Date('2023-12-15T00:00:00.000Z') },
-    ];
-
-    // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
-
-    // Call the function and expect the result
-    try {
-      const result = await proposals.getProposalsByExpirationDate(mockExpirationDate);
-      // Assert the result and that the Prisma method was called
-      expect(result).toEqual([mockProposals[0]]);
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    } catch (error) {
-      // Handle the rejection here
-      console.error(error);
-    }
-  });
-
-  it('should get proposals by level', async () => {
-    // Mocked data for the successful case
-    const mockLevel = 'Bachelor';
-    const mockProposals = [
-      { id: 1, level: 'Bachelor' },
-      { id: 2, level: 'Master' },
-    ];
-
-    // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
-
-    // Call the function and expect the result
-    try {
-      const result = await proposals.getProposalsByLevel(mockLevel);
-      // Assert the result and that the Prisma method was called
-      expect(result).toEqual([mockProposals[0]]);
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    } catch (error) {
-      // Handle the rejection here
-      console.error(error);
-    }
-  });
-
-  it('should get proposals by CDS', async () => {
-    // Mocked data for the successful case
-    const mockCDS = 'CDS001';
-    const mockProposals = [
-      { id: 1, cds: 'CDS001' },
-      { id: 2, cds: 'CDS002' },
-    ];
-
-    // Mock the Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
-
-    // Call the function and expect the result
-    try {
-      const result = await proposals.getProposalsByCDS(mockCDS);
-      // Assert the result and that the Prisma method was called
-      expect(result).toEqual([mockProposals[0]]);
-      expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    } catch (error) {
-      // Handle the rejection here
-      console.error(error);
-    }
-  });
-
-  // Add more test cases for other functions in the proposals.js file
+  // Add more test cases for other functions in the applications.js file
   // ...
 
 });
