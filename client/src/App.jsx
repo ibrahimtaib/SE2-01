@@ -2,7 +2,7 @@
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useState } from 'react';
 import "react-datetime/css/react-datetime.css";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import API from './API';
 import DefaultRoute from './components/DefaultRoute';
 import Header from './components/Header';
@@ -56,7 +56,12 @@ function App() {
       <Header />
       <NavBar user={user}/>
       <Routes>
-        <Route path="/" element={<MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>} />
+      < Route
+        exact 
+        path="/"
+        element={
+          user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>}
+        />
         <Route path="/login" element={<LoginPage setUser={setUser}/>}/>
         <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />}/>
         <Route path='/applications/*' element={<ApplicationsPage />} />
