@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma");
+const { resolve } = require("path");
 
 module.exports = {
 
@@ -33,7 +34,7 @@ module.exports = {
         })
         .catch(() => {
           return reject({
-            error: "An error occurred while querying the database for cds",
+            error: "An error occurred while querying the database for types",
           });
         })
     );
@@ -48,14 +49,11 @@ module.exports = {
           },
         })
         .then((levels) => {
-          // Utilizza un set per garantire l'unicità dei valori
           const uniqueLevels = new Set(levels.map((lv) => lv.level));
-          // Converti il set in un array
           const uniqueLevelsArray = Array.from(uniqueLevels);
           return resolve(uniqueLevelsArray);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for level",
           });
@@ -66,13 +64,13 @@ module.exports = {
 
   getProposals: async () => {
     return new Promise((resolve, reject) => {
-      prisma.proposal.findMany({
+      prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
               surname: true,
             }
-          },
+          },  
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -83,10 +81,11 @@ module.exports = {
       .then((proposals) => {
         resolve(proposals);
       })
-      .catch((error) => {
-        console.error(error);
-        reject(new Error("An error occurred while querying the database for proposals"));
-      });
+      .catch(() => {
+        return reject({
+          error: "An error occurred while querying the database",
+        });
+      })
     });
   },
   
@@ -119,8 +118,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -154,8 +152,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -165,7 +162,6 @@ module.exports = {
 
   getProposalsBySupervisor: async (surname) => {
     try {
-      // Trova l'insegnante con il cognome specificato
       const teachers = await prisma.Teacher.findMany({
         where: {
           surname: {
@@ -175,20 +171,18 @@ module.exports = {
         },
       });
 
-      // Se l'insegnante non è stato trovato, restituisci un array vuoto
       if (!teachers) {
         throw new Error("An error occurred while querying the database");;
       }
 
       const teacherIds = teachers.map((teacher) => teacher.id);
-      // Trova le proposte associate all'insegnante
       const proposals = await prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
               surname: true,
             }
-          },  // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          },  
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -204,7 +198,6 @@ module.exports = {
 
       return proposals;
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while querying the database");
     }
   },
@@ -237,8 +230,7 @@ module.exports = {
 
           resolve(filteredProposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           reject({
             error: "An error occurred while querying the database",
           });
@@ -274,8 +266,7 @@ module.exports = {
 
           resolve(filteredProposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           reject({
             error: "An error occurred while querying the database",
           });
@@ -310,8 +301,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -345,8 +335,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -363,7 +352,7 @@ module.exports = {
               select: {
                 surname: true,
               }
-            },  // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+            },  
             degree: {
               select: {
                 TITLE_DEGREE: true,
@@ -380,8 +369,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -412,8 +400,7 @@ module.exports = {
         .then((proposals) => {
           return resolve(proposals);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           return reject({
             error: "An error occurred while querying the database",
           });

@@ -1,10 +1,10 @@
-const { getAllCds, getAllTypes, getAllLevels, getProposals, getProposalsByTitle, getProposalsByCosupervisor, getProposalsBySupervisor, getProposalsByKeywords, getProposalsByGroups, getProposalsByExpirationDate, getProposalsByLevel, getProposalsByType, getProposalsByCDS } = require("../../controllers/proposals.js");
+const { getAllCds, getAllTypes, getAllLevels, getProposals, getProposalsByTitle, getProposalsByCosupervisor, getProposalsBySupervisor, getProposalsByKeywords, getProposalsByGroups, getProposalsByExpirationDate, getProposalsByLevel, getProposalsByType, getProposalsByCDS } = require("../../../controllers/proposals.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
-const prisma = require("../../controllers/prisma.js");
+const prisma = require("../../../controllers/prisma.js");
 
 
-jest.mock("../../controllers/prisma.js", () => ({
+jest.mock("../../../controllers/prisma.js", () => ({
   Degree: {
     findMany: jest.fn(() => {}),
   },
