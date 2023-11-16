@@ -205,8 +205,8 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Level</Form.Label>
-                    <Form.Select value={level} onChange={handleLevelSelectedChange}>
-                        <option name="level" value="" disabled>Seleziona</option>
+                    <Form.Select name="level" value={level} onChange={handleLevelSelectedChange}>
+                        <option value="" disabled>Seleziona</option>
                         {levelList.map((proposal, index) => (
                             <option key={index} value={proposal.title}>
                                 {proposal.title}
@@ -218,8 +218,8 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by CDS</Form.Label>
-                    <Form.Select value={cds} onChange={handleCdsSelectedChange}>
-                        <option name="cds" value="" disabled>Seleziona</option>
+                    <Form.Select name="cds" value={cds} onChange={handleCdsSelectedChange}>
+                        <option value="" disabled>Seleziona</option>
                         {cdsList.map((proposal, index) => (
                             <option key={index} value={proposal.cod}>
                                 {proposal.title}
@@ -229,8 +229,8 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Type</Form.Label>
-                    <Form.Select value={type} onChange={handleTypeSelectedChange}>
-                        <option name="type" value="" disabled>Seleziona</option>
+                    <Form.Select name="type" value={type} onChange={handleTypeSelectedChange}>
+                        <option value="" disabled>Seleziona</option>
                         {typeList.map((proposal, index) => (
                             <option key={index} value={proposal.title}>
                                 {proposal.title}
