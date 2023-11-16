@@ -82,8 +82,8 @@ describe('Proposals Controller', () => {
     ];
   
     // Mock the Prisma methods
-    prisma.Teacher.findMany.mockResolvedValueOnce(mockTeachers);
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
+    //prisma.Teacher.findMany.mockResolvedValueOnce(mockTeachers);
+    //prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
   
     // Call the function and expect the result
     try {

@@ -23,15 +23,14 @@ const ProposalDetails = () => {
       <div className="card border-indigo-500 shadow-md rounded p-6 mb-6">
         <div className="card-body text-center">
           <ul className="list-none">
-            <li className="list-item"><span className="font-semibold">Name:</span> {student.student.name} {student.student.surname}</li>
-            <li className="list-item"><span className="font-semibold">Email:</span> {student.student.email}</li>
-            <li className="list-item"><span className="font-semibold">Gender:</span> {student.student.gender}</li>
-            <li className="list-item"><span className="font-semibold">Nationality:</span> {student.student.nationality}</li>
-            <li className="list-item"><span className="font-semibold">Degree:</span> {student.student.degree.TITLE_DEGREE}</li>
-            <li className="list-item"><span className="font-semibold">Degree Code:</span> {student.student.COD_DEGREE}</li>
-            <li className="list-item"><span className="font-semibold">Enrollment Year:</span> {student.student.ENROLLMENT_YEAR}</li>
-          </ul>
-
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Name:</span> {student.student.name} {student.student.surname}</li>
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Email:</span> {student.student.email}</li>
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Gender:</span> {student.student.gender}</li>
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Nationality:</span> {student.student.nationality}</li>
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Degree:</span> {student.student.degree.TITLE_DEGREE}</li>
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Degree Code:</span> {student.student.COD_DEGREE}</li>
+              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Enrollment Year:</span> {student.student.ENROLLMENT_YEAR}</li>
+            </ul>
           <div className="overflow-y-auto max-h-32">
             <table className="table w-full">
               <thead>
