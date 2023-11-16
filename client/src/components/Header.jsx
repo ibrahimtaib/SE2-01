@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <Navbar expand="md" style={{ background: '#003576' }} className="w-100">
       <Container fluid className="p-0">
-        <Navbar.Brand href="#home">
+        <Navbar.Brand>
           <img
             alt=""
             src="https://planet.polito.it/app/uploads/2021/03/Polito_Logo_2021_BIANCO-768x337.png"

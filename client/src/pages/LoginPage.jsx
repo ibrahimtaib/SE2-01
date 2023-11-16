@@ -6,7 +6,7 @@ import styles from "./LoginPage.module.css";
 import Form from 'react-bootstrap/Form';
 const mockUser = {
   id: 1,
-  name: 'Marco Rossi',
+  name: 'Mario Rossi',
   email: 's319095@studenti.polito.it',
   role: 'student',
 };
@@ -40,6 +40,7 @@ const LoginPage = ({ setUser }) => {
 
     if (email === "s123456@polito.it") {
       mockUser.role = 'teacher';
+      mockUser.name = 'Mario Professore'
       setUser(mockUser);
       setShowAlert(false);
       navTo("/");

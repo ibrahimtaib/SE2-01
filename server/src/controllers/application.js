@@ -61,6 +61,7 @@ module.exports = {
             comment,
             STUDENT_ID,
             PROPOSAL_ID,
+            date: new Date(),
           },
         })
         .then((application) => {

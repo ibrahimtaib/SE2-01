@@ -62,6 +62,7 @@ const ProposalList = ({ applications , loading }) => {
 
   return (
     <Container>
+      <br></br>
       <h1 className="text-3xl font-bold tracking-tight text-indigo-800 mb-6 text-center">
         Thesis Applications
       </h1>

@@ -21,7 +21,6 @@ function ProposalCard(props) {
           {props.proposal.Description}
         </Card.Text>
         <Card.Text className={isVisible ? '' : 'nascondi'}>
-          <br /><b>Co-Supervisor</b>: {props.proposal.CoSupervisor}
           <br /><b>Level</b>: {props.proposal.Level}
           {props.proposal.Groups.map((group, index) => (
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
