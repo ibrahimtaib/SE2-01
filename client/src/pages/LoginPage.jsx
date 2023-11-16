@@ -38,13 +38,21 @@ const LoginPage = ({ setUser }) => {
       alert('An error occurred. Please try again later.');
     }*/
 
-    if(teacher === 1) {
+    if (email === "s123456@polito.it") {
       mockUser.role = 'teacher';
+      setUser(mockUser);
+      setShowAlert(false);
+      navTo("/");
     }
-    console.log(mockUser);
-    setUser(mockUser);
-    setShowAlert(false);
-    navTo("/");
+    else if (email === "s123456@studenti.polito.it") {
+      setUser(mockUser);
+      setShowAlert(false);
+      navTo("/");
+    }
+    else {
+      alert('An error occurred. Please try again later.');
+    }
+
   };
 
 
@@ -76,24 +84,7 @@ const LoginPage = ({ setUser }) => {
           <button className={styles["login-btn"]} onClick={handleLogin}>
             Login
           </button>
-          <Form>
-            <Form.Check
-              style={{ paddingTop: "5px" }}
-              type="switch"
-              id="custom-switch"
-              label="Teacher"
-              onChange={(e) => {
-                if (e.target.checked) {
-                  // switch is checked
-                  teacher = 1;
-                } else {
-                  // switch is not checked
-                  teacher = 0;
-                }
-              }}
-            />
-
-          </Form></div>
+        </div>
       </div>
       <div>
       </div>

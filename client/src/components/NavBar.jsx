@@ -25,6 +25,14 @@ function NavBar({ user }) {
               Settings
             </NavDropdown.Item>
           </NavDropdown>
+
+          {user.role === "teacher" ? <Button
+            variant="outline-light"
+            className="mr-3"
+            style={{ marginRight: '10px' }}
+            onClick={() => navigateTo('/add')}
+          >Add proposal</Button> : <></>}
+          
           <Button
             variant="outline-light"
             className="mr-3"

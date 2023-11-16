@@ -63,7 +63,8 @@ function App() {
             user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
         />
         <Route path="/login" element={<LoginPage setUser={setUser} />} />
-        <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />} />
+        <Route path="/add" element={
+            user === null ? <Navigate replace to="/login" /> : <InsertPage isLoggedIn={loggedIn} />} />
         <Route
           exact
           path='/applications/*'
