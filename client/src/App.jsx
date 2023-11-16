@@ -5,8 +5,11 @@ import "react-datetime/css/react-datetime.css";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import API from './API';
 import DefaultRoute from './components/DefaultRoute';
+import Header from './components/Header';
+import NavBar from './components/NavBar';
 import ApplyPage from './pages/ApplyPage';
 import InsertPage from './pages/InsertPage';
+import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 
 
@@ -50,12 +53,15 @@ function App() {
   
   return (
     <BrowserRouter>
+      <Header />
+      <NavBar user={user}/>
       <Routes>
-        <Route path='/' element={<MainPage ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>} />
+        <Route path="/" element={<MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>} />
+        <Route path="/login" element={<LoginPage setUser={setUser}/>}/>
         <Route path="/add" element={<InsertPage isLoggedIn={loggedIn} />}/>
         <Route path='/applications/*' element={<ApplicationsPage />} />
         <Route path="/students/:id" element={<StudentDetailsPage />} />
-        <Route path="proposals/:proposalId/apply" element={<ApplyPage/>}/>
+        <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user}/>}/>
         <Route path='/*' element={<DefaultRoute />} />
       </Routes>
     </BrowserRouter>

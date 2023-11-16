@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import API from '../API';
 import ApplyForm from '../components/ApplyForm';
-import Header from '../components/Header';
-import NavBar from '../components/NavBar';
 
 function ApplyPage() {
   const [proposal, setProposal] = useState(undefined)
@@ -19,11 +17,7 @@ function ApplyPage() {
   }, [])
 
   return proposal == undefined ? (<></>):(
-    <>
-    <Header/>
-    <NavBar/>
     <ApplyForm proposal={proposal}/>
-    </>
   )
 }
 

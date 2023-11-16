@@ -5,18 +5,22 @@ import { Container } from 'react-bootstrap';
 
 
 import FilterProposals from '../components/FilterProposals';
-import Header from '../components/Header';
-import NavBar from '../components/NavBar';
 
-function MainPage(props) {
-  return (
+function MainPage({ProposalsList, setProposalsList, user}) {
+  return (   
         <>
-          <Header/>
-          <NavBar/>
+        {user !== null ?(
+          <>
           <Container fluid className="App p-0">
-          <FilterProposals ProposalsList={props.ProposalsList} setProposalsList={props.setProposalsList}/>
+          <FilterProposals ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>
           </Container>
         </>
+        ):(
+          //redirect to login page
+          <></>
+        )
+      }
+      </>
   )
 }
 

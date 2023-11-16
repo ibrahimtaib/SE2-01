@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import API from '../API';
 import ApplicationsList from '../components/BrowseApplications';
-import Header from '../components/Header';
-import NavBar from '../components/Navbar';
 import ProposalDetails from '../components/ProposalDetails';
 
 
@@ -27,8 +25,6 @@ function ApplicationsPage() {
 
   return (
     <>
-      <Header />
-      <NavBar />
       <Routes>
         <Route path="/" element={<ApplicationsList applications={applications} loading={loading} setLoading={setLoading}/>} />
         <Route path="/proposal/:id" element={<ProposalDetails />} />
