@@ -17,7 +17,7 @@ function FilterProposals(props) {
         <Container fluid className="m-0">
             <Row className="h-100">
                 <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide ProposalsList={props.ProposalsList}></RightSide></Col>
+                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -348,7 +348,7 @@ function RightSide(props) {
     return (
         <>
             {props.ProposalsList.map((proposal, index) => (
-                <ProposalCard key={index} proposal={proposal} />
+                <ProposalCard user={props.user} key={index} proposal={proposal} />
             ))}
         </>
     );

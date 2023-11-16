@@ -12,7 +12,7 @@ function MainPage({ProposalsList, setProposalsList, user}) {
         {user !== null ?(
           <>
           <Container fluid className="App p-0">
-          <FilterProposals ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>
+          <FilterProposals user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>
           </Container>
         </>
         ):(
