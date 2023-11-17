@@ -65,7 +65,7 @@ model Student {
 
 model Application {
   id          Int      @id @default(autoincrement())
-  date        DateTime
+  date        DateTime @default(now())
   status      String
   comment     String?
   STUDENT_ID  Int

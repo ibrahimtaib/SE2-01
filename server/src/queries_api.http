@@ -1,0 +1,18 @@
+###
+GET http://localhost:3001/proposals/title/propOSTA HTTP/1.1
+###
+GET http://localhost:3001/proposals/cosupervisor/RoSSI HTTP/1.1
+###
+GET http://localhost:3001/proposals/keywords/ARCHITETTURA,crittografia HTTP/1.1
+###
+GET http://localhost:3001/proposals/groups/Gruppo,gruppo1 HTTP/1.1
+###
+GET http://localhost:3001/proposals/level/MAGISTRALE HTTP/1.1
+###
+GET http://localhost:3001/proposals/expiration/2023-11-30 HTTP/1.1
+###
+
+GET http://localhost:3001/proposals/cds/CDS1 HTTP/1.1
+
+###
+GET http://localhost:3001/applications/1 HTTP/1.1
