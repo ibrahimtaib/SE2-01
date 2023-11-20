@@ -8,10 +8,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        id:e.id,
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.teacher,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -20,7 +18,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -32,9 +32,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -43,7 +42,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -55,9 +56,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -66,7 +66,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -78,9 +80,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -89,7 +90,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -138,9 +141,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -149,7 +151,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -161,9 +165,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -172,7 +175,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -184,9 +189,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -195,7 +199,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -207,9 +213,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -218,7 +223,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -230,9 +237,8 @@ async function getAllProposals() {
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -241,7 +247,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -249,14 +257,12 @@ async function getAllProposals() {
   }
 
   async function getProposalsByExpirationDate(date) {
-    console.log(date)
     const response = await fetch(`${URL}proposals/expiration/${date}`); // Attendere che la Promise si risolva
     const proposals = await response.json(); // Attendere che la Promise si risolva
     if (response.ok) {
       return proposals.map((e) => ({
-        Supervisor:e.supervisor,
+        Supervisor:e.teacher.surname,
         Cds:e.cds,
-        Teacher:e.supervisor,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
@@ -265,7 +271,9 @@ async function getAllProposals() {
         Type:e.type,
         Description:e.description,
         Notes: e.notes,
-        RequiredKnowledge: e.requiredKnowledge
+        RequiredKnowledge: e.requiredKnowledge,
+        Teacher: e.teacher.surname,
+        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;
@@ -274,29 +282,43 @@ async function getAllProposals() {
 
   async function filterProposals(data) {
     try {
-        const response = await fetch(`${URL}proposals`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Add any other headers as needed
-          },
-          body: JSON.stringify(data),
-        });
-    
-        if (response.ok) {
-          const result = await response.json();
-          
-          console.log('Proposal submitted successfully:', result);
-        } else {
-          throw new Error('Failed to submit proposal');
-        }
-      } catch (error) {
-        console.error('Error submitting proposal:', error);
-        throw error;
+      const response = await fetch(`${URL}proposals/filter`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers as needed
+        },
+        body: JSON.stringify({ filters: data }), // Invia i filtri nel corpo della richiesta
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        return result.map((e) => ({
+            Supervisor:e.teacher.surname,
+            Cds:e.cds,
+            Title: e.title,
+            CoSupervisor: e.coSupervisors,
+            Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
+            Groups:e.groups,
+            Level:e.level,
+            Type:e.type,
+            Description:e.description,
+            Notes: e.notes,
+            RequiredKnowledge: e.requiredKnowledge,
+            Teacher: e.teacher.surname,
+            titleDegree: e.degree.TITLE_DEGREE
+          }));
+      } else {
+        throw new Error('Failed to submit proposal');
       }
+    } catch (error) {
+      console.error('Error submitting proposal:', error);
+      throw error;
+    }
   }
   
-  
+    
+
   async function getApplicationsByTeacherId(teacherId) {
     const response = await fetch(`${URL}applications/${teacherId}`);
     const res = await response.json();
