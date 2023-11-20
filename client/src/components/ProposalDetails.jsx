@@ -18,8 +18,9 @@ const ProposalDetails = () => {
       <br></br>
     <div className="max-w-4xl mx-auto mt-8">
 
-      <div className="max-w-2xl mx-auto bg-white overflow-hidden shadow-sm rounded-lg p-6 mb-6 text-center">
+      <div className="max-w-2xl mx-auto bg-white overflow-hidden shadow-sm rounded-lg p-6 mb-6">
         <h1 className="text-3xl font-bold text-indigo-800 mb-6">Proposal Details</h1>
+        <br></br>
 
         <Card style={{ textAlign: "left" }}>
           <Card.Header>{proposal.teacher.name} {proposal.teacher.surname}</Card.Header>
