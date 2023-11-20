@@ -39,7 +39,7 @@ function ApplyForm({proposal}) {
     <div className='container-apply-form'>
     <DismissableAlert showAlert={showAlert} setShowAlert={setShowAlert} heading={"Sorry!"} message={messageAlert}/>
       <h1 className='title-apply-form'>Apply to: {proposal.title}</h1>
-      <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name}</h3>
+      <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name} {proposal.supervisor.surname}</h3>
 
       <div 
             style={{borderRadius: '5px', border: '1px solid #ccc', padding: '10px'}}
