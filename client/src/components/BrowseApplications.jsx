@@ -65,11 +65,13 @@ const ProposalList = ({ applications , loading }) => {
       <br></br>
     <div>
       <h1>Thesis Applications</h1>
+      <br></br>
       {loading ? (
         <div>Loading...</div>
       ) : applications ? (
         applications.length > 0 ? (
           applications.map((selectedApplication, index) => (
+            <>
             <div
               key={index}
               onMouseLeave={() => {
@@ -119,6 +121,8 @@ const ProposalList = ({ applications , loading }) => {
                 Refuse
               </button>
             </div>
+            <br></br>
+            </>
           ))
         ) : (
           <div>No applications found.</div>

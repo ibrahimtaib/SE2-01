@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Container } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
@@ -25,12 +26,13 @@ const ProposalDetails = () => {
   }
 
   return (
+    <Container>
     <div className="max-w-4xl mx-auto mt-8">
 
       <div className="card border-indigo-500 shadow-md rounded p-6 mb-6">
         <div className="card-body text-center">
+          <h1>{student.student.name} {student.student.surname}</h1>
           <ul className="list-none">
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Name:</span> {student.student.name} {student.student.surname}</li>
               <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Email:</span> {student.student.email}</li>
               <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Gender:</span> {student.student.gender}</li>
               <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Nationality:</span> {student.student.nationality}</li>
@@ -72,6 +74,7 @@ const ProposalDetails = () => {
       </Link>
       </div>
     </div>
+    </Container>
   );
 };
 

@@ -1,5 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { Container } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -13,6 +14,8 @@ const ProposalDetails = () => {
   }
 
   return (
+    <Container>
+      <br></br>
     <div className="max-w-4xl mx-auto mt-8">
 
       <div className="max-w-2xl mx-auto bg-white overflow-hidden shadow-sm rounded-lg p-6 mb-6 text-center">
@@ -66,12 +69,15 @@ const ProposalDetails = () => {
         <Link
           style={{ padding: "20px" }}
           to="/applications">
+            <br></br>
           <Button
             variant="dark"
           >Go Back</Button>
         </Link>
+        <br></br>
       </div>
     </div>
+    </Container>
   );
 };
 

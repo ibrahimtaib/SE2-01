@@ -19,7 +19,7 @@ export const addPage = async (proposal) => {
 export const addApplication = async (application) => {
     try {
       const response = await api.post("/applications/", application);
-      return response.data;
+      return response;
     } catch (error) {
       throw error;
     }
