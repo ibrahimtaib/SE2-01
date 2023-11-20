@@ -5,14 +5,15 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "helmet": "^7.0.0",
+    "jest-mock": "^29.7.0",
+    "jest-extended": "^3.2.4",
     "nodemon": "^3.0.1",
     "prisma": "^5.5.2"
   },
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "npx jest",
-    "cypress": "npx cypress open"
+    "test:unit": "npx jest --runInBand --coverage --coverageDirectory=coverage/coverage_unit --colors proposals.unit.test.js"
   },
   "devDependencies": {
     "jest": "^29.7.0",

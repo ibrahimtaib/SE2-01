@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({ log: ["query"] });
+const prisma = require('./prisma');
 
 module.exports = {
   createProposal: async (body) => {
