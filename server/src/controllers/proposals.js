@@ -565,7 +565,8 @@ module.exports = {
       console.error(error);
       throw new Error("An error occurred while filtering proposals");
     }
-  }
+  },
+  
   getApplicationsBySupervisorId: async (teacherId) => {
     return new Promise((resolve, reject) =>
       prisma.Application

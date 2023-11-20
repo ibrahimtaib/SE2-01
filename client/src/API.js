@@ -20,7 +20,8 @@ async function getAllProposals() {
         Notes: e.notes,
         RequiredKnowledge: e.requiredKnowledge,
         Teacher: e.teacher.surname,
-        titleDegree: e.degree.TITLE_DEGREE
+        titleDegree: e.degree.TITLE_DEGREE,
+        id: e.id
       }));
     } else {
       throw proposals;
