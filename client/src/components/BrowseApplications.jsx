@@ -63,28 +63,20 @@ const ProposalList = ({ applications , loading }) => {
   return (
     <Container>
       <br></br>
-      <h1 className="text-3xl font-bold tracking-tight text-indigo-800 mb-6 text-center">
-        Thesis Applications
-      </h1>
+    <div>
+      <h1>Thesis Applications</h1>
       {loading ? (
-        <Container className="text-center mt-5">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-          <p>Loading...</p>
-        </Container>
-      ) : (
-        applications.map((selectedApplication, index) => (
-          <Row
-            key={index}
-            className="mt-6 border rounded p-4 bg-white shadow-md"
-            onMouseEnter={() => setHoveredTitle(null)} 
-            onMouseLeave={() => {
-              setHoveredTitle(null);
-              setHoveredStudent(null);
-            }}
-          >
-            <Col md={6}>
+        <div>Loading...</div>
+      ) : applications ? (
+        applications.length > 0 ? (
+          applications.map((selectedApplication, index) => (
+            <div
+              key={index}
+              onMouseLeave={() => {
+                setHoveredTitle(null);
+                setHoveredStudent(null);
+              }}
+            >
               <div
                 onClick={() => handleTitleClick(selectedApplication)}
                 onMouseEnter={() => setHoveredTitle(index)}
@@ -96,53 +88,45 @@ const ProposalList = ({ applications , loading }) => {
                 }}
                 className="hover:underline"
               >
-                <h2 className="text-xl font-semibold text-indigo-600">
-                  {selectedApplication.proposal.title}
-                </h2>
+                {selectedApplication.proposal.title}
               </div>
-            </Col>
-            <Col md={6}>
-              <div className="d-flex flex-column align-items-start">
-                <span
-                  onClick={() => handleStudentClick(selectedApplication)}
-                  onMouseEnter={() => setHoveredStudent(index)}
-                  onMouseLeave={() => setHoveredStudent(null)}
-                  style={{
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: 'black',
-                    textDecoration: hoveredStudent === index ? 'underline' : 'none'
-                  }}
-                  className="hover:underline font-semibold text-black mb-2"
-                >
-                  {`${selectedApplication.student.name} ${selectedApplication.student.surname}`}
-                </span>
-                <p className="text-sm text-gray-600">
-                  Degree: {selectedApplication.student.degree.TITLE_DEGREE}
-                </p>
+              <div
+                onClick={() => handleStudentClick(selectedApplication)}
+                onMouseEnter={() => setHoveredStudent(index)}
+                onMouseLeave={() => setHoveredStudent(null)}
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  color: 'black',
+                  textDecoration: hoveredStudent === index ? 'underline' : 'none'
+                }}
+                className="hover:underline font-semibold text-black mb-2"
+              >
+                {`${selectedApplication.student.name} ${selectedApplication.student.surname}`}
+                <br />
+                Degree: {selectedApplication.student.degree.TITLE_DEGREE}
               </div>
-            </Col>
-            <Col md={12} className="mt-3 d-flex justify-content-end">
-              <Button
-                onClick={() =>
-                  handleApplicationAction(selectedApplication.id, selectedApplication.student.id, 'accept')
-                }
-                className="bg-success text-white px-3 py-1 rounded hover:bg-green-600 transition duration-300 mx-2" 
+              <button
+                onClick={() => handleApplicationAction(selectedApplication.id, selectedApplication.student.id, 'accept')}
+                className="bg-success text-white px-3 py-1 rounded hover:bg-green-600 transition duration-300 mx-2"
               >
                 Accept
-              </Button>
-              <Button
-                onClick={() =>
-                  handleApplicationAction(selectedApplication.id, selectedApplication.student.id, 'reject')
-                }
+              </button>
+              <button
+                onClick={() => handleApplicationAction(selectedApplication.id, selectedApplication.student.id, 'reject')}
                 className="bg-danger text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
               >
                 Refuse
-              </Button>
-            </Col>
-          </Row>
-        ))
+              </button>
+            </div>
+          ))
+        ) : (
+          <div>No applications found.</div>
+        )
+      ) : (
+        <div>Applications not defined.</div>
       )}
+    </div>
     </Container>
   );
 };
