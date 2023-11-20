@@ -188,6 +188,7 @@ export default function InsertForm() {
 
     return (
         <>
+            <br></br>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 style={styles.form}
@@ -400,8 +401,11 @@ export default function InsertForm() {
                     >
                         Add
                     </Button>
+                    
                 </div>
             </form>
+            <br></br>
+            <br></br>
         </>
 
     )
