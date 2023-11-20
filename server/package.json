@@ -32,6 +32,9 @@
       "!./src/tests/**/*.js"
     ],
     "coverageDirectory": "src/tests/coverage",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   }
 }
