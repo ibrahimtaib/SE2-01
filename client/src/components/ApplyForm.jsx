@@ -17,7 +17,6 @@ function ApplyForm({proposal}) {
   //TODO: check if user has already applied
 
   const onSubmit = async (data) => {
-    try {
     const res = addApplication({
       STUDENT_ID: student.id,
       PROPOSAL_ID: proposal.id,
@@ -65,5 +64,5 @@ function ApplyForm({proposal}) {
     </>
   );
 }
-}
+
 export default ApplyForm

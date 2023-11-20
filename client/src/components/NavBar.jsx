@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function NavBar({ user }) {
   const navigateTo = useNavigate();
   return (
-    <Navbar className="navbar-orange sticky-top" expand="sm" variant="dark">
+    <Navbar style={{ backgroundColor : "rgb(252, 122, 8)"}} className="sticky-top" expand="sm" variant="dark">
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       {user ? (
         <>
