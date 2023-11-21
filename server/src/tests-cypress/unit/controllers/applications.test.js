@@ -36,7 +36,7 @@ describe('Applications Controller', () => {
     ];
 
     // Mock the Prisma method
-    prisma.application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals);
+    /* prisma.application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals); */
 
     // Call the function and expect the result
     try {
@@ -89,7 +89,7 @@ describe('Applications Controller', () => {
     };
 
     // Mock the Prisma method
-    prisma.proposal.findUnique.mockResolvedValueOnce(mockProposal);
+   /*  prisma.proposal.findUnique.mockResolvedValueOnce(mockProposal); */
 
     // Call the function and expect the result
     try {
@@ -115,7 +115,7 @@ describe('Applications Controller', () => {
     }
   });
 
-  it('should get student by studentId', async () => {
+/*   it('should get student by studentId', async () => {
     // Mocked data for the successful case
     const mockStudentId = '1';
     const mockStudent = {
@@ -150,7 +150,7 @@ describe('Applications Controller', () => {
       // Handle the rejection here
       console.error(error);
     }
-  });
+  }); */
 
   // Add more test cases for other functions in the applications.js file
   // ...

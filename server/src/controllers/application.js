@@ -77,7 +77,7 @@ module.exports = {
         console.error(error);
         reject({
           status: error.status || 500,
-          error: error.error || "An error occurred while creating Application",
+          error: error.error || "An error occurred",
         });
       }
     });

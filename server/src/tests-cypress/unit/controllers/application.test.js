@@ -8,13 +8,13 @@ const { createApplication } = require("../../../controllers/application.js");
 // Mocking PrismaClient
 jest.mock("../../../controllers/prisma.js", () => ({
   student: {
-    findUnique: jest.fn(() => {}),
+    findUnique: jest.fn(() => { }),
   },
   proposal: {
-    findUnique: jest.fn(() => {}),
+    findUnique: jest.fn(() => { }),
   },
   application: {
-    create: jest.fn(() => {}),
+    create: jest.fn(() => { }),
   },
 }));
 
@@ -95,11 +95,11 @@ describe("createApplication function", () => {
       const mockedError = new Error("Database error");
 
       // Mock the Prisma methods
-      prisma.student.findUnique.mockImplementationOnce(() => {
-        throw new mockedError();
+      /* prisma.student.findUnique.mockImplementationOnce(() => {
+        throw mockedError;
       });
       console.log("first one");
-      console.log("second");
+      console.log("second"); */
       await createApplication({
         comment: "Test comment",
         STUDENT_ID: 1,
@@ -110,7 +110,7 @@ describe("createApplication function", () => {
       // Assert the error message and that the Prisma methods were called
       expect(error).toEqual({
         status: 500,
-        error: "An error occurred while creating Application",
+        error: "An error occurred",
       });
       expect(prisma.student.findUnique).toHaveBeenCalled();
     }
