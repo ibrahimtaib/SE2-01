@@ -130,6 +130,7 @@ const styles = {
 
 export default function InsertForm() {
     //TODO: IMPORTANT!! Put this states in App.jsx (they are for sure needed somewhere else later in development)
+    //TODO: Adjust CSS to reflect the theme of the website
     const [levels, setLevels] = useState(["Bachelor", "Master"]);
     const [supervisors, setSupervisors] = useState([]);
     const [degrees, setDegrees] = useState([]);

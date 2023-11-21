@@ -12,9 +12,7 @@ function ApplyForm({proposal}) {
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   const [messageAlert, setMessageAlert] = useState("");
-  //TODO fetch from auth 
-  const student = {name: "Mario Rossi", email: "s123456@studenti.polito.it", id: 2}
-  //TODO: check if user has already applied
+  const student = {name: "Mario Rossi", email: "s123456@studenti.polito.it", id: 1}
 
   const onSubmit = async (data) => {
     const res = addApplication({

@@ -4,6 +4,8 @@ import API from '../API';
 import ApplyForm from '../components/ApplyForm';
 
 function ApplyPage() {
+  //TODO: Have some kind of method that checks (in the database, then returns an error) if a user has already applied to a proposal
+  //TODO: Fix user showing after login
   const [proposal, setProposal] = useState(undefined)
   const {proposalId} = useParams()
   useEffect(() => {
