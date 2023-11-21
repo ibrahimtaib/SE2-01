@@ -50,7 +50,7 @@ describe('Applications Controller', () => {
         },
         proposal: application.proposal,
       })));
-      expect(prisma.Application.findMany).toHaveBeenCalledWith({
+      expect(prisma.application.findMany).toHaveBeenCalledWith({
         where: {
           proposal: {
             teacher: {
