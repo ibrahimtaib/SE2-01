@@ -5,7 +5,7 @@ const degreesRouter = require('./degrees')
 const proposalsRouter = require("./proposals")
 const applicationsRouter = require("./applications")
 
-router.use("/applications", applicationsRouter);
+
 // Status 404 if the route is not found
 
 router.use('/proposals', proposalsRouter)

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const proposalsApplication = require("../controllers/applications");
+const applicationsController = require("../controllers/applications.js");
 const applicationController = require("../controllers/application.js");
 
 
@@ -22,7 +22,7 @@ router.get("/:teacherId/", async (req, res) => {
   const teacherId = req.params.teacherId;
 
   try {
-    const applications = await proposalsApplication.getApplicationsStudentsProposalsDegreesByTeacherId(teacherId);
+    const applications = await applicationsController.getApplicationsStudentsProposalsDegreesByTeacherId(teacherId);
     res.status(200).json(applications);
   } catch (error) {
     console.error(error);
@@ -35,7 +35,7 @@ router.get("/proposal/:proposalId", async (req, res) => {
   const proposalId = req.params.proposalId;
 
   try {
-    const proposal = await proposalsApplication.getProposalById(proposalId);
+    const proposal = await applicationsController.getProposalById(proposalId);
     res.status(200).json(proposal);
   } catch (error) {
     console.error(error);
@@ -47,7 +47,7 @@ router.get("/student/:studentId", async (req, res) => {
   const studentId = req.params.studentId;
 
   try {
-    const student = await proposalsApplication.getStudentById(studentId);
+    const student = await applicationsController.getStudentById(studentId);
     res.status(200).json(student);
   } catch (error) {
     console.error(error);

@@ -18,4 +18,10 @@ GET http://localhost:3001/proposals/cds/CDS1 HTTP/1.1
 GET http://localhost:3001/proposals/types HTTP/1.1
 
 ###
+POST http://localhost:3001/ HTTP/1.1
+
+###
 GET http://localhost:3001/applications/1 HTTP/1.1
+
+###
+GET http://localhost:3001/1 HTTP/1.1
