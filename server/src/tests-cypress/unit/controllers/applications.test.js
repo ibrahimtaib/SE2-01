@@ -36,7 +36,7 @@ describe('Applications Controller', () => {
     ];
 
     // Mock the Prisma method
-    prisma.Application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals);
+    prisma.application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals);
 
     // Call the function and expect the result
     try {
@@ -50,7 +50,7 @@ describe('Applications Controller', () => {
         },
         proposal: application.proposal,
       })));
-      expect(prisma.Application.findMany).toHaveBeenCalledWith({
+      expect(prisma.application.findMany).toHaveBeenCalledWith({
         where: {
           proposal: {
             teacher: {
@@ -89,7 +89,7 @@ describe('Applications Controller', () => {
     };
 
     // Mock the Prisma method
-    prisma.Proposal.findUnique.mockResolvedValueOnce(mockProposal);
+    prisma.proposal.findUnique.mockResolvedValueOnce(mockProposal);
 
     // Call the function and expect the result
     try {
@@ -100,7 +100,7 @@ describe('Applications Controller', () => {
         teacher: mockProposal.teacher,
         degree: mockProposal.degree,
       });
-      expect(prisma.Proposal.findUnique).toHaveBeenCalledWith({
+      expect(prisma.proposal.findUnique).toHaveBeenCalledWith({
         where: {
           id: parseInt(mockProposalId),
         },
