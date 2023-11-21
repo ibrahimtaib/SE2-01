@@ -36,7 +36,7 @@ describe('Applications Controller', () => {
     ];
 
     // Mock the Prisma method
-    prisma.Application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals);
+    prisma.application.findMany.mockResolvedValueOnce(mockApplicationsStudentsProposals);
 
     // Call the function and expect the result
     try {
@@ -89,7 +89,7 @@ describe('Applications Controller', () => {
     };
 
     // Mock the Prisma method
-    prisma.Proposal.findUnique.mockResolvedValueOnce(mockProposal);
+    prisma.proposal.findUnique.mockResolvedValueOnce(mockProposal);
 
     // Call the function and expect the result
     try {
