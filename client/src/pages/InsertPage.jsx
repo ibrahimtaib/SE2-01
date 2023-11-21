@@ -2,12 +2,12 @@
 /* eslint-disable react/prop-types */
 import 'tailwindcss/tailwind.css';
 
-import InsertForm2 from '../components/InsertForm2';
+import InsertForm from '../components/InsertForm';
 
 function InsertPage({isLoggedIn}) {
 
   return (
-    <InsertForm2 />
+    <InsertForm />
   )
 }
 

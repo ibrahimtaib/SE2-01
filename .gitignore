@@ -2,6 +2,7 @@
 **/package-lock.json
 **/yarn.lock
 **/node_modules/
+**/coverage/
 
 # Ignore eventual .env and secrets
 **/.env

@@ -23,6 +23,7 @@ function App() {
 
   // This state keeps track if the user is currently logged-in.
   // eslint-disable-next-line no-unused-vars
+  //FIXME: login!
   const [loggedIn, setLoggedIn] = useState(false);
   // This state contains the user's info.
   const [user, setUser] = useState(null);

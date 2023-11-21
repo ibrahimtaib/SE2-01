@@ -11,30 +11,32 @@ function ApplyForm({proposal}) {
   const navigateTo = useNavigate();
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
-  //TODO fetch from auth 
-  const student = {name: "Mario Rossi", email: "s123456@studenti.polito.it", id: 2}
-  //TODO: check if user has already applied
+  const [messageAlert, setMessageAlert] = useState("");
+  const student = {name: "Mario Rossi", email: "s123456@studenti.polito.it", id: 1}
 
   const onSubmit = async (data) => {
-    try {
     const res = addApplication({
       STUDENT_ID: student.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
-      })
-    console.log("application added", res)
-    navigateTo("/")
-    }catch(err){
-      console.log("error adding application", err)
+    }).then((res) => {
+      if (res.status === 200 || res.status === 201)
+      {
+        navigateTo("/");
+      }
+      setMessageAlert(res.data.error);
+      setShowAlert(true);
+    }).catch(() => {
+      setMessageAlert("There was an error while submitting your application, please try again in a few moments.")
       setShowAlert(true)
-    }
+    })
   };
 
   return (
     <>
     <div className='container-apply-form'>
-    <DismissableAlert showAlert={showAlert} setShowAlert={setShowAlert} heading={"Sorry!"} message={"There was an error while submitting your application, please try again in a few moments or log in again if the problem persists."}/>
-      <h1 className='title-apply-form'>Apply for: {proposal.title}</h1>
+    <DismissableAlert showAlert={showAlert} setShowAlert={setShowAlert} heading={"Sorry!"} message={messageAlert}/>
+      <h1 className='title-apply-form'>Apply to: {proposal.title}</h1>
       <h3 id="supervisor-apply-form">Supervisor: {proposal.supervisor.name} {proposal.supervisor.surname}</h3>
 
       <div 

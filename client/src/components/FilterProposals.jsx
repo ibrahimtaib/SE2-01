@@ -131,17 +131,17 @@ function LeftSide(props) {
 
     const handleFilter = () => {
         event.preventDefault();
-        const flt=[
-            {type: 'title', value: title},
-            {type: 'supervisor', value: supervisor},
-            {type: 'cosupervisor', value: cosupervisor},
-            {type: 'keywords', value: keywords},
-            {type: 'groups', value: groups},
-            {type: 'expirationDate', value: date},
-            {type: 'level', value: level},
-            {type: 'type', value: type},
-            {type: 'cds', value: cds},
-        ]
+        const flt={
+            title:title,
+            coSupervisor:cosupervisor,
+            level:level,
+            type:type,
+            cds:cds,
+            expiration:date,
+            keywords:keywords,
+            groups:groups,
+            supervisor:supervisor
+        }
         setFilter(flt);
         setClick(true);
     };
@@ -165,98 +165,18 @@ function LeftSide(props) {
     useEffect(() => {
         if (click) {
             const init = async () => {
-                if (title !== "") {
-                    try {
-                        API.getProposalsByTitle(title).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
+                try {
+                    API.filterProposals(filter).then((a) => {
+                        props.setProposalsList(a)
                         setClick(false)
-                    }
-                } else if (cosupervisor !== "") {
-                    try {
-                        API.getProposalsByCosupervisor(cosupervisor).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
+                    })
+                    .catch((err) => {
+                        console.log(err)
                         setClick(false)
-                    }
-                } else if (supervisor !== "") {
-                    try {
-                        API.getProposalsBySupervisor(supervisor).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                } else if (keywords !== "") {
-                    try {
-                        API.getProposalsByKeywords(keywords).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                } else if (groups !== "") {
-                    try {
-                        API.getProposalsByGroups(groups).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                } else if (level !== "") {
-                    try {
-                        API.getProposalsByLevel(level).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                }else if (cds !== "") {
-                    try {
-                        API.getProposalsByCds(cds).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                }else if (type !== "") {
-                    try {
-                        API.getProposalsByType(type).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
-                }else if (date !== "") {
-                    try {
-                        API.getProposalsByExpirationDate(date).then((a) => {
-                            props.setProposalsList(a)
-                            setClick(false)
-                        })
-                            .catch((err) => console.log(err));
-                    } catch (err) {
-                        setClick(false)
-                    }
+                    });
+                } catch (err) {
+                    setClick(false)
                 }
-
             };
             init();
         }
@@ -267,7 +187,7 @@ function LeftSide(props) {
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Title</Form.Label>
-                    <Form.Control placeholder="Title" value={title} onChange={handleTitleChange} />
+                    <Form.Control name="title" placeholder="Title" value={title} onChange={handleTitleChange} />
                 </Form.Group>
                 {/*
                 <Form.Group className="mb-3">
@@ -277,23 +197,23 @@ function LeftSide(props) {
                 */}
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Supervisor</Form.Label>
-                    <Form.Control placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
+                    <Form.Control name="supervisor" placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Co-Supervisor</Form.Label>
-                    <Form.Control placeholder="Co-Supervisor" value={cosupervisor} onChange={handleCosupervisorChange} />
+                    <Form.Control name="cosupervisor" placeholder="Co-Supervisor" value={cosupervisor} onChange={handleCosupervisorChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Keywords</Form.Label>
-                    <Form.Control placeholder="Keywords separeted by ," value={keywords} onChange={handleKeywordsChange} />
+                    <Form.Control name="keywords" placeholder="Keywords separeted by ," value={keywords} onChange={handleKeywordsChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Groups</Form.Label>
-                    <Form.Control placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange} />
+                    <Form.Control name="groups" placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Level</Form.Label>
-                    <Form.Select value={level} onChange={handleLevelSelectedChange}>
+                    <Form.Select name="level" value={level} onChange={handleLevelSelectedChange}>
                         <option value="" disabled>Seleziona</option>
                         {levelList.map((proposal, index) => (
                             <option key={index} value={proposal.title}>
@@ -306,7 +226,7 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by CDS</Form.Label>
-                    <Form.Select value={cds} onChange={handleCdsSelectedChange}>
+                    <Form.Select name="cds" value={cds} onChange={handleCdsSelectedChange}>
                         <option value="" disabled>Seleziona</option>
                         {cdsList.map((proposal, index) => (
                             <option key={index} value={proposal.cod}>
@@ -317,7 +237,7 @@ function LeftSide(props) {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Type</Form.Label>
-                    <Form.Select value={type} onChange={handleTypeSelectedChange}>
+                    <Form.Select name="type" value={type} onChange={handleTypeSelectedChange}>
                         <option value="" disabled>Seleziona</option>
                         {typeList.map((proposal, index) => (
                             <option key={index} value={proposal.title}>
