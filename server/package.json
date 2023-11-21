@@ -36,8 +36,5 @@
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
   }
 }
