@@ -4,6 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
 
+
 // Mocking PrismaClient
 jest.mock('../../../controllers/prisma.js', () => ({
   Application: {
