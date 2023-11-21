@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("./prisma.js");
 
 module.exports = {
   /**
@@ -69,7 +69,6 @@ module.exports = {
             comment,
             STUDENT_ID,
             PROPOSAL_ID,
-            date: new Date(),
           },
         });
 
