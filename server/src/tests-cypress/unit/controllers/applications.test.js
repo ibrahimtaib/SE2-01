@@ -100,7 +100,7 @@ describe('Applications Controller', () => {
         teacher: mockProposal.teacher,
         degree: mockProposal.degree,
       });
-      expect(prisma.Proposal.findUnique).toHaveBeenCalledWith({
+      expect(prisma.proposal.findUnique).toHaveBeenCalledWith({
         where: {
           id: parseInt(mockProposalId),
         },
