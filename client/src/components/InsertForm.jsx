@@ -3,6 +3,7 @@
 import Tagify from '@yaireo/tagify';
 import { useEffect, useRef, useState } from "react";
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import api, { addPage } from "../api/api";
@@ -13,7 +14,7 @@ const Types = {
 }
 
 const styles = {
-    form:{
+    form: {
         backgroundColor: "white",
         width: "70%",
         maxWidth: "3xl",
@@ -26,18 +27,18 @@ const styles = {
         padding: "1rem 2rem", // Assuming 1 rem is equivalent to 2.5rem
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Example shadow values; adjust as needed
     },
-    container:{
+    container: {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
     },
-    innerContainer:{
+    innerContainer: {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
         width: "40%", // Since "w-2/5" corresponds to a width of 2/5 or 40%
-    },    
-    label:{
+    },
+    label: {
         fontSize: "1rem",
         fontWeight: "600",
         lineHeight: "1.75",
@@ -58,7 +59,7 @@ const styles = {
             outline: "0",
             ringOffsetWidth: "0",
             ringWidth: "2px",
-            },
+        },
         fontSize: "0.875rem",
         lineHeight: "1.5",
         borderRadius: "0.375rem",
@@ -79,7 +80,7 @@ const styles = {
         placeholderColor: "#a0aec0", // Replace with your specific placeholder text color, here it's text-gray-400
         focusOutline: "none", // Disable the default focus outline
     },
-    select:{
+    select: {
         width: "100%",
         borderRadius: "0.375rem", // You may adjust the radius value according to your design
         boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", // Adjust the shadow according to your design
@@ -97,35 +98,35 @@ const styles = {
         color: "#4A5568", // Adjust the text color according to your design
         lineHeight: "1.25", // You may adjust the line height according to your design
     },
-    header:{
+    header: {
         fontSize: "2.25rem", // Equivalent to text-4xl in Tailwind CSS
         fontWeight: "bold",  // Equivalent to font-bold in Tailwind CSS
         letterSpacing: "-0.01em", // Equivalent to tracking-tight in Tailwind CSS
         color: "#1a202c", // Equivalent to text-gray-900 in Tailwind CSS
     },
-    buttonContainer:{
+    buttonContainer: {
         marginTop: "1.5rem", // Assuming default font size is 1rem, as Tailwind uses 1.5rem for mt-6
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-end",
         columnGap: "1.5rem", // Assuming default font size is 1rem, as Tailwind uses 1.5rem for gap-x-6
     },
-    cancel:{
+    cancel: {
         fontSize: "0.875rem",
         fontWeight: "400",
         lineHeight: "1.5",
         color: "#1a202c",
     },
-    add:{
+    add: {
         backgroundColor: "#1a365d",
         color: "#fff",
-        
+
     }
-     
+
 
 }
-    
-    
+
+
 
 export default function InsertForm() {
     //TODO: IMPORTANT!! Put this states in App.jsx (they are for sure needed somewhere else later in development)
@@ -193,16 +194,16 @@ export default function InsertForm() {
                 onSubmit={handleSubmit(onSubmit)}
                 style={styles.form}
             >
-                <h1 
-                className="sans-serif"
-                style={styles.header}
+                <h1
+                    className="sans-serif"
+                    style={styles.header}
                 >New Proposal</h1>
                 <div style={styles.container}>
                     <label style={styles.label} htmlFor='title'>
                         Title
                     </label>
                     {errors.title?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                        <a style={{ color: "red" }}>Field is required</a>
                     )}
                     <input
                         {...register("title", { required: true })}
@@ -218,7 +219,7 @@ export default function InsertForm() {
                         Description
                     </label>
                     {errors.description?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                        <a style={{ color: "red" }}>Field is required</a>
                     )}
                     <textarea
                         {...register("description", { required: true })}
@@ -231,18 +232,18 @@ export default function InsertForm() {
 
                 </div>
 
-                <div 
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}
                 >
                     <div style={styles.innerContainer}>
-                        <label 
-                        style={styles.label} 
-                        htmlFor='expiration-date'
+                        <label
+                            style={styles.label}
+                            htmlFor='expiration-date'
                         >
                             Expiration date
                         </label>
@@ -262,7 +263,7 @@ export default function InsertForm() {
                             Level
                         </label>
                         {errors.level?.type === "required" && (
-                            <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                            <a style={{ color: "red" }}>Field is required</a>
                         )}
                         <select
                             {...register("level", { required: true })}
@@ -280,7 +281,7 @@ export default function InsertForm() {
                         Programme/Degree
                     </label>
                     {errors.cds?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                        <a style={{ color: "red" }}>Field is required</a>
                     )}
                     <select
                         {...register("cds", { required: true })}
@@ -296,7 +297,7 @@ export default function InsertForm() {
                         Type
                     </label>
                     {errors.type?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                        <a style={{ color: "red" }}>Field is required</a>
                     )}
                     <select
                         {...register("type", { required: true })}
@@ -312,24 +313,6 @@ export default function InsertForm() {
                     </select>
                 </div>
 
-
-
-                {/* <div style={styles.container}>
-                    <label style={styles.label}>
-                        Supervisor
-                    </label>
-                    {errors.supervisor?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
-                    )}
-                    <select
-                        {...register("supervisor", { required: true })}
-                        id="supervisor"
-                        style={styles.select}
-                    >
-                        {supervisors.map(supervisor => <option key={supervisor.id} value={supervisor.id}>{supervisor.name} {supervisor.surname}</option>)}
-                    </select>
-                </div> */}
-
                 <div style={styles.container}>
                     <label style={styles.label}>
                         Co-Supervisors
@@ -342,7 +325,7 @@ export default function InsertForm() {
                         Required knowledge
                     </label>
                     {errors.requiredKnowledge?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                        <a style={{ color: "red" }}>Field is required</a>
                     )}
                     <input
                         {...register("requiredKnowledge", { required: true })}
@@ -371,26 +354,29 @@ export default function InsertForm() {
                         Keywords
                     </label>
                     {errors.keywords?.type === "required" && (
-                        <p className="mt-3 text-sm leading-6 text-red-500">Field is required</p>
+                        <a style={{ color: "red" }}>Field is required</a>
                     )}
 
                     <KeywordsInput setKeywords={setKeywords} />
                 </div>
 
                 {successfullySent && (
-                    <h2 className="mt-3 text-l leading-6 text-cyan-800">Proposal successfully inserted! Redirecting to home page...</h2>
+                    <Alert variant="success" style={{ width: "100%" }}>
+                        Proposal successfully inserted! Redirecting to home page...
+                    </Alert>
                 )}
                 {serverError && (
-                    <h2 className="mt-3 text-l leading-6 text-red-500">An error occurred while inserting the proposal: try again.</h2>
+                    <Alert variant="error">
+                        An error occurred while inserting the proposal: try again.
+                    </Alert>
                 )}
 
-
-                <div 
-                style={styles.buttonContainer}
+                <div
+                    style={styles.buttonContainer}
                 >
-                    <Button 
-                    variant="outline-secondary"
-                    onClick={() => navigate('/')}
+                    <Button
+                        variant="outline-secondary"
+                        onClick={() => navigate('/')}
                     >
                         Cancel
                     </Button>
@@ -401,7 +387,7 @@ export default function InsertForm() {
                     >
                         Add
                     </Button>
-                    
+
                 </div>
             </form>
             <br></br>
