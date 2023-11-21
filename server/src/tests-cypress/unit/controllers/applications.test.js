@@ -1,5 +1,5 @@
 // Import necessary modules and functions
-const { applications } = require("../../../controllers/applications.js");
+const { getApplicationsStudentsProposalsDegreesByTeacherId, getProposalById, getStudentById } = require("../../../controllers/applications.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
@@ -40,7 +40,7 @@ describe('Applications Controller', () => {
 
     // Call the function and expect the result
     try {
-      const result = await applications.getApplicationsStudentsProposalsDegreesByTeacherId(mockTeacherId);
+      const result = await getApplicationsStudentsProposalsDegreesByTeacherId(mockTeacherId);
       // Assert the result and that the Prisma method was called
       expect(result).toEqual(mockApplicationsStudentsProposals.map((application) => ({
         application,
@@ -93,7 +93,7 @@ describe('Applications Controller', () => {
 
     // Call the function and expect the result
     try {
-      const result = await applications.getProposalById(mockProposalId);
+      const result = await getProposalById(mockProposalId);
       // Assert the result and that the Prisma method was called
       expect(result).toEqual({
         proposal: mockProposal,
@@ -131,7 +131,7 @@ describe('Applications Controller', () => {
 
     // Call the function and expect the result
     try {
-      const result = await applications.getStudentById(mockStudentId);
+      const result = await getStudentById(mockStudentId);
       // Assert the result and that the Prisma method was called
       expect(result).toEqual({
         student: mockStudent,
