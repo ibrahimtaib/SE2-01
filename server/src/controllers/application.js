@@ -34,7 +34,7 @@ module.exports = {
         });
 
         if (student == null || proposal == null) {
-          reject({
+          return reject({
             status: 500,
             error: "An error occurred",
           });
@@ -49,7 +49,7 @@ module.exports = {
         });
 
         if (prevApplication != null) {
-          reject({
+          return reject({
             status: 400,
             error: "Student has already applied to this proposal!",
           });
@@ -57,7 +57,7 @@ module.exports = {
 
         // Check student is suitable
         if (student.COD_DEGREE !== proposal.cds) {
-          reject({
+          return reject({
             status: 400,
             error: "Student cannot apply to this proposal!",
           });
@@ -65,13 +65,13 @@ module.exports = {
 
         // Check proposal is valid
         if (proposal.expiration <= Date.now()) {
-          reject({
+          return reject({
             status: 400,
             error: "Proposal has already expired!",
           });
         }
         if (proposal.applications.length > 0 || proposal.archived) {
-          reject({
+          return reject({
             status: 400,
             error: "The proposal is no longer available",
           });
