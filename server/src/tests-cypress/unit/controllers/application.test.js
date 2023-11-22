@@ -118,4 +118,40 @@ describe("createApplication function", () => {
       expect(prisma.student.findUnique).toHaveBeenCalled();
     }
   });
+
+  it("Should say that an application already exists", async () => {
+    // Mocked error for the error case
+    prisma.application.findFirst.mockResolvedValueOnce({
+      id: 123,
+      status: "pending",
+      comment: "Test comment",
+      date: new Date(Date.now()),
+      STUDENT_ID: 1,
+      PROPOSAL_ID: 1,
+    });
+    prisma.student.findUnique.mockResolvedValueOnce({
+      id: 1,
+      COD_DEGREE: "someDegreeCode",
+      email: "some@email.com",
+    });
+    prisma.proposal.findUnique.mockResolvedValueOnce({
+      id: 1,
+      cds: "someDegreeCode",
+      expiration: new Date(Date.now() + 1000000), // Set a future expiration date
+      applications: [], // Assuming no applications yet
+      archived: false,
+    });
+
+    // Pass a valid object to createApplication, for example:
+    createApplication({
+      comment: "Test comment",
+      STUDENT_ID: 1,
+      PROPOSAL_ID: 1,
+    }).catch((res) => {
+      expect(res).toEqual({
+        status: 400,
+        error: "Student has already applied to this proposal!",
+      });
+    });
+  });
 });
