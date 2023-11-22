@@ -49,7 +49,7 @@ export default {
     } catch (error) {
       return error;
     }
-  }
+  },
   helloTeacher: async function () {
     console.log("IN");
     try {
