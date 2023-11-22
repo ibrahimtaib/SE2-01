@@ -109,7 +109,7 @@ module.exports = {
       try {
         const { PROPOSAL_ID, STUDENT_ID } = body;
 
-        const application = await prisma.application.findUnique({
+        const application = await prisma.application.findFirst({
           where: {
             PROPOSAL_ID,
             STUDENT_ID,
