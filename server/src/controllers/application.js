@@ -97,4 +97,33 @@ module.exports = {
       }
     });
   },
+
+  /**
+   * Returns the application of a student for a proposal. Returns null if the student has not applied.
+   * @date 2023-11-22
+   * @param {{PROPOSAL_ID: number, STUDENT_ID: number}} body
+   * @returns {null | {id: number, status: string, comment: string, date: Date, STUDENT_ID: number, PROPOSAL_ID: number}}
+   */
+  getStudentApplication: (body) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { PROPOSAL_ID, STUDENT_ID } = body;
+
+        const application = await prisma.application.findUnique({
+          where: {
+            PROPOSAL_ID,
+            STUDENT_ID,
+          },
+        });
+
+        resolve(application);
+      } catch (error) {
+        console.error(error);
+        reject({
+          status: 500,
+          error: "An error occurred",
+        });
+      }
+    });
+  },
 };
