@@ -8,13 +8,14 @@ const { createApplication } = require("../../../controllers/application.js");
 // Mocking PrismaClient
 jest.mock("../../../controllers/prisma.js", () => ({
   student: {
-    findUnique: jest.fn(() => { }),
+    findUnique: jest.fn(() => {}),
   },
   proposal: {
-    findUnique: jest.fn(() => { }),
+    findUnique: jest.fn(() => {}),
   },
   application: {
-    create: jest.fn(() => { }),
+    create: jest.fn(() => {}),
+    findFirst: jest.fn(() => {}),
   },
 }));
 
@@ -58,6 +59,7 @@ describe("createApplication function", () => {
     // Mock the Prisma methods
     prisma.student.findUnique.mockResolvedValueOnce(mockStudent);
     prisma.proposal.findUnique.mockResolvedValueOnce(mockProposal);
+    prisma.application.findFirst.mockResolvedValueOnce(null);
     prisma.application.create.mockResolvedValueOnce(mockCreatedApplication);
 
     // Call the function and expect the result
@@ -89,6 +91,7 @@ describe("createApplication function", () => {
 
   it("should reject with an error if there is a database error", async () => {
     // Mocked error for the error case
+    prisma.application.findFirst.mockResolvedValueOnce(null);
 
     try {
       // Pass a valid object to createApplication, for example:
