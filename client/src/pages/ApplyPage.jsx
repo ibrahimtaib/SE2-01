@@ -8,9 +8,15 @@ function ApplyPage() {
   //TODO: Fix user showing after login
   const [proposal, setProposal] = useState(undefined)
   const {proposalId} = useParams()
+  const studentId = 1 //TODO: Get student id from user
   useEffect(() => {
     const fetchProposal = async ()=> {
       const response = await API.getProposalById(proposalId)
+      const application = await API.getApplication(studentId, proposalId)
+      if (application) {
+        console.log("Application already exists")
+        //TODO: Redirect to error page
+      }
       console.log("getProposalById", response.proposal)
       const fetchedProposal = {...response.proposal, supervisor: response.proposal.teacher}
       setProposal(fetchedProposal)
