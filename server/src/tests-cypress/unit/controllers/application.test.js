@@ -3,7 +3,10 @@ const { application } = require("../../../controllers/application.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
-const { createApplication } = require("../../../controllers/application.js");
+const {
+  createApplication,
+  getStudentApplication,
+} = require("../../../controllers/application.js");
 
 // Mocking PrismaClient
 jest.mock("../../../controllers/prisma.js", () => ({
@@ -120,15 +123,7 @@ describe("createApplication function", () => {
   });
 
   it("Should say that an application already exists", async () => {
-    // Mocked error for the error case
-    prisma.application.findFirst.mockResolvedValueOnce({
-      id: 123,
-      status: "pending",
-      comment: "Test comment",
-      date: new Date(Date.now()),
-      STUDENT_ID: 1,
-      PROPOSAL_ID: 1,
-    });
+    // Mocked error for the error cases
     prisma.student.findUnique.mockResolvedValueOnce({
       id: 1,
       COD_DEGREE: "someDegreeCode",
@@ -152,6 +147,75 @@ describe("createApplication function", () => {
         status: 400,
         error: "Student has already applied to this proposal!",
       });
+    });
+  });
+});
+
+describe("getStudentApplication", () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns the application when it exists", async () => {
+    // Mock the prisma application.findFirst function
+    prisma.application.findFirst.mockResolvedValueOnce({
+      id: 1,
+      status: "pending",
+      comment: "Test comment",
+      date: new Date(),
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+    });
+
+    // Test data
+    const body = {
+      PROPOSAL_ID: 456,
+      STUDENT_ID: 123,
+    };
+
+    // Perform the test
+    await expect(getStudentApplication(body)).resolves.toEqual({
+      id: 1,
+      status: "pending",
+      comment: "Test comment",
+      date: expect.any(Date),
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+    });
+
+    // Verify that prisma.application.findUnique was called with the correct arguments
+    expect(prisma.application.findFirst).toHaveBeenCalledWith({
+      where: {
+        PROPOSAL_ID: 456,
+        STUDENT_ID: 123,
+      },
+    });
+  });
+
+  it("rejects with an error when an error occurs", async () => {
+    // Mock the prisma application.findUnique function to throw an error
+    prisma.application.findFirst.mockImplementationOnce(() => {
+      throw new Error("Test error");
+    });
+
+    // Test data
+    const body = {
+      PROPOSAL_ID: 456,
+      STUDENT_ID: 123,
+    };
+
+    // Perform the test
+    await expect(getStudentApplication(body)).rejects.toEqual({
+      status: 500,
+      error: "An error occurred",
+    });
+
+    // Verify that prisma.application.findUnique was called with the correct arguments
+    expect(prisma.application.findFirst).toHaveBeenCalledWith({
+      where: {
+        PROPOSAL_ID: 456,
+        STUDENT_ID: 123,
+      },
     });
   });
 });
