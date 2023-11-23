@@ -53,7 +53,7 @@ module.exports = {
    * 400 if proposal doesn't exist, 500 if an error occurred.
    * @date 2023-11-23
    * @param {Number} id
-   * @returns {{status: Number}}
+   * @returns {{status: Number, message: String} | {status: Number, error: String}}
    */
   deleteProposal: async (id) => {
     return new Promise(async (resolve, reject) => {
@@ -62,13 +62,31 @@ module.exports = {
           where: {
             id: id,
           },
+          include: {
+            applications: {
+              where: {
+                status: STATUS.ACCEPTED,
+              },
+            },
+          },
         });
+
+        // Check if proposal exists
         if (!proposal) {
           return reject({
             status: 400,
             message: "Proposal does not exist!",
           });
         }
+        // Check if proposal can be deleted
+        if (proposal.applications.length > 0) {
+          return reject({
+            status: 400,
+            message:
+              "Proposal cannot be deleted because it has accepted applications!",
+          });
+        }
+
         //initiate a prisma transaction
         prisma.$transaction(async (prisma) => {
           // Archive the proposal
