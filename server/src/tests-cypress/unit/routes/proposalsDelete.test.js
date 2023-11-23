@@ -45,4 +45,16 @@ describe("deleteProposals= route", () => {
 
     expect(deleteProposal).toHaveBeenCalledWith(1);
   });
+
+  it("Wrong id format", async () => {
+    // Call the route and expect the result
+    await supertest(app)
+      .delete("/proposals/abc")
+      .expect(400)
+      .expect("Content-Type", /json/)
+      .expect({
+        status: 400,
+        error: "Wrong Id format",
+      });
+  });
 });
