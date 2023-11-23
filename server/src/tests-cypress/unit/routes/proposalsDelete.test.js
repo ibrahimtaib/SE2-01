@@ -29,4 +29,20 @@ describe("deleteProposals= route", () => {
 
     expect(deleteProposal).toHaveBeenCalledWith(1);
   });
+
+  it("Unsuccessful delete request", async () => {
+    deleteProposal.mockRejectedValue({
+      status: 404,
+      message: "Proposal not found!",
+    });
+
+    // Call the route and expect the result
+    await supertest(app)
+      .delete("/proposals/1")
+      .expect(404)
+      .expect("Content-Type", /json/)
+      .expect({ status: 404, message: "Proposal not found!" });
+
+    expect(deleteProposal).toHaveBeenCalledWith(1);
+  });
 });
