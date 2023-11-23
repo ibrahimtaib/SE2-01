@@ -182,15 +182,10 @@ router.delete("/:id", async (req, res) => {
     res.status(400).json({ status: 400, error: "Wrong Id format" });
     return;
   }
-  try {
-    proposalsController
-      .deleteProposal(+id)
-      .then((message) => res.status(message.status).json(message))
-      .catch((error) => res.status(error.status).json(error));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: 500, error: "Internal Server Error" });
-  }
+  proposalsController
+    .deleteProposal(+id)
+    .then((message) => res.status(message.status).json(message))
+    .catch((error) => res.status(error.status).json(error));
 });
 
 module.exports = router;
