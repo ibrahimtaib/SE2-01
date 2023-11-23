@@ -189,12 +189,27 @@ module.exports = {
               TITLE_DEGREE: true,
             },
           },
+          applications: {
+            where: {
+              status: STATUS.accepted,
+            },
+          },
         },
       })
         .then((proposals) => {
+          proposals.forEach((proposal) => {
+            if (proposal.applications.length > 0) {
+              proposal.deletable = false;
+            } else {
+              proposal.deletable = true;
+            }
+            delete proposal.applications;
+          });
+
           resolve(proposals);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
           return reject({
             error: "An error occurred while querying the database",
           });
