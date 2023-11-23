@@ -46,6 +46,7 @@ const LoginPage = ({ setUser }) => {
       navTo("/");
     }
     else if (email === "s123456@studenti.polito.it") {
+      mockUser.role = 'student';
       setUser(mockUser);
       setShowAlert(false);
       navTo("/");
