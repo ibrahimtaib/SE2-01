@@ -358,6 +358,16 @@ async function getAllProposals() {
     }
 }
 
+async function getApplicationsByStudentId(studentId) {
+  const response = await fetch(`${URL}applications/decisions/${studentId}`);
+  const res = await response.json();
+  if (response.ok) {
+    return res;
+  } else {
+    throw 0;
+  }
+}  
+
 
 const API = {
   getAllProposals,
@@ -376,6 +386,7 @@ const API = {
   getProposalsByCds, 
   getProposalsByType, 
   getProposalsByExpirationDate, 
-  filterProposals
+  filterProposals,
+  getApplicationsByStudentId
 };
 export default API;
