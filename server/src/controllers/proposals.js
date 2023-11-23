@@ -74,7 +74,7 @@ module.exports = {
         // Check if proposal exists
         if (!proposal) {
           return reject({
-            status: 400,
+            status: 404,
             message: "Proposal does not exist!",
           });
         }

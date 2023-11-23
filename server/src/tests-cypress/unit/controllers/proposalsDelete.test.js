@@ -77,7 +77,7 @@ describe("deleteProposal function", () => {
 
     // Call the function and expect it to reject with the appropriate error
     await expect(deleteProposal(1)).rejects.toEqual({
-      status: 400,
+      status: 404,
       message: "Proposal does not exist!",
     });
 
