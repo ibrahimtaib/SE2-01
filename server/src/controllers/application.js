@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma.js");
-
+const { STATUS } = require("../constants/application.js");
 module.exports = {
   /**
    * Function that creates an application in the database.
@@ -27,7 +27,7 @@ module.exports = {
           include: {
             applications: {
               where: {
-                status: "accepted",
+                status: STATUS.accepted,
               },
             },
           },
@@ -65,7 +65,7 @@ module.exports = {
         // Create application
         const application = await prisma.application.create({
           data: {
-            status: "pending",
+            status: STATUS.pending,
             comment,
             STUDENT_ID,
             PROPOSAL_ID,
