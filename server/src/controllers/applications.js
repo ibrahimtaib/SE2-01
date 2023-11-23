@@ -87,4 +87,33 @@ module.exports = {
       throw new Error("An error occurred while querying the database for student information");
     }
   },
+
+  getApplicationsDecisionsByStudentId: async (studentId) => {
+    try {
+      const studentIdInt = parseInt(studentId, 10);
+  
+      if (isNaN(studentIdInt)) {
+        throw { error: "Invalid studentId provided" };
+      }
+  
+      const applications = await prisma.Application.findMany({
+        where: {
+          STUDENT_ID: studentIdInt,
+        },
+        include: {
+          proposal: {
+            include: {
+                teacher: true,
+                degree: true,
+            },
+        },
+        },
+      });
+  
+      return applications;
+    } catch (error) {
+      console.error("Error in getApplicationsDecisionsByStudentId:", error);
+      throw { error: "An error occurred while querying the database" };
+    }
+  }  
 }
