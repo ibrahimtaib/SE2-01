@@ -179,7 +179,7 @@ router.delete("/:id", async (req, res) => {
   const id = req.params.id;
 
   if (isNaN(id)) {
-    res.status(400).json({ error: "Invalid ID" });
+    res.status(400).json({ status: 400, error: "Wrong Id format" });
     return;
   }
   try {
@@ -189,7 +189,7 @@ router.delete("/:id", async (req, res) => {
       .catch((error) => res.status(error.status).json(error));
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: 500, error: "Internal Server Error" });
   }
 });
 
