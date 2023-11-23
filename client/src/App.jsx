@@ -18,6 +18,7 @@ import './App.css';
 
 import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
+import StudentApplicationsPage from "./pages/StudentApplicationsPage";
 
 function App() {
 
@@ -57,26 +58,55 @@ function App() {
       <Header />
       <NavBar user={user} />
       <Routes>
-        < Route
+        <Route
           exact
           path="/"
           element={
-            user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+            user === null ? (
+              <Navigate replace to="/login" />
+            ) : user.role === "student" ? (
+              <Navigate replace to="/student/proposals" />
+            ) : user.role === "teacher" ? (
+              <Navigate replace to="/teacher/proposals" />
+            ) : (
+              <MainPage
+                user={user}
+                ProposalsList={ProposalsList}
+                setProposalsList={setProposalsList}
+              />
+            )
+          }
+        />
+        <Route
+          path="/student/applications"
+          element={<StudentApplicationsPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
         />
         <Route path="/login" element={<LoginPage setUser={setUser} />} />
-        <Route path="/add" element={
-            user === null ? <Navigate replace to="/login" /> : <InsertPage isLoggedIn={loggedIn} />} />
         <Route
-          exact
-          path='/applications/*'
-          element={user === undefined ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <ApplicationsPage /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+          path="/add"
+          element={
+            user === null ? (
+              <Navigate replace to="/login" />
+            ) : (
+              <InsertPage isLoggedIn={loggedIn} />
+            )
+          }
+        />
+        <Route
+          path="/student/proposals"
+          element={<MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+        />
+        <Route
+          path="/teacher/proposals"
+          element={<ApplicationsPage />}
         />
         <Route path="/students/:id" element={<StudentDetailsPage />} />
         <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user} />} />
-        <Route path='/*' element={<DefaultRoute />} />
+        <Route path="/*" element={<DefaultRoute />} />
       </Routes>
     </BrowserRouter>
   );
+
 }
 
 
