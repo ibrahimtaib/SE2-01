@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tests
         run: |
-          cd server/src
+          cd server/
           npx jest
           ./update_badges.sh
       - name: Commit and push if tests pass
