@@ -36,6 +36,6 @@ jobs:
           ./update_coverage.sh
           cat README.md
           git status
-          git add ./README.md
+          git add README.md
           git commit -m "Updating coverage badge"
           git push
