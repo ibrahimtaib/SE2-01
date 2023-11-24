@@ -18,7 +18,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "docker-compose": "^0.24.3",
+    "docker-compose": "^0.24.3"
+  },
+  "devDependencies": {
     "faker": "^5.5.3"
   }
 }
