@@ -26,7 +26,7 @@ jobs:
 
       - name: Check for *.test.js files changes
         run: |
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.test\.js'; then
+          if git diff --name-only ${{ github.event.before }} | grep '\.test\.js'; then
             echo "Changes to *.test.js files detected. Proceeding with the push."
           else
             echo "No changes to *.test.js files detected. Skipping the push."
