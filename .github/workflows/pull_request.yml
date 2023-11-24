@@ -23,13 +23,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set up Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+ss
       - name: Run tests
         run: |
           cd server/
           ./update_coverage.sh
-          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          ls
           cat README.md
           git status
           git add ./README.md
