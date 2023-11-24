@@ -19,6 +19,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set up git user
+        run: |
+          git config user.name ${{github.actor}}
+          git config user.email ${{github.actor}}@users.noreply.github.com
+
       - name: Check for *.test.js files changes
         run: |
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.test\.js'; then
@@ -31,9 +36,6 @@ jobs:
       - name: Run tests
         if: success()
         run: |
-          git config user.name ${{github.actor}}
-          git config user.email ${{github.actor}}@users.noreply.github.com
-
           cd server/
           ./update_coverage.sh
           cat README.md
