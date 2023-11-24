@@ -11,15 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check for *.test.js files changes
-        run: |
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.test\.js'; then
-            echo "Changes to *.test.js files detected. Proceeding with the push."
-          else
-            echo "No changes to *.test.js files detected. Skipping the push."
-            exit 0  # Exit successfully without further steps
-          fi
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -28,11 +19,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set up Git
+      - name: Check for *.test.js files changes
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.test\.js'; then
+            echo "Changes to *.test.js files detected. Proceeding with the push."
+          else
+            echo "No changes to *.test.js files detected. Skipping the push."
+            exit 1  # Exit successfully without further steps
+          fi
+
       - name: Run tests
+        if: success()
         run: |
           git config user.name ${{github.actor}}
           git config user.email ${{github.actor}}@users.noreply.github.com
