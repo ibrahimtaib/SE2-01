@@ -1,4 +1,4 @@
-#![Coverage](https://img.shields.io/badge/Coverage-32.5%-green)
+![Coverage](https://img.shields.io/badge/Coverage-32.5%-red)
 
 # Server implementation of Thesis Managment
 
