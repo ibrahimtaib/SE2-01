@@ -37,5 +37,5 @@ jobs:
           cat README.md
           git status
           git add ./README.md
-          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git commit -m "Updating coverage badge"
           git push
