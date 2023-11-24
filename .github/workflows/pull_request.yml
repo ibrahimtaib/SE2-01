@@ -42,7 +42,7 @@ jobs:
           ./update_coverage.sh
           if [[ -n $(git status --porcelain README.md) ]]; then
             git status
-            git add README.md
+            git add README.md ../README.md
             git commit -m "Updating coverage badge"
             git push origin HEAD:refs/heads/${GITHUB_REF#refs/heads/}
           else

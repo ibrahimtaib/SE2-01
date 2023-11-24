@@ -6,3 +6,4 @@ COVERAGE=$(npx jest | grep -oP "All files.*" | awk '{ match($0, /[0-9]+(\.[0-9]+
 echo $COVERAGE
 # Update REA  DME.md with shields.io badges
 sed -i'' -e "s/\!\[Coverage\].*/\!\[Coverage\](https:\/\/img\.shields\.io\/badge\/Coverage-${COVERAGE}-green)/g" README.md 
+sed -i'' -e "s/\!\[Coverage\].*/\!\[Coverage\](https:\/\/img\.shields\.io\/badge\/Coverage-${COVERAGE}-green)/g" ../README.md 
