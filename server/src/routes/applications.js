@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 const applicationsController = require("../controllers/applications.js");
 const applicationController = require("../controllers/application.js");
 
-
+//TODO: This should be in application, we need to clarify about name of the files and we should make javadocs
 router.post("/", async (req, res) => {
   console.log("QUI");
   applicationController
