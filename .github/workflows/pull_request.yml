@@ -37,4 +37,4 @@ jobs:
           git status
           git add README.md
           git commit -m "Updating coverage badge"
-          git push origin HEAD:$GITHUB_REF
+          git push origin HEAD:refs/heads/${GITHUB_REF#refs/heads/}
