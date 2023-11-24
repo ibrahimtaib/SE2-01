@@ -2,7 +2,7 @@ const {
   getProposals,
   createProposal,
 } = require("../src/controllers/proposals.js");
-
+//
 const prisma = require("../src/controllers/prisma.js");
 
 // Mocking PrismaClient
