@@ -27,8 +27,11 @@ jobs:
         run: |
           cd server/
           ./update_coverage.sh
-          git config --global user.name "github-actions[bot]"
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "Update coverage"
+          ls
+          cat README.md
+          git status
+          git add ./README.md
+          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
