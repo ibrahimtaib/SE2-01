@@ -1,10 +1,7 @@
 name: Pull Request Workflow
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
+  push:
 
 jobs:
   build:
@@ -13,6 +10,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Check for *.test.js files changes
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.test\.js'; then
+            echo "Changes to *.test.js files detected. Proceeding with the push."
+          else
+            echo "No changes to *.test.js files detected. Skipping the push."
+            exit 0  # Exit successfully without further steps
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
