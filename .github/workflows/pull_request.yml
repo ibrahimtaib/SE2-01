@@ -49,3 +49,5 @@ jobs:
             echo "No local changes to README.md detected. Skipping the commit."
             exit 0  # Exit successfully without further steps
           fi
+      - name: Exit successfully
+        run: exit 0
