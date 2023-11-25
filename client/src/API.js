@@ -358,6 +358,50 @@ async function getAllProposals() {
     }
 }
 
+async function acceptApplication(applicationId) {
+  try {
+    const response = await fetch(`${URL}applications/accept-application/${applicationId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to accept application');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while accepting the application');
+  }
+}
+
+async function refuseApplication(applicationId) {
+  try {
+    const response = await fetch(`${URL}applications/refuse-application/${applicationId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to refuse application');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while refusing the application');
+  }
+}
+
 
 const API = {
   getAllProposals,
@@ -376,6 +420,8 @@ const API = {
   getProposalsByCds, 
   getProposalsByType, 
   getProposalsByExpirationDate, 
-  filterProposals
+  filterProposals,
+  acceptApplication,
+  refuseApplication,
 };
 export default API;

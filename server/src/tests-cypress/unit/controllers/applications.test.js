@@ -1,20 +1,21 @@
 // Import necessary modules and functions
-const { getApplicationsStudentsProposalsDegreesByTeacherId, getProposalById, getStudentById } = require("../../../controllers/applications.js");
+const { getApplicationsStudentsProposalsDegreesByTeacherId, getProposalById, getStudentById, acceptApplication, refuseApplication } = require("../../../controllers/applications.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
 
-
 // Mocking PrismaClient
 jest.mock('../../../controllers/prisma.js', () => ({
-  Application: {
-    findMany: jest.fn(() => {}),
-  },
   Proposal: {
     findUnique: jest.fn(() => {}),
   },
   student: {
     findUnique: jest.fn(() => {}),
+  },
+  Application: { 
+    findUnique: jest.fn(() => {}),
+    findMany: jest.fn(() => {}),
+    update: jest.fn(() => {}),
   },
 }));
 
@@ -115,44 +116,91 @@ describe('Applications Controller', () => {
     }
   });
 
-/*   it('should get student by studentId', async () => {
-    // Mocked data for the successful case
-    const mockStudentId = '1';
-    const mockStudent = {
-      id: 1,
-      name: 'John Doe',
-      applications: [{ id: 1, status: 'pending' }],
-      degree: { COD_DEGREE: 'ABC123' },
-      Career: [{ id: 1, COD_COURSE: 'C001' }],
-    };
 
-    // Mock the Prisma method
-    prisma.student.findUnique.mockResolvedValueOnce(mockStudent);
-
-    // Call the function and expect the result
-    try {
-      const result = await getStudentById(mockStudentId);
-      // Assert the result and that the Prisma method was called
-      expect(result).toEqual({
-        student: mockStudent,
+  describe('acceptApplication function', () => {
+    it('should update the application status to "accept"', async () => {
+      const mockUpdatedApplication = {
+        id: 1,
+        status: 'accept',
+        comment: 'Accepted',
+        STUDENT_ID: 123,
+        PROPOSAL_ID: 456,
+        student: { id: 123, name: 'John', surname: 'Doe' },
+        proposal: { id: 456, title: 'Proposal 1' },
+      };
+    
+      prisma.Application.update.mockResolvedValueOnce(mockUpdatedApplication);
+    
+      const result = await acceptApplication(1);
+    
+      expect(prisma.Application.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: { status: 'accept'},
       });
-      expect(prisma.student.findUnique).toHaveBeenCalledWith({
-        where: {
-          id: parseInt(mockStudentId),
-        },
-        include: {
-          applications: true,
-          degree: true,
-          Career: true,
-        },
+    
+      expect(result).toEqual(mockUpdatedApplication);
+    });
+    
+    it('should throw an error if updating the application status fails', async () => {
+      // Simula un errore durante l'aggiornamento
+      const mockError = new Error('Database error');
+      prisma.Application.update.mockImplementationOnce(() => {
+        throw mockError;
       });
-    } catch (error) {
-      // Handle the rejection here
-      console.error(error);
-    }
-  }); */
-
-  // Add more test cases for other functions in the applications.js file
-  // ...
-
+    
+      // Chiamata alla funzione da testare
+      await expect(acceptApplication(1)).rejects.toThrow("An error occurred while updating the application status to 'accept'");
+    
+      // Verifica se la chiamata a prisma.Application.update è avvenuta correttamente
+      expect(prisma.Application.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: { status: 'accept'},
+      });
+    });
+    
+  });
+  
 });
+
+// Test per refuseApplication
+describe('refuseApplication function', () => {
+  it('should update the application status to "refuse"', async () => {
+    const mockUpdatedApplication = {
+      id: 1,
+      status: 'refuse',
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+      student: { id: 123, name: 'John', surname: 'Doe' },
+      proposal: { id: 456, title: 'Proposal 1' },
+    };
+  
+    prisma.Application.update.mockResolvedValueOnce(mockUpdatedApplication);
+  
+    const result = await refuseApplication(1);
+  
+    expect(prisma.Application.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { status: 'refuse'},
+    });
+  
+    expect(result).toEqual(mockUpdatedApplication);
+  });
+
+  it('should throw an error if updating the application status fails', async () => {
+    // Simula un errore durante l'aggiornamento
+    const mockError = new Error('Database error');
+    prisma.Application.update.mockImplementationOnce(() => {
+      throw mockError;
+    });
+  
+    // Chiamata alla funzione da testare
+    await expect(refuseApplication(1)).rejects.toThrow("An error occurred while updating the application status to 'refuse'");
+  
+    // Verifica se la chiamata a prisma.Application.update è avvenuta correttamente
+    expect(prisma.Application.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { status: 'refuse'},
+    });
+  });
+});
+

@@ -55,8 +55,6 @@ router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
     });
 });
 
-module.exports = router;
-
 router.get("/proposal/:proposalId", async (req, res) => {
   const proposalId = req.params.proposalId;
 
@@ -80,5 +78,30 @@ router.get("/student/:studentId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.post("/accept-application/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+
+  try {
+    const result = await applicationsController.acceptApplication(applicationId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/refuse-application/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+
+  try {
+    const result = await applicationsController.refuseApplication(applicationId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 module.exports = router;

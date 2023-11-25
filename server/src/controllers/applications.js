@@ -1,90 +1,125 @@
+// const { PrismaClient } = require("@prisma/client");
+// const prisma = new PrismaClient({ log: ["query"] });
+
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({ log: ["query"] });
+const prisma = require("./prisma");
+const { resolve } = require("path");
 
 module.exports = {
-  getApplicationsStudentsProposalsDegreesByTeacherId: async (teacherId) => {
-    let int_id = parseInt(teacherId);
-    try {
-        const applicationsStudentsProposals = await prisma.Application.findMany({
-            where: {
-                proposal: {
-                    teacher: {
-                        id: int_id,
+    getApplicationsStudentsProposalsDegreesByTeacherId: async (teacherId) => {
+        let int_id = parseInt(teacherId);
+        try {
+            const applicationsStudentsProposals = await prisma.Application.findMany({
+                where: {
+                    proposal: {
+                        teacher: {
+                            id: int_id,
+                        },
                     },
                 },
-            },
-            include: {
-                proposal: {
-                    include: {
-                        teacher: true,
-                        degree: true,
+                include: {
+                    proposal: {
+                        include: {
+                            teacher: true,
+                            degree: true,
+                        },
+                    },
+                    student: {
+                        include: {
+                            degree: true,
+                        },
                     },
                 },
-                student: {
-                    include: {
-                        degree: true,
-                    },
-                },
-            },
-        });
+            });
 
-        return applicationsStudentsProposals.map((application) => ({
-            application,
-            student: {
-                ...application.student,
-                degree: application.student.degree, 
-            },
-            proposal: application.proposal,
-        }));
-    } catch (error) {
-        console.error(error);
-        throw new Error("An error occurred while querying the database for applications, students, degrees, and proposals");
-    }
-  },
-  getProposalById: async (proposalId) => {
-    let int_proposal_id = parseInt(proposalId);
-    try {
-          const proposal = await prisma.Proposal.findUnique({
+            return applicationsStudentsProposals
+                .map((application) => ({
+                    application,
+                    student: {
+                    ...application.student,
+                    degree: application.student.degree,
+                    },
+                    proposal: application.proposal,
+                }))
+                .sort((a, b) => new Date(a.application.date) - new Date(b.application.date));
+        } catch (error) {
+            console.error(error);
+            throw new Error("An error occurred while querying the database for applications, students, degrees, and proposals");
+        }
+    },
+    getProposalById: async (proposalId) => {
+        let int_proposal_id = parseInt(proposalId);
+        try {
+            const proposal = await prisma.Proposal.findUnique({
+                where: {
+                    id: int_proposal_id,
+                },
+                include: {
+                    teacher: true,
+                    degree: true,
+                },
+            });
+        
+
+            return {
+                proposal,
+                teacher: proposal.teacher,
+                degree: proposal.degree,
+            };
+        } catch (error) {
+            console.error(error);
+            throw new Error("An error occurred while querying the database for the proposal and related information");
+        }
+    },
+    getStudentById: async (studentId) => {
+        let int_student_id = parseInt(studentId);
+        try {
+        const student = await prisma.student.findUnique({
             where: {
-                id: int_proposal_id,
+                id: int_student_id,
             },
             include: {
-                teacher: true,
+                applications: true,
                 degree: true,
+                Career: true,
             },
-        });
+            });
     
-
         return {
-            proposal,
-            teacher: proposal.teacher,
-            degree: proposal.degree,
+            student
         };
-    } catch (error) {
+        } catch (error) {
         console.error(error);
-        throw new Error("An error occurred while querying the database for the proposal and related information");
+        throw new Error("An error occurred while querying the database for student information");
+        }
+    },
+    acceptApplication: async (applicationId) => {
+        let intApplicationId = parseInt(applicationId);
+        try {
+          const updatedApplication = await prisma.Application.update({
+            where: { id: intApplicationId },
+            data: { status: 'accept' },
+          });
+            
+          return updatedApplication;
+        } catch (error) {
+          console.error(error);
+          throw new Error("An error occurred while updating the application status to 'accept'");
+        }
+      },
+    refuseApplication: async (applicationId) => {
+        let intApplicationId = parseInt(applicationId);
+        try {
+            const updatedApplication = await prisma.Application.update({
+              where: { id: intApplicationId },
+              data: { status: 'refuse' },
+            });
+              
+            return updatedApplication;
+          } catch (error) {
+            console.error(error);
+            throw new Error("An error occurred while updating the application status to 'refuse'");
+          }
     }
-  },
-  getStudentById: async (studentId) => {
-    let int_student_id = parseInt(studentId);
-    try {
-    const student = await prisma.student.findUnique({
-        where: {
-            id: int_student_id,
-        },
-        include: {
-            applications: true,
-            degree: true,
-            Career: true,
-        },
-        });
-  
-      return {
-        student
-      };
-    } catch (error) {
-      console.error(error);
-      throw new Error("An error occurred while querying the database for student information");
-    }
-  },
-}
+      
+};

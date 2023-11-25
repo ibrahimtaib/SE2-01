@@ -14,6 +14,11 @@ jest.mock("../../controllers/prisma.js", () => ({
   Teacher: {
     findMany: jest.fn(() => {}),
   },
+  Application: { 
+    findUnique: jest.fn(() => {}),
+    findMany: jest.fn(() => {}),
+    update: jest.fn(() => {}),
+  },
 }));
 
 
@@ -598,6 +603,52 @@ describe("getProposalsByCDS function", () => {
     }
   });
 });
+
+describe('acceptApplication function', () => {
+  it('should update the application status to "accept"', async () => {
+    // Creo un mock di prisma.Application.findMany con id 1 e status ‘waiting’
+    const mockApplication = {
+      id: 1,
+      status: 'waiting',
+      comment: null,
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+      student: { id: 123, name: 'John', surname: 'Doe' },
+      proposal: { id: 456, title: 'Proposal 1' },
+    };
+  
+    // Mocko la funzione prisma.Application.findMany per restituire il mockApplication
+    prisma.Application.findUnique.mockResolvedValueOnce(mockApplication);
+  
+    // Mocko la funzione prisma.Application.update per restituire un mockUpdatedApplication
+    const mockUpdatedApplication = {
+      id: 1,
+      status: 'accept',
+      comment: 'Accepted',
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+      student: { id: 123, name: 'John', surname: 'Doe' },
+      proposal: { id: 456, title: 'Proposal 1' },
+    };
+  
+    prisma.Application.update.mockResolvedValueOnce(mockUpdatedApplication);
+  
+    // Chiamata alla funzione da testare
+    const result = await acceptApplication(1);
+  
+    // Verifico che la funzione prisma.Application.update sia stata chiamata con i parametri corretti
+    expect(prisma.Application.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { status: 'accept'},
+    });
+  
+    // Verifico che il risultato sia uguale al mockUpdatedApplication
+    expect(result).toEqual(mockUpdatedApplication);
+  });
+  
+});
+
+
 
 
 
