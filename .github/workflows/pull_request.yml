@@ -25,15 +25,6 @@ jobs:
           git config user.name ${{github.actor}}
           git config user.email ${{github.actor}}@users.noreply.github.com
 
-      - name: Check for *.test.js files changes
-        run: |
-          if git diff --name-only ${{ github.event.before }} | grep '\.test\.js'; then
-            echo "Changes to *.test.js files detected. Proceeding with the push."
-          else
-            echo "No changes to *.test.js files detected. Skipping the push."
-            exit 1  # Exit successfully without further steps
-          fi
-
       - name: Run tests
         if: success()
         run: |
