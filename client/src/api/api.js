@@ -24,6 +24,16 @@ export const addApplication = async (application) => {
       throw error;
     }
   }
+
+export const sendMail = async (applicationId, studentDetails, action) => {
+  try {
+    const response = await api.post('/send-email', {applicationId, student : studentDetails, action});
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const applicationApi = {
   addApplication: async (application) => {
     const response = await api.post("/applications/", application);

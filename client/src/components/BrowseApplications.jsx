@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
+import { sendMail } from '../api/api';
 
 const ProposalList = ({ applications , loading }) => {
   const [hoveredTitle, setHoveredTitle] = useState(null);
@@ -10,8 +11,10 @@ const ProposalList = ({ applications , loading }) => {
   const navigate = useNavigate();
 
 
-  const handleApplicationAction = (applicationId, studentId, action) => {
-    console.log(`Application ID: ${applicationId}, Student ID: ${studentId}, Action: ${action}`);
+  const handleApplicationAction = async (applicationId, studentId, action) => {
+    const studentDetails = await API.getExamAndStudentById(studentId);
+    await sendMail(applicationId, studentDetails, action);
+    console.log(`Application ID: ${applicationId}, Student ID: ${hoveredStudent}, Action: ${action}`);
   };
 
   const handleTitleClick = async (selectedApplication) => {
@@ -47,6 +50,7 @@ const ProposalList = ({ applications , loading }) => {
       if (student) {
         try {
           const studentDetails = await API.getExamAndStudentById(student.id);
+          console.log(studentDetails);
   
           navigate(`/students/${student.id}`, {
             state: {
