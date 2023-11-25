@@ -103,5 +103,28 @@ router.post("/refuse-application/:applicationId", async (req, res) => {
   }
 });
 
+router.get("/get-proposal-id/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+
+  try {
+    const proposalId = await applicationsController.getProposalIdByApplicationId(applicationId);
+    res.status(200).json({ proposalId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/reject-waiting-applications/:proposalId", async (req, res) => {
+  const proposalId = req.params.proposalId;
+
+  try {
+    const result = await applicationsController.rejectWaitingApplicationsByProposalId(proposalId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

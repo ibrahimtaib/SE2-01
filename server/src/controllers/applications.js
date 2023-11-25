@@ -120,6 +120,42 @@ module.exports = {
             console.error(error);
             throw new Error("An error occurred while updating the application status to 'refuse'");
           }
+    },
+    getProposalIdByApplicationId: async(applicationId) => {
+        try {
+        const application = await prisma.Application.findUnique({
+            where: { id: parseInt(applicationId) },
+            select: { PROPOSAL_ID: true },
+        });
+    
+        if (!application) {
+            throw new Error('Application not found');
+        }
+    
+        return application.PROPOSAL_ID;
+        } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while fetching the proposalId for the application');
+        }
+    },
+  
+    rejectWaitingApplicationsByProposalId: async(proposalId) => {
+    try {
+      const rejectedApplications = await prisma.Application.updateMany({
+        where: {
+          PROPOSAL_ID: parseInt(proposalId),
+          status: 'waiting',
+        },
+        data: {
+          status: 'refuse',
+        },
+      });
+  
+      return rejectedApplications;
+    } catch (error) {
+      console.error(error);
+      throw new Error('An error occurred while rejecting waiting applications for the proposal');
     }
+    },
       
 };
