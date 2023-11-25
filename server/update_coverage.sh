@@ -28,8 +28,8 @@ if [ "$tests_passed" -lt "$total_tests" ]; then
     TEST_COLOR="red"
 fi
 echo $tests_passed$total_tests
-sed -i'' -e "s/\!\[Total tests\].*/\!\[Total tests\](https:\/\/img\.shields\.io\/badge\/Total%20tests-${total_tests}%-green)/g" README.md 
-sed -i'' -e "s/\!\[Passed tests\].*/\!\[Passed tests\](https:\/\/img\.shields\.io\/badge\/Passed%20tests-${tests_passed}%-${TEST_COLOR})/g" README.md 
+sed -i'' -e "s/\!\[Total tests\].*/\!\[Total tests\](https:\/\/img\.shields\.io\/badge\/Total%20tests-${total_tests}%25-green)/g" README.md 
+sed -i'' -e "s/\!\[Passed tests\].*/\!\[Passed tests\](https:\/\/img\.shields\.io\/badge\/Passed%20tests-${tests_passed}%25-${TEST_COLOR})/g" README.md 
 
 sed -i'' -e "s/\!\[Total tests\].*/\!\[Total tests\](https:\/\/img\.shields\.io\/badge\/Total%20tests-${total_tests}-green)/g" ../README.md 
 sed -i'' -e "s/\!\[Passed tests\].*/\!\[Passed tests\](https:\/\/img\.shields\.io\/badge\/Passed%20tests-${tests_passed}-${TEST_COLOR})/g" ../README.md 
