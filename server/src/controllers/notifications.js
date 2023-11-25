@@ -20,7 +20,7 @@ module.exports = {
 
         const mailOptions = {
             from: 'teacher@polito.it',
-            to: student.email,
+            to: 'jaouadouchaib2@gmail.com', //TODO : student.email need to be added to mailgin authorized recipients,
             subject,
             text: `Hello ${student.name} ${student.surname}, this is a notification email following your application ${applicationId}
             after the evaluation of the teacher you have been ${action}ed.
