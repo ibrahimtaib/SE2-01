@@ -16,6 +16,24 @@ export const addPage = async (proposal) => {
   }
 };
 
+export const login = async () => {
+  try {
+    const response = await api.get("/login");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = await api.get("/logout");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addApplication = async (application) => {
     try {
       const response = await api.post("/applications/", application);

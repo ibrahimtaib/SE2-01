@@ -2,7 +2,7 @@
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useState } from 'react';
 import "react-datetime/css/react-datetime.css";
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import API from './API';
 import DefaultRoute from './components/DefaultRoute';
 import Header from './components/Header';
@@ -11,6 +11,8 @@ import ApplyPage from './pages/ApplyPage';
 import InsertPage from './pages/InsertPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
+import LogoutPage from "./pages/LogoutPage";
+import CallbackLogin from "./components/CallbackLogin";
 
 
 import './App.css';
@@ -20,16 +22,11 @@ import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 
 function App() {
-
-  // This state keeps track if the user is currently logged-in.
-  // eslint-disable-next-line no-unused-vars
-  //FIXME: login!
-  const [loggedIn, setLoggedIn] = useState(false);
-  // This state contains the user's info.
   const [user, setUser] = useState(null);
 
   const [message, setMessage] = useState('');
 
+  //FIXME: This state, we should put it in the correct component to be loaded after login
   const [ProposalsList, setProposalsList] = useState([]);
 
   const handleErrors = (err) => {
@@ -40,6 +37,8 @@ function App() {
     setMessage(msg);
   }
 
+
+//FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
   useEffect(() => {
     const init = async () => {
       API.getAllProposals().then((a) => {
@@ -55,29 +54,52 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <NavBar user={user} />
+      <NavBar user={user}/>
       <Routes>
-        < Route
-          exact
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/*" element={<DefaultRoute />} />
+        <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
+        <Route
           path="/"
           element={
-            user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+            user ? (
+              <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
-        <Route path="/login" element={<LoginPage setUser={setUser} />} />
-        <Route path="/add" element={
-            user === null ? <Navigate replace to="/login" /> : <InsertPage isLoggedIn={loggedIn} />} />
         <Route
-          exact
-          path='/applications/*'
-          element={user === undefined ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <ApplicationsPage /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+          path="/logout"
+          element={
+            user ? (
+              <LogoutPage />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
-        <Route path="/students/:id" element={<StudentDetailsPage />} />
-        <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user} />} />
-        <Route path='/*' element={<DefaultRoute />} />
+        <Route
+          path="/proposals/:proposalId/apply"
+          element={
+            user ? (
+              <ApplyPage user={user} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        {user?.role === "teacher" && (
+          <>
+            <Route path="/add" element={<InsertPage />} />
+            <Route path="/applications/*" element={<ApplicationsPage />} />
+            <Route path="/students/:id" element={<StudentDetailsPage />} />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );
+  
 }
-
 
 export default App

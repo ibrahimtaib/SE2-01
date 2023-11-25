@@ -14,6 +14,8 @@ function ApplyForm({proposal}) {
   const [messageAlert, setMessageAlert] = useState("");
   const student = {name: "Mario Rossi", email: "s123456@studenti.polito.it", id: 1}
 
+
+//TODO: put user here! must be student
   const onSubmit = async (data) => {
     const res = addApplication({
       STUDENT_ID: student.id,
