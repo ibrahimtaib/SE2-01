@@ -37,6 +37,19 @@ export default {
       return null;
     }
   },
+  getApplication: async function (studentId, proposalId) {
+    try {
+      const response = await api.get(
+        `/applications/proposal/${proposalId}/student/${studentId}`
+      );
+      if (response.status === 200) {
+        return response.data;
+      }
+      return undefined;
+    } catch (error) {
+      return error;
+    }
+  },
   helloTeacher: async function () {
     console.log("IN");
     try {

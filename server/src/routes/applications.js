@@ -22,7 +22,10 @@ router.get("/:teacherId/", async (req, res) => {
   const teacherId = req.params.teacherId;
 
   try {
-    const applications = await applicationsController.getApplicationsStudentsProposalsDegreesByTeacherId(teacherId);
+    const applications =
+      await applicationsController.getApplicationsStudentsProposalsDegreesByTeacherId(
+        teacherId
+      );
     res.status(200).json(applications);
   } catch (error) {
     console.error(error);
@@ -30,6 +33,30 @@ router.get("/:teacherId/", async (req, res) => {
   }
 });
 
+router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
+  const PROPOSAL_ID = req.params.proposalId;
+  const STUDENT_ID = req.params.studentId;
+
+  if (isNaN(PROPOSAL_ID) || isNaN(STUDENT_ID)) {
+    return res.status(400).json({
+      error: "Invalid proposal or student id",
+    });
+  }
+  applicationController
+    .getStudentApplication({
+      PROPOSAL_ID: +PROPOSAL_ID,
+      STUDENT_ID: +STUDENT_ID,
+    })
+    .then((applications) => {
+      res.status(200).json(applications);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error?.status !== undefined ? error.status : 500).json(error);
+    });
+});
+
+module.exports = router;
 
 router.get("/proposal/:proposalId", async (req, res) => {
   const proposalId = req.params.proposalId;
@@ -54,6 +81,5 @@ router.get("/student/:studentId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;
