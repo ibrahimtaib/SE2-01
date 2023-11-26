@@ -17,7 +17,7 @@ fi
 
 
 
-OUTPUT=$(cat jest.txt | grep "Tests:" | awk -F'[, ]+' '/Tests:/ { print $4, $6 }'
+OUTPUT=$(cat jest.txt | grep "Tests:" | awk -F'[, ]+' '/Tests:/ { print $4, ($6 ? $6 : $2) }'
 )
 echo $OUTPUT
 read -r tests_passed total_tests <<< $OUTPUT
