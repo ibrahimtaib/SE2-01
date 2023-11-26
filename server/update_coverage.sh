@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run Jest coverage and capture the coverage percentage
-npx --coverage jest --color=false 2> jest.txt
+node node_modules/.bin/jest --coverage --color=false 2> jest.txt
 COVERAGE=$(npx jest | grep -oP "All files.*" | awk '{ match($0, /[0-9]+(\.[0-9]+)?/); print substr($0, RSTART, RLENGTH) }')
 echo $COVERAGE
 COLOR="green"
