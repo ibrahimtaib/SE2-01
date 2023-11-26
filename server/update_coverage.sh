@@ -16,7 +16,7 @@ if [ "$(echo "$COVERAGE < 50" | bc -l)" -eq 1 ]; then
 fi
 
 
-
+cat jest.txt
 OUTPUT=$(cat jest.txt | grep "Tests:" | awk -F'[, ]+' '/Tests:/ { print $4, ($6 ? $6 : $2) }'
 )
 echo $OUTPUT
