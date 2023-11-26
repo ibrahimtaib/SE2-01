@@ -4,10 +4,10 @@ import 'tailwindcss/tailwind.css';
 
 import InsertForm from '../components/InsertForm';
 
-function InsertPage({isLoggedIn}) {
+function InsertPage({user}) {
 
   return (
-    <InsertForm />
+    <InsertForm user={user}/>
   )
 }
 
