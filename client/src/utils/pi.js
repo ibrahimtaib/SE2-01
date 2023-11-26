@@ -55,7 +55,6 @@ export default {
     try {
       const response = await api.get("/teachers");
       if (response.status === 200) {
-        console.log("Hello teacher!");
         return response.data;
       }
       console.log(response);

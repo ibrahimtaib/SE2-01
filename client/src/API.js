@@ -358,6 +358,19 @@ async function getAllProposals() {
     }
 }
 
+async function getUserInfo() {
+  const response = await fetch(URL + 'sessions/current', {
+    credentials: 'include'
+  });
+  const userInfo = await response.data;
+  console.log(response.data);
+  if (response.ok) {
+    return userInfo;
+  } else {
+    throw userInfo;
+  }
+}
+
 
 const API = {
   getAllProposals,
@@ -376,6 +389,7 @@ const API = {
   getProposalsByCds, 
   getProposalsByType, 
   getProposalsByExpirationDate, 
-  filterProposals
+  filterProposals,
+  getUserInfo
 };
 export default API;

@@ -24,7 +24,6 @@ function ApplyPage() {
       const response = await API.getProposalById(proposalId)
       const application = await api.getApplication(studentId, proposalId)
       setApplication(application)
-      console.log("getProposalById", response.proposal)
       const fetchedProposal = {...response.proposal, supervisor: response.proposal.teacher}
       setProposal(fetchedProposal)
     }

@@ -8,8 +8,6 @@ module.exports = {
      */
     checkUser: (userID) => {
         return new Promise((resolve, reject) => {
-            console.log(userID);
-
             prisma.teacher
                 .findUnique({
                     where: {
@@ -17,7 +15,6 @@ module.exports = {
                     },
                 })
                 .then((teacher) => {
-                    console.log(teacher);
                     if (teacher) {
                         const customTeacherObject = {
                             id: teacher.id,
@@ -25,7 +22,6 @@ module.exports = {
                             role: "teacher",
                             email: teacher.email,
                         };
-                        console.log(customTeacherObject);
                         resolve(customTeacherObject);
                     } else {
                         return prisma.student.findUnique({
@@ -44,7 +40,6 @@ module.exports = {
                             role: "student",
                             email: student.email,
                         };
-                        console.log(customStudentObject);
                         resolve(customStudentObject);
                     } else {
                         throw new Error('User not found');

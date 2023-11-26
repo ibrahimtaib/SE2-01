@@ -20,9 +20,13 @@ import './App.css';
 
 import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
+import { getUserInfo } from "./api/api";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [message, setMessage] = useState('');
 
@@ -40,29 +44,45 @@ function App() {
 
   //FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
   useEffect(() => {
+
     const init = async () => {
-      API.getAllProposals().then((a) => {
-        setProposalsList(a)
-      })
-        .catch((err) => console.log("error fetching proposals", err));
-
+      try {
+        const userInfo = await getUserInfo();
+        setLoggedIn(true);
+        setUser(userInfo);
+        try {
+          const proposals = await API.getAllProposals();
+          setProposalsList(proposals);
+          setLoading(false);
+        } catch (proposalError) {
+          console.error("Error fetching proposals:", proposalError);
+        }
+      } catch (err) {
+        setLoggedIn(false);
+        setUser(null);
+        setLoading(false);
+        console.log(err);
+      }
     };
-
     init();
   }, []);
+
+  if(loading){
+    return (<LoadingSpinner />);
+  }
 
   return (
     <BrowserRouter>
       <Header />
       <NavBar user={user} />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
         <Route path="/*" element={<DefaultRoute />} />
         <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
         <Route
           path="/"
           element={
-            user ? (
+            loggedIn ? (
               <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />
             ) : (
               <Navigate to="/login" />
@@ -72,8 +92,8 @@ function App() {
         <Route
           path="/logout"
           element={
-            user ? (
-              <LogoutPage />
+            loggedIn ? (
+              <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn}/>
             ) : (
               <Navigate to="/login" />
             )
@@ -82,7 +102,7 @@ function App() {
         <Route
           path="/proposals/:proposalId/apply"
           element={
-            user ? (
+            loggedIn ? (
               <ApplyPage user={user} />
             ) : (
               <Navigate to="/login" />

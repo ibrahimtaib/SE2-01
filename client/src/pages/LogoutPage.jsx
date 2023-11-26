@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { logout } from '../api/api';
 
-const LogoutPage = () => {
+const LogoutPage = ({setUser, setLoggedIn}) => {
   useEffect(() => {
     logout()
       .then((res) => {
-        console.log(res);
+        setUser(null);
+        setLoggedIn(false);
         navigateTo('/login');
       })
       .catch((error) => {
