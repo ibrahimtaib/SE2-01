@@ -8,7 +8,7 @@ Main project for Software Engineering 2 at PoliTo
 
 ## Users
 
-**Right now we don't have a synchronization between data, you should access Database Studio and add manually the following users!**
+**Right now we don't have synchronization between database data, you should access Database Studio and add manually the following users!**
 
 To access the thesis managment page, you should authenticate with the following users (other fields are not important):
 
