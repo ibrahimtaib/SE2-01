@@ -7,18 +7,16 @@ import { addApplication } from '../api/api.js';
 import './ApplyForm.css';
 import DismissableAlert from './DismissableAlert.jsx';
 
-function ApplyForm({proposal}) {
+function ApplyForm({proposal, user}) {
   const navigateTo = useNavigate();
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
   const [messageAlert, setMessageAlert] = useState("");
-  const student = {name: "Mario Rossi", email: "s123456@studenti.polito.it", id: 1}
 
 
-//TODO: put user here! must be student
   const onSubmit = async (data) => {
-    const res = addApplication({
-      STUDENT_ID: student.id,
+    addApplication({
+      STUDENT_ID: user?.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
     }).then((res) => {
@@ -45,8 +43,8 @@ function ApplyForm({proposal}) {
             style={{borderRadius: '5px', border: '1px solid #ccc', padding: '10px'}}
 
       className="student-information-apply-form">
-        <span><strong>Student Name</strong>: {student.name}</span>
-        <span><strong>Student Email</strong>: {student.email}</span>
+        <span><strong>Student Name</strong>: {user.name}</span>
+        <span><strong>Student Email</strong>: {user.email}</span>
       </div>
 
       <div className='input-apply-form'>

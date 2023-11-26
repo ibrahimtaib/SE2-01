@@ -45,9 +45,9 @@ export default {
       if (response.status === 200) {
         return response.data;
       }
-      return undefined;
+      return null;
     } catch (error) {
-      return error;
+      return null;
     }
   },
   helloTeacher: async function () {
