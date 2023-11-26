@@ -118,3 +118,5 @@ async function populateDatabase() {
 }
 
 module.exports = populateDatabase;
+
+populateDatabase();
