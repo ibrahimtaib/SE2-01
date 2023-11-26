@@ -22,7 +22,6 @@ async function getAllProposals() {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
-      id: e.id,
     }));
   } else {
     throw proposals;
