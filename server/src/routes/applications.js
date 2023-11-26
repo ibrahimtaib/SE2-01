@@ -5,11 +5,9 @@ const applicationController = require("../controllers/application.js");
 
 //TODO: This should be in application, we need to clarify about name of the files and we should make javadocs
 router.post("/", async (req, res) => {
-  console.log("QUI");
   applicationController
     .createApplication(req.body)
     .then((application) => {
-      console.log("QUA");
       res.status(200).json(application);
     })
     .catch((error) => {

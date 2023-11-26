@@ -16,14 +16,17 @@ export const addPage = async (proposal) => {
   }
 };
 
-export const login = async () => {
+export const checkUser = async (user) => {
   try {
-    const response = await api.get("/login");
+    const response = await api.post("/checkAuth", user, {
+      credentials: 'include', // Add this line to include credentials
+    });
     return response;
   } catch (error) {
     throw error;
   }
-};
+}
+
 
 export const logout = async () => {
   try {
@@ -35,13 +38,13 @@ export const logout = async () => {
 };
 
 export const addApplication = async (application) => {
-    try {
-      const response = await api.post("/applications/", application);
-      return response;
-    } catch (error) {
-      throw error;
-    }
+  try {
+    const response = await api.post("/applications/", application);
+    return response;
+  } catch (error) {
+    throw error;
   }
+}
 const applicationApi = {
   addApplication: async (application) => {
     const response = await api.post("/applications/", application);

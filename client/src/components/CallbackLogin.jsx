@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { checkUser } from "../api/api";
 
 
 function CallbackLogin({ setUser }) {
@@ -10,16 +12,18 @@ function CallbackLogin({ setUser }) {
     };
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        const userString = params.get('user');
         const userIDString = params.get('userID');
 
-        if (userString) {
-            //TODO: API for the user 
-            mockUser.name = userString;
-            setUser(mockUser);
-            navigate('/');
-            setIsDelayedActionComplete(true);
+        if (userIDString) {
+            checkUser({ id: userIDString })
+                .then((res) => {
+                    setUser(res.data);
+                    navigate('/')
 
+                })
+                .catch((err) => {
+                    navigate('/')
+                })
         }
     }, []);
 

@@ -38,7 +38,7 @@ function App() {
   }
 
 
-//FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
+  //FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
   useEffect(() => {
     const init = async () => {
       API.getAllProposals().then((a) => {
@@ -54,7 +54,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <NavBar user={user}/>
+      <NavBar user={user} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/*" element={<DefaultRoute />} />
@@ -91,7 +91,7 @@ function App() {
         />
         {user?.role === "teacher" && (
           <>
-            <Route path="/add" element={<InsertPage />} />
+            <Route path="/add" element={<InsertPage user={user} />} />
             <Route path="/applications/*" element={<ApplicationsPage />} />
             <Route path="/students/:id" element={<StudentDetailsPage />} />
           </>
@@ -99,7 +99,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-  
+
 }
 
 export default App

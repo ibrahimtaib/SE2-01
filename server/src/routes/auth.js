@@ -3,6 +3,8 @@ const router = express.Router({ mergeParams: true });
 const passport = require("passport");
 const saml = require("passport-saml");
 const app = require("../app")
+const authController = require("../controllers/auth.js")
+
 
 const samlStrategy = new saml.Strategy({
     entryPoint: "https://thesis-managment-01.eu.auth0.com/samlp/3FKY3CY8ZT5RpeywuUnpoexaqFdO9dup",
@@ -14,14 +16,26 @@ const samlStrategy = new saml.Strategy({
 });
 passport.use("samlStrategy", samlStrategy);
 
-const isAuthenticatedMiddleware = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-};
+const isLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated())
+        return next();
 
+    return res.status(401).json({ error: 'Not authenticated' });
+}
+
+    router.post(
+        "/checkAuth", async (req, res) => {
+            //TODO: Substitute it with the userID passed after SAML authentication
+            authController.
+                checkUser(req.body.id)
+                .then((obj) => {
+                    res.status(200).json(obj)
+                })
+                .catch((error) => {
+                    res.status(418).json(error) 
+                });
+        }
+    );
 
 
 router.get(
@@ -53,7 +67,7 @@ router.post(
 
 
 
-router.get('/authenticated-test-route', isAuthenticatedMiddleware, (req, res) => {
+router.get('/authenticated-test-route', isLoggedIn, (req, res) => {
     res.send('Authenticated Route');
 });
 
