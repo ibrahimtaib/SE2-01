@@ -590,4 +590,38 @@ module.exports = {
         })
     );
 },
+
+//for updating proposals
+UpdateProposal: async (body) => {
+  const {id,title, supervisor, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree} = body;
+  return new Promise((resolve, reject) =>
+      prisma.Proposal.update({
+        where: {id},
+      data:{
+          title, 
+          supervisor,
+          keywords, 
+          type, 
+          groups, 
+          description, 
+          notes, 
+          expiration,
+          level,
+          cds,
+          teacher,
+          requiredKnowledge,
+          degree
+         }
+      })
+      .then((proposal) => {
+          return resolve(proposal);
+      })
+      .catch((error) => {
+        console.error(error);
+        return reject({
+          error: "An error occurred while updating propsal",
+        });
+      })
+  );
+},
 };
