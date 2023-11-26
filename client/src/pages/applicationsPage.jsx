@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import API from '../API';
@@ -5,7 +6,7 @@ import ApplicationsList from '../components/BrowseApplications';
 import ProposalDetails from '../components/ProposalDetails';
 
 
-function ApplicationsPage() {
+function ApplicationsPage({user}) {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -13,7 +14,7 @@ function ApplicationsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-              const applicationsData = await API.getApplicationsByTeacherId(1);  
+              const applicationsData = await API.getApplicationsByTeacherId(user.id);  
               setApplications(applicationsData);
               setLoading(false);
             } catch (error) {

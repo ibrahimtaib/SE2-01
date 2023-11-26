@@ -112,7 +112,7 @@ function App() {
         {user?.role === "teacher" && (
           <>
             <Route path="/add" element={<InsertPage user={user} />} />
-            <Route path="/applications/*" element={<ApplicationsPage />} />
+            <Route path="/applications/*" element={<ApplicationsPage user={user}/>} />
             <Route path="/students/:id" element={<StudentDetailsPage />} />
           </>
         )}
