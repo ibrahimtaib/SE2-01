@@ -592,7 +592,7 @@ module.exports = {
 },
 
 //for updating proposals
-UpdateProposal: async (body) => {
+updateProposal: async (body) => {
   const {id,title, supervisor, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree} = body;
   return new Promise((resolve, reject) =>
       prisma.Proposal.update({
