@@ -10,6 +10,7 @@ async function getAllProposals() {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -35,6 +36,7 @@ async function getProposalsByTitle(title) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -59,6 +61,7 @@ async function getProposalsByCosupervisor(surname) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -83,6 +86,7 @@ async function getProposalsBySupervisor(surname) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -144,6 +148,7 @@ async function getProposalsByKeywords(keywords) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -168,6 +173,7 @@ async function getProposalsByGroups(groups) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -192,6 +198,7 @@ async function getProposalsByLevel(level) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -216,6 +223,7 @@ async function getProposalsByCds(cds) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -240,6 +248,7 @@ async function getProposalsByType(type) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
       Cds: e.cds,
+      id: e.id,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
@@ -298,6 +307,7 @@ async function filterProposals(data) {
       return result.map((e) => ({
         Supervisor: e.teacher.surname,
         Cds: e.cds,
+        id: e.id,
         Title: e.title,
         CoSupervisor: e.coSupervisors,
         Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
