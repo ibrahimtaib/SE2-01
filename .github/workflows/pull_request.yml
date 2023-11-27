@@ -1,0 +1,45 @@
+name: Pull Request Workflow
+
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up git user
+        run: |
+          git config user.name ${{github.actor}}
+          git config user.email ${{github.actor}}@users.noreply.github.com
+
+      - name: Run tests
+        if: success()
+        run: |
+          cd server/
+          cat README.md > prev
+          ./update_coverage.sh
+          if [[ -n $(git status --porcelain README.md) ]]; then
+            git status
+            git add README.md ../README.md
+            git commit -m "Updating coverage badge"
+            git push origin HEAD:refs/heads/${GITHUB_REF#refs/heads/}
+          else
+            echo "No local changes to README.md detected. Skipping the commit."
+            exit 0  # Exit successfully without further steps
+          fi
