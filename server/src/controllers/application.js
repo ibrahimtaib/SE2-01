@@ -89,7 +89,6 @@ module.exports = {
 
         resolve(application);
       } catch (error) {
-        console.error(error);
         reject({
           status: 500,
           error: "An error occurred",
@@ -118,7 +117,6 @@ module.exports = {
 
         resolve(application);
       } catch (error) {
-        console.error(error);
         reject({
           status: 500,
           error: "An error occurred",

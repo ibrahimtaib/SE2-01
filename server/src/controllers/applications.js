@@ -43,7 +43,6 @@ module.exports = {
                 }))
                 .sort((a, b) => new Date(a.application.date) - new Date(b.application.date));
         } catch (error) {
-            console.error(error);
             throw new Error("An error occurred while querying the database for applications, students, degrees, and proposals");
         }
     },
@@ -67,7 +66,6 @@ module.exports = {
                 degree: proposal.degree,
             };
         } catch (error) {
-            console.error(error);
             throw new Error("An error occurred while querying the database for the proposal and related information");
         }
     },
@@ -89,7 +87,6 @@ module.exports = {
             student
         };
         } catch (error) {
-        console.error(error);
         throw new Error("An error occurred while querying the database for student information");
         }
     },
@@ -103,7 +100,6 @@ module.exports = {
             
           return updatedApplication;
         } catch (error) {
-          console.error(error);
           throw new Error("An error occurred while updating the application status to 'accept'");
         }
       },
@@ -117,7 +113,6 @@ module.exports = {
               
             return updatedApplication;
           } catch (error) {
-            console.error(error);
             throw new Error("An error occurred while updating the application status to 'refuse'");
           }
     },
@@ -127,14 +122,9 @@ module.exports = {
             where: { id: parseInt(applicationId) },
             select: { PROPOSAL_ID: true },
         });
-    
-        if (!application) {
-            throw new Error('Application not found');
-        }
-    
+
         return application.PROPOSAL_ID;
         } catch (error) {
-        console.error(error);
         throw new Error('An error occurred while fetching the proposalId for the application');
         }
     },
@@ -153,7 +143,6 @@ module.exports = {
   
       return rejectedApplications;
     } catch (error) {
-      console.error(error);
       throw new Error('An error occurred while rejecting waiting applications for the proposal');
     }
     },

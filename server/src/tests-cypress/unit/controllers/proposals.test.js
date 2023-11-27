@@ -1,9 +1,7 @@
 const { getAllCds, getAllTypes, getAllLevels, getProposals, getProposalsByTitle, getProposalsByCosupervisor, getProposalsBySupervisor, getProposalsByKeywords, getProposalsByGroups, getProposalsByExpirationDate, getProposalsByLevel, getProposalsByType, getProposalsByCDS } = require("../../../controllers/proposals.js");
-const {acceptApplication} = require("../../../controllers/applications.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
-
 
 jest.mock("../../../controllers/prisma.js", () => ({
   Degree: {
@@ -605,6 +603,5 @@ describe("getProposalsByCDS function", () => {
     }
   });
 });
-
 
 
