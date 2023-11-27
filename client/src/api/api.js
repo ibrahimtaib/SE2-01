@@ -24,6 +24,13 @@ export const addApplication = async (application) => {
       throw error;
     }
   }
+export const deleteProposal = async (proposal) => {
+	try {
+		return await api.delete(`/proposals/${proposal.id}/`)
+	} catch (error) {
+		return null;
+	}
+}
 const applicationApi = {
   addApplication: async (application) => {
     const response = await api.post("/applications/", application);
