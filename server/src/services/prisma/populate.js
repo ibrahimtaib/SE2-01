@@ -101,9 +101,9 @@ async function populateDatabase() {
         return prisma.application.create({
           data: {
             status: faker.random.arrayElement([
-              "Pending",
-              "Approved",
-              "Rejected",
+              "pending",
+              "approved",
+              "rejected",
             ]),
             comment: faker.lorem.sentence(),
             STUDENT_ID: faker.random.arrayElement(students).id,
@@ -116,5 +116,6 @@ async function populateDatabase() {
     console.log("Database populated successfully!");
   });
 }
+(async () => await populateDatabase())();
 
 module.exports = populateDatabase;
