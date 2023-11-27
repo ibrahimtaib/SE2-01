@@ -65,7 +65,7 @@ module.exports = {
           include: {
             applications: {
               where: {
-                status: STATUS.ACCEPTED,
+                status: STATUS.accepted,
               },
             },
           },
@@ -79,6 +79,7 @@ module.exports = {
           });
         }
         // Check if proposal can be deleted
+        console.log(proposal);
         if (proposal.applications.length > 0) {
           return reject({
             status: 400,
@@ -89,23 +90,20 @@ module.exports = {
 
         //initiate a prisma transaction
         prisma.$transaction(async (prisma) => {
-          // Archive the proposal
-          await prisma.Proposal.update({
-            where: {
-              id: id,
-            },
-            data: {
-              archived: true,
-            },
-          });
-
           // Set all applications to canceled
           await prisma.Application.updateMany({
             where: {
-              proposalId: id,
+              PROPOSAL_ID: id,
             },
             data: {
-              status: STATUS.CANCELED,
+              status: STATUS.canceled,
+            },
+          });
+
+          // Archive the proposal
+          await prisma.Proposal.delete({
+            where: {
+              id: id,
             },
           });
         });
