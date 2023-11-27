@@ -162,7 +162,7 @@ router.get("/cds/:cds", async (req, res) => {
   });
 
   //update proposals
-  router.post("/", async (req, res) => {
+  router.post("/update", async (req, res) => {
     proposalsController
       .updateProposal(req.body)
       .then((proposal) => {

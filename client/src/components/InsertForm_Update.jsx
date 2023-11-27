@@ -150,7 +150,7 @@ export default function InsertForm({ initialValues }) {
 
 
     const onSubmit = (data) => {
-        addPage({
+        addPageUpdate({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
             supervisor: 1,

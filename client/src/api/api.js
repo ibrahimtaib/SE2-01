@@ -16,6 +16,15 @@ export const addPage = async (proposal) => {
   }
 };
 
+export const addPageUpdate = async (proposal) => {
+  try {
+    const response = await api.post('/proposals/update', proposal);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addApplication = async (application) => {
     try {
       const response = await api.post("/applications/", application);
