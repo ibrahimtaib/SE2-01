@@ -64,14 +64,14 @@ model Student {
 }
 
 model Application {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @default(now())
+  id          Int       @id @default(autoincrement())
+  date        DateTime  @default(now())
   status      String
   comment     String?
   STUDENT_ID  Int
-  PROPOSAL_ID Int
-  student     Student  @relation(fields: [STUDENT_ID], references: [id])
-  proposal    Proposal @relation(fields: [PROPOSAL_ID], references: [id])
+  PROPOSAL_ID Int?
+  student     Student   @relation(fields: [STUDENT_ID], references: [id], onDelete: Cascade)
+  proposal    Proposal? @relation(fields: [PROPOSAL_ID], references: [id], onDelete: SetNull)
 }
 
 model Proposal {
