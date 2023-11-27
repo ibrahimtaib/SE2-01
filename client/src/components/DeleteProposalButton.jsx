@@ -12,20 +12,23 @@ function DeleteProposalButton({proposal}) {
   const [alertBody, setAlertBody] = useState("Are you sure you want to delete this proposal?"); //TODO change this to the actual proposal title
   const backdrop = deleting || succesfulDelete?{backdrop: 'static'}:{};
 
- const handleDelete = async (proposal) => {
-  setDeleting(true);
-  const res = await deleteProposal(proposal);
-  if (res) {
-    setSuccesfulDelete(true);
-    setAlertBody("Proposal deleted successfully!");
+  const handleDelete = async (proposal) => {
+    setDeleting(true);
+    const res = await deleteProposal(proposal);
+    if (res) {
+      setSuccesfulDelete(true);
+      setAlertBody("Proposal deleted successfully!");
+    }
+    else {
+      setAlertBody("An error occurred. Please try again later.");
+      setSuccesfulDelete(false);
+    }
+    setDeleting(false);
   }
-  else {
-    setAlertBody("An error occurred. Please try again later.");
-    setSuccesfulDelete(false);
-  }
-  setDeleting(false);
-}
 
+  const handleNavigate = async () => {
+    //TODO refresh page
+  }
  
 	function modalClose() {
     if(succesfulDelete == true) {
@@ -53,8 +56,10 @@ function DeleteProposalButton({proposal}) {
 		</Modal.Body>  
 
 		<Modal.Footer>  
-		{!(deleting || succesfulDelete == false) && <Button variant="primary" onClick={() => handleDelete(proposal)}>Confirm</Button> } 
-		<Button variant="secondary" onClick={modalClose}>Cancel</Button>  
+		{!(deleting || succesfulDelete != null) && <Button variant="danger" onClick={() => handleDelete(proposal)}>Confirm</Button> } 
+		{!(deleting || succesfulDelete === true) && <Button variant="secondary" onClick={modalClose}>Cancel</Button>} 
+		{(succesfulDelete && !deleting) && <Button variant="primary" onClick={handleNavigate}>Close</Button> } 
+     
 		</Modal.Footer>  
 		</Modal>  
 		</div>
