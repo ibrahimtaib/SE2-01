@@ -2,7 +2,6 @@ const {
   getProposals,
   createProposal,
 } = require("../src/controllers/proposals.js");
-
 const prisma = require("../src/controllers/prisma.js");
 
 // Mocking PrismaClient
@@ -46,7 +45,7 @@ describe("getProposals", () => {
     const response = await getProposals();
 
     expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    expect(response).toEqual(mockProposal);
+    expect(response).toEqual(mockResponse);
   });
 });
 
