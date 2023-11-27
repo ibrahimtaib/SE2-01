@@ -6,27 +6,34 @@ import {deleteProposal} from '../api/api';
 import { useState } from 'react';  
 
 function DeleteProposalButton({proposal}) {
-	const [showAlert, setShowAlert] = useState(true);
+	const [showAlert, setShowAlert] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [succesfulDelete, setSuccesfulDelete] = useState(null);
   const [alertBody, setAlertBody] = useState("Are you sure you want to delete this proposal?"); //TODO change this to the actual proposal title
-  const backdrop = deleting?{backdrop: 'static'}:{};
+  const backdrop = deleting || succesfulDelete?{backdrop: 'static'}:{};
 
  const handleDelete = async (proposal) => {
   setDeleting(true);
   const res = await deleteProposal(proposal);
   if (res) {
-    setShowAlert(false);
-    //TODO refresh page
+    setSuccesfulDelete(true);
+    setAlertBody("Proposal deleted successfully!");
   }
   else {
     setAlertBody("An error occurred. Please try again later.");
+    setSuccesfulDelete(false);
   }
   setDeleting(false);
 }
 
  
 	function modalClose() {
+    if(succesfulDelete == true) {
+      //TODO refresh page
+      window.location.reload();
+    }
 		setShowAlert(false);	
+    setSuccesfulDelete(null)
     setAlertBody("Are you sure you want to delete this proposal?");
 	}
 	return (
@@ -46,8 +53,8 @@ function DeleteProposalButton({proposal}) {
 		</Modal.Body>  
 
 		<Modal.Footer>  
+		{!(deleting || succesfulDelete == false) && <Button variant="primary" onClick={() => handleDelete(proposal)}>Confirm</Button> } 
 		<Button variant="secondary" onClick={modalClose}>Cancel</Button>  
-		<Button variant="primary" onClick={() => handleDelete(proposal)}>Confirm</Button>  
 		</Modal.Footer>  
 		</Modal>  
 		</div>
