@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function ProposalCard(props) {
   const [isVisible, setIsVisible] = useState(false);
   const navigateTo = useNavigate();
+  
 
 
   const toggleVisibility = () => {
@@ -16,7 +17,7 @@ function ProposalCard(props) {
   return (
     <Card className="text-left m-3">
       <Card.Header>Prof. {props.proposal.Teacher}</Card.Header>
-      <Card.Body>
+      <Card.Body>  
         <Card.Title>{props.proposal.Title}</Card.Title>
         <Card.Text>
           {props.proposal.Description}
@@ -26,10 +27,10 @@ function ProposalCard(props) {
           {props.proposal.Groups.map((group, index) => (
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
           ))}
-          <br/><b>Type</b>: {props.proposal.Type}
-          <br/><b>Cds</b>: {props.proposal.titleDegree}
-          <br/><b>Notes:</b>: {props.proposal.Notes}
-          <br/><b>Required Knowledge</b>: {props.proposal.RequiredKnowledge}
+          <br /><b>Type</b>: {props.proposal.Type}
+          <br /><b>Cds</b>: {props.proposal.titleDegree}
+          <br /><b>Notes:</b>: {props.proposal.Notes}
+          <br /><b>Required Knowledge</b>: {props.proposal.RequiredKnowledge}
         </Card.Text>
         <div className="d-flex justify-content-between">
           <Button variant="outline-secondary" onClick={toggleVisibility}>
@@ -40,7 +41,11 @@ function ProposalCard(props) {
               onClick={() => navigateTo(`/proposals/${props.proposal.id}/apply`)}
               variant="success">
               Apply
-            </Button> : <></>
+            </Button> : <Button
+              onClick={() => navigateTo(`/proposals/${props.proposal.id}/apply`)}
+              variant="warning">
+              Copy
+            </Button>
           }
         </div>
       </Card.Body>

@@ -375,7 +375,7 @@ export default function InsertForm({user}) {
                 >
                     <Button
                         variant="outline-secondary"
-                        onClick={() => navigate('/')}
+                        onClick={() => navigateTo('/')}
                     >
                         Cancel
                     </Button>
