@@ -526,7 +526,7 @@ const API = {
   getProposalsByExpirationDate,
   filterProposals,
   acceptApplication,
-  refuseApplication,,
+  refuseApplication,
   getUserInfo,
 };
 export default API;
