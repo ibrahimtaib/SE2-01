@@ -134,7 +134,7 @@ module.exports = {
       const rejectedApplications = await prisma.Application.updateMany({
         where: {
           PROPOSAL_ID: parseInt(proposalId),
-          status: 'waiting',
+          status: 'pending',
         },
         data: {
           status: 'refuse',
@@ -143,7 +143,7 @@ module.exports = {
   
       return rejectedApplications;
     } catch (error) {
-      throw new Error('An error occurred while rejecting waiting applications for the proposal');
+      throw new Error('An error occurred while rejecting pending applications for the proposal');
     }
     },
       

@@ -114,7 +114,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
               )}
             </div>
 
-            {application.application.status === 'waiting' && (
+            {application.application.status === 'pending' && (
               <>
                 <Button onClick={handleAccept} variant="success" style={{ marginRight: '10px' }}>
                   Accept
