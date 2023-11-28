@@ -45,9 +45,9 @@ export default {
       if (response.status === 200) {
         return response.data;
       }
-      return undefined;
+      return null;
     } catch (error) {
-      return error;
+      return null;
     }
   },
   helloTeacher: async function () {
@@ -55,7 +55,6 @@ export default {
     try {
       const response = await api.get("/teachers");
       if (response.status === 200) {
-        console.log("Hello teacher!");
         return response.data;
       }
       console.log(response);

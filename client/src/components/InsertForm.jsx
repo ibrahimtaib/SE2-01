@@ -128,9 +128,7 @@ const styles = {
 
 
 
-export default function InsertForm() {
-    //TODO: IMPORTANT!! Put this states in App.jsx (they are for sure needed somewhere else later in development)
-    //TODO: Adjust CSS to reflect the theme of the website
+export default function InsertForm({user}) {
     const [levels, setLevels] = useState(["Bachelor", "Master"]);
     const [supervisors, setSupervisors] = useState([]);
     const [degrees, setDegrees] = useState([]);
@@ -150,7 +148,7 @@ export default function InsertForm() {
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
-            supervisor: 1,
+            supervisor: user.id,
             coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()), //TODO: Fix in database or here sending of cosupervisors
             keywords: keywords.map((keyword) => keyword.trim()),
             groups: [],
@@ -160,7 +158,7 @@ export default function InsertForm() {
             setTimeout(() => {
 
                 navigateTo('/');
-            }, 7500);
+            }, 4000);
 
         })
             .catch((error) => {

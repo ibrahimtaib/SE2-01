@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run Jest coverage and capture the coverage percentage
-npx --coverage jest 1&> jest.txt
+node node_modules/.bin/jest --coverage --color=false 2> jest.txt
 COVERAGE=$(npx jest | grep -oP "All files.*" | awk '{ match($0, /[0-9]+(\.[0-9]+)?/); print substr($0, RSTART, RLENGTH) }')
 echo $COVERAGE
 COLOR="green"
@@ -15,9 +15,9 @@ if [ "$(echo "$COVERAGE < 50" | bc -l)" -eq 1 ]; then
     COLOR="red"
 fi
 
-
-
-OUTPUT=$(cat jest.txt | grep "Tests:" | awk -F'[, ]+' '/Tests:/ { print $4, $6 }'
+echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+cat jest.txt
+OUTPUT=$(cat jest.txt | grep "Tests:" | awk -F'[, ]+' '/Tests:/ { print $4, ($6 ? $6 : $2) }'
 )
 echo $OUTPUT
 read -r tests_passed total_tests <<< $OUTPUT
