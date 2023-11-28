@@ -432,68 +432,6 @@ async function refuseApplication(applicationId) {
   }
 }
 
-async function acceptApplication(applicationId) {
-  try {
-    const acceptResponse = await fetch(`${URL}applications/accept-application/${applicationId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const acceptData = await acceptResponse.json();
-
-    if (!acceptResponse.ok) {
-      throw new Error(acceptData.error || 'Failed to accept application');
-    }
-
-    const proposalIdResponse = await fetch(`${URL}applications/get-proposal-id/${applicationId}`);
-    const proposalIdData = await proposalIdResponse.json();
-    const proposalId = proposalIdData.proposalId;
-
-    const rejectOtherApplicationsResponse = await fetch(`${URL}applications/reject-waiting-applications/${proposalId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const rejectOtherApplicationsData = await rejectOtherApplicationsResponse.json();
-
-    if (!rejectOtherApplicationsResponse.ok) {
-      throw new Error(rejectOtherApplicationsData.error || 'Failed to reject other applications');
-    }
-
-    return acceptData;
-  } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while accepting the application');
-  }
-}
-
-
-async function refuseApplication(applicationId) {
-  try {
-    const response = await fetch(`${URL}applications/refuse-application/${applicationId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      return data;
-    } else {
-      throw new Error(data.error || 'Failed to refuse application');
-    }
-  } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while refusing the application');
-  }
-}
-
 async function getUserInfo() {
   const response = await fetch(URL + "sessions/current", {
     credentials: "include",
