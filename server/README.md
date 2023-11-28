@@ -1,6 +1,6 @@
-![Coverage](https://img.shields.io/badge/Coverage-34.79%25-red)
-![Total tests](https://img.shields.io/badge/Total%20tests--green)
-![Passed tests](https://img.shields.io/badge/Passed%20tests--green)
+![Coverage](https://img.shields.io/badge/Coverage-41.05%25-red)
+![Total tests](https://img.shields.io/badge/Total%20tests-108-green)
+![Passed tests](https://img.shields.io/badge/Passed%20tests-94-red)
 
 # Server implementation of Thesis Managment
 

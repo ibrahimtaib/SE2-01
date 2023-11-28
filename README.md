@@ -1,6 +1,6 @@
-![Coverage](https://img.shields.io/badge/Coverage-26.54%25-red)
-![Total tests](https://img.shields.io/badge/Total%20tests-63-green)
-![Passed tests](https://img.shields.io/badge/Passed%20tests-63-green)
+![Coverage](https://img.shields.io/badge/Coverage-41.05%25-red)
+![Total tests](https://img.shields.io/badge/Total%20tests-108-green)
+![Passed tests](https://img.shields.io/badge/Passed%20tests-94-red)
 
 # SE2-01
 
