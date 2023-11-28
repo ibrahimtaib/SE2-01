@@ -12,10 +12,8 @@ function ApplicationsPage({user}) {
 
   const handleAcceptApplication = async (applicationId) => {
     try {
-      // Implementa la logica per l'accettazione dell'applicazione
       await API.acceptApplication(applicationId);
-      // Aggiorna la lista delle applicazioni dopo l'accettazione
-      const updatedApplications = await API.getApplicationsByTeacherId(1);
+      const updatedApplications = await API.getApplicationsByTeacherId(user.id);
       setApplications(updatedApplications);
     } catch (error) {
       console.error("Error accepting application", error);
@@ -27,7 +25,7 @@ function ApplicationsPage({user}) {
       // Implementa la logica per il rifiuto dell'applicazione
       await API.refuseApplication(applicationId);
       // Aggiorna la lista delle applicazioni dopo il rifiuto
-      const updatedApplications = await API.getApplicationsByTeacherId(1);
+      const updatedApplications = await API.getApplicationsByTeacherId(user.id);
       setApplications(updatedApplications);
     } catch (error) {
       console.error("Error rejecting application", error);

@@ -185,7 +185,7 @@ describe('Applications Controller', () => {
       expect(prisma.Application.updateMany).toHaveBeenCalledWith({
         where: {
           PROPOSAL_ID: mockProposalId,
-          status: 'waiting',
+          status: 'pending',
         },
         data: {
           status: 'refuse',
@@ -204,13 +204,13 @@ describe('Applications Controller', () => {
       });
 
       await expect(rejectWaitingApplicationsByProposalId(mockProposalId)).rejects.toThrow(
-        'An error occurred while rejecting waiting applications for the proposal'
+        'An error occurred while rejecting pending applications for the proposal'
       );
 
       expect(prisma.Application.updateMany).toHaveBeenCalledWith({
         where: {
           PROPOSAL_ID: mockProposalId,
-          status: 'waiting',
+          status: 'pending',
         },
         data: {
           status: 'refuse',
@@ -439,7 +439,7 @@ describe('getStudentById function', () => {
       name: 'John',
       surname: 'Doe',
       applications: [
-        { id: 101, status: 'waiting', date: new Date('2023-01-01') },
+        { id: 101, status: 'pending', date: new Date('2023-01-01') },
         { id: 102, status: 'accept', date: new Date('2023-01-02') },
       ],
       degree: { id: 201, name: 'Computer Science' },
@@ -463,7 +463,7 @@ describe('getStudentById function', () => {
         name: 'John',
         surname: 'Doe',
         applications: [
-          { id: 101, status: 'waiting', date: new Date('2023-01-01') },
+          { id: 101, status: 'pending', date: new Date('2023-01-01') },
           { id: 102, status: 'accept', date: new Date('2023-01-02') },
         ],
         degree: { id: 201, name: 'Computer Science' },

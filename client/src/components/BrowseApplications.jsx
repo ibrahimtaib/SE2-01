@@ -132,6 +132,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
 };
 
 const ProposalList = ({ applications, loading, onAccept, onReject }) => {
+  console.log(applications)
   return (
     <Container>
       <br />

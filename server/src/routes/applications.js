@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
 
 router.get("/:teacherId/", async (req, res) => {
   const teacherId = req.params.teacherId;
-
   try {
     const applications =
       await applicationsController.getApplicationsStudentsProposalsDegreesByTeacherId(
