@@ -60,91 +60,36 @@ module.exports = {
             });
         
 
-            return {
-                proposal,
-                teacher: proposal.teacher,
-                degree: proposal.degree,
-            };
-        } catch (error) {
-            throw new Error("An error occurred while querying the database for the proposal and related information");
-        }
-    },
-    getStudentById: async (studentId) => {
-        let int_student_id = parseInt(studentId);
-        try {
-        const student = await prisma.student.findUnique({
-            where: {
-                id: int_student_id,
-            },
-            include: {
-                applications: true,
-                degree: true,
-                Career: true,
-            },
-            });
-    
         return {
-            student
+            proposal,
+            teacher: proposal.teacher,
+            degree: proposal.degree,
         };
-        } catch (error) {
-        throw new Error("An error occurred while querying the database for student information");
-        }
-    },
-    acceptApplication: async (applicationId) => {
-        let intApplicationId = parseInt(applicationId);
-        try {
-          const updatedApplication = await prisma.Application.update({
-            where: { id: intApplicationId },
-            data: { status: 'accept' },
-          });
-            
-          return updatedApplication;
-        } catch (error) {
-          throw new Error("An error occurred while updating the application status to 'accept'");
-        }
-      },
-    refuseApplication: async (applicationId) => {
-        let intApplicationId = parseInt(applicationId);
-        try {
-            const updatedApplication = await prisma.Application.update({
-              where: { id: intApplicationId },
-              data: { status: 'refuse' },
-            });
-              
-            return updatedApplication;
-          } catch (error) {
-            throw new Error("An error occurred while updating the application status to 'refuse'");
-          }
-    },
-    getProposalIdByApplicationId: async(applicationId) => {
-        try {
-        const application = await prisma.Application.findUnique({
-            where: { id: parseInt(applicationId) },
-            select: { PROPOSAL_ID: true },
-        });
-
-        return application.PROPOSAL_ID;
-        } catch (error) {
-        throw new Error('An error occurred while fetching the proposalId for the application');
-        }
-    },
-  
-    rejectWaitingApplicationsByProposalId: async(proposalId) => {
-    try {
-      const rejectedApplications = await prisma.Application.updateMany({
-        where: {
-          PROPOSAL_ID: parseInt(proposalId),
-          status: 'pending',
-        },
-        data: {
-          status: 'refuse',
-        },
-      });
-  
-      return rejectedApplications;
     } catch (error) {
-      throw new Error('An error occurred while rejecting pending applications for the proposal');
+        console.error(error);
+        throw new Error("An error occurred while querying the database for the proposal and related information");
     }
-    },
-      
-};
+  },
+  getStudentById: async (studentId) => {
+    let int_student_id = parseInt(studentId);
+    try {
+    const student = await prisma.student.findUnique({
+        where: {
+            id: int_student_id,
+        },
+        include: {
+            applications: true,
+            degree: true,
+            Career: true,
+        },
+        });
+  
+      return {
+        student
+      };
+    } catch (error) {
+      console.error(error);
+      throw new Error("An error occurred while querying the database for student information");
+    }
+  },
+}
