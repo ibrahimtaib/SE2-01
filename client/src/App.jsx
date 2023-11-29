@@ -39,29 +39,56 @@ function App() {
     else msg = "Unknown Error";
     setMessage(msg);
   }
+  /*
+    useEffect(() => {
+      const init = async () => {
+        API.getAllProposals().then((a) => {
+          setProposalsList(a)
+        })
+          .catch((err) => console.log("error fetching proposals", err));
+  
+      };
+  
+      init();
+    }, []);*/
 
   useEffect(() => {
-    const init = async () => {
-      API.getAllProposals().then((a) => {
-        setProposalsList(a)
-      })
-        .catch((err) => console.log("error fetching proposals", err));
+    const fetchData = async () => {
+      try {
+        
+        const proposals = await API.getAllProposals();
+        setProposalsList(proposals);
 
+        if (user?.role === 'teacher') {
+          const teacherId = user.teacherId;
+          const teacherProposals = await API.getTeacherProposals(teacherId);
+          setProposalsList(teacherProposals);
+        }
+      } catch (error) {
+        console.log("Error fetching proposals:", error);
+      }
     };
 
-    init();
-  }, []);
+    fetchData();
+  }, [user]); // Adding props.user.teacherId as a dependency
+
+
 
   return (
     <BrowserRouter>
       <Header />
       <NavBar user={user} />
       <Routes>
-        < Route
+        <Route
           exact
           path="/"
           element={
-            user === null ? <Navigate replace to="/login" /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+            user === null ? (
+              <Navigate replace to="/login" />
+            ) : (
+              <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />
+            )
+          }
         />
         <Route path="/login" element={<LoginPage setUser={setUser} />} />
         <Route path="/add" element={

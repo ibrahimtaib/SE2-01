@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const proposalsController = require("../controllers/proposals");
+const { teacher } = require("../controllers/prisma");
 
 router.post("/", async (req, res) => {
   proposalsController

@@ -332,7 +332,7 @@ async function getAllProposals() {
   
   async function getTeacherProposals(teacherId) {
     const response = await fetch(`${URL}proposals/teacher/${teacherId}`);
-    const res = await response.json();
+    const proposals = await response.json();
     if (response.ok) {
       return proposals.map((e) => ({
         Cds:e.cds,

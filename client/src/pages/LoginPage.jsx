@@ -4,11 +4,13 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import styles from "./LoginPage.module.css";
 import Form from 'react-bootstrap/Form';
+
 const mockUser = {
   id: 1,
   name: 'Mario Rossi',
   email: 's319095@studenti.polito.it',
   role: 'student',
+  //cds: 'CDS1'
 };
 
 const LoginPage = ({ setUser }) => {
@@ -41,6 +43,7 @@ const LoginPage = ({ setUser }) => {
     if (email === "s123456@polito.it") {
       mockUser.role = 'teacher';
       mockUser.name = 'Mario Professore'
+      mockUser.teacherId = parseInt(1)
       setUser(mockUser);
       setShowAlert(false);
       navTo("/");
