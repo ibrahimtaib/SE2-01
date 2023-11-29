@@ -20,9 +20,11 @@ module.exports = {
         after the evaluation of the teacher you have been ${action}ed.
         we invite you to check the platform for further details.`;
 
+        const email = 'jaouadouchaib2@gmail.com'
+
         const mailOptions = {
             from: 'teacher@polito.it',
-            to: 'jaouadouchaib2@gmail.com', //TODO : student.email need to be added to mailgin authorized recipients,
+            to: email, //TODO : student.email need to be added to mailgin authorized recipients,
             subject,
             text: text,
         }

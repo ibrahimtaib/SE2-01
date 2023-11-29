@@ -1,17 +1,14 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
+import { sendMail } from '../api/api';
 
 const ProposalCard = ({ application, onAccept, onReject }) => {
   const [hoveredTitle, setHoveredTitle] = useState(false);
   const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
-
-
-  const handleApplicationAction = (applicationId, studentId, action) => {
-    console.log(`Application ID: ${applicationId}, Student ID: ${studentId}, Action: ${action}`);
-  };
 
   const handleTitleClick = async (selectedApplication) => {
     if (selectedApplication) {
@@ -60,6 +57,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   const handleAccept = async () => {
     try {
       await onAccept(application.application.id);
+      await sendMail(application.application.id, application.student, 'accept')
     } catch (error) {
       console.error(error);
     }
@@ -68,6 +66,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   const handleReject = async () => {
     try {
       await onReject(application.application.id);
+      await sendMail(application.application.id, application.student, 'accept')
     } catch (error) {
       console.error(error);
     }
