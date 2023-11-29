@@ -26,7 +26,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
           ))}
           <br /><b>Type</b>: {proposal.Type}
-          <br /><b>Cds</b>: {proposal.titleDegree}
+          <br /><b>Degree</b>: {proposal.titleDegree}
           <br /><b>Notes:</b> {proposal.Notes ? proposal.Notes : "None"}
           <br /><b>Required Knowledge</b>: {proposal.RequiredKnowledge}
           <br /><b>Co-Supervisors:</b> {proposal.CoSupervisor.length > 0 ? proposal.CoSupervisor.join(', ') : 'None'}
@@ -36,38 +36,72 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
           </Button>
-          {
-            user.role === "student" ? <Button
+          <div id='buttons'>
+          {user.role === "student" ? (
+            <Button
               onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
               variant="success">
               Apply
-            </Button> : <Button
-              style={{
-                backgroundColor: "#1a365d",
-                color: "#fff",
-              }}
-              onClick={() => {
-                setUpdate(true);
-                setProposalToInsert({
-                  id: proposal.id,
-                  title: proposal.Title,
-                  description: proposal.Description,
-                  expiration: proposal.date,
-                  coSupervisors: proposal.CoSupervisor,
-                  keywords: proposal.Keywords,
-                  degree: {
-                    COD_DEGREE: proposal.cds
-                  },
-                  teacherID: proposal.teacherID,
-                  date: proposal.date,
-                  
-                });
-                navigateTo(`/add`);
-              }}
-              variant="">
-              UPDATE TO FIX!!!!!
             </Button>
-          }
+          ) : (
+            <>
+              <Button
+                onClick={() => {
+                  setUpdate(false);
+                  setProposalToInsert({
+                    id: proposal.id,
+                    title: proposal.Title,
+                    description: proposal.Description,
+                    expiration: proposal.date,
+                    coSupervisors: proposal.CoSupervisor,
+                    keywords: proposal.Keywords,
+                    degree: {
+                      COD_DEGREE: proposal.cds
+                    },
+                    teacherID: proposal.teacherID,
+                    date: proposal.date,
+                    requiredKnowledge: proposal.RequiredKnowledge,
+                    notes: proposal.Notes
+                  });
+                  navigateTo(`/add`);
+                }}
+                variant="">
+                Copy
+              </Button>
+              {user.id === proposal.teacherID ? (
+                <>
+                  <Button
+                    style={{
+                      backgroundColor: "#1a365d",
+                      color: "#fff",
+                    }}
+                    onClick={() => {
+                      setUpdate(true);
+                      setProposalToInsert({
+                        id: proposal.id,
+                        title: proposal.Title,
+                        description: proposal.Description,
+                        expiration: proposal.date,
+                        coSupervisors: proposal.CoSupervisor,
+                        keywords: proposal.Keywords,
+                        degree: {
+                          COD_DEGREE: proposal.cds
+                        },
+                        teacherID: proposal.teacherID,
+                        date: proposal.date,
+                        requiredKnowledge: proposal.RequiredKnowledge,
+                        notes: proposal.Notes
+                      });
+                      navigateTo(`/add`);
+                    }}
+                    variant="">
+                    Update
+                  </Button>
+                </>
+              ) : ''}
+            </>
+          )}
+          </div>
         </div>
       </Card.Body>
       <Card.Footer className="text-muted">Expiration: {proposal.Expiration}</Card.Footer>
