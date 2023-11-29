@@ -55,7 +55,6 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
         const proposals = await API.getAllProposals();
         setProposalsList(proposals);
 
