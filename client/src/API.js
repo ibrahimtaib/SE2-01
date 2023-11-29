@@ -345,7 +345,6 @@ async function getAllProposals() {
         Description:e.description,
         Notes: e.notes,
         RequiredKnowledge: e.requiredKnowledge,
-        titleDegree: e.degree.TITLE_DEGREE
       }));
     } else {
       throw proposals;

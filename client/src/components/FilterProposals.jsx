@@ -26,7 +26,6 @@ function FilterProposals(props) {
     }
 
     visibleFilters = { ...allFilters, ...disabledFilters };
-    console.log(visibleFilters)
 
 
     console.log("FilterProposals", props.ProposalsList)
