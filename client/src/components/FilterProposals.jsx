@@ -17,6 +17,7 @@ function FilterProposals(props) {
 
     let disabledFilters = {};
     let visibleFilters = {};
+    
     if (props.user.role === "teacher") {
         disabledFilters = { ...disabledFilters, supervisor: false }
     }
