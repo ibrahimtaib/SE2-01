@@ -67,7 +67,7 @@ function App() {
     init();
   }, []);
 
-  if(loading){
+  if (loading) {
     return (<LoadingSpinner />);
   }
 
@@ -93,26 +93,31 @@ function App() {
           path="/logout"
           element={
             loggedIn ? (
-              <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn}/>
+              <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn} />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
-        <Route
-          path="/proposals/:proposalId/apply"
-          element={
-            loggedIn ? (
-              <ApplyPage user={user} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+        {user?.role === "student" && (
+          <>
+            <Route path="/students/:id" element={<StudentDetailsPage />} />
+            <Route
+              path="/proposals/:proposalId/apply"
+              element={
+                loggedIn ? (
+                  <ApplyPage user={user} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+          </>
+        )}
         {user?.role === "teacher" && (
           <>
             <Route path="/add" element={<InsertPage user={user} />} />
-            <Route path="/applications/*" element={<ApplicationsPage user={user}/>} />
+            <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
             <Route path="/students/:id" element={<StudentDetailsPage />} />
           </>
         )}

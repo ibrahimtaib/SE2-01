@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import Tagify from '@yaireo/tagify';
 import { useEffect, useRef, useState } from "react";
 import Button from 'react-bootstrap/Button';
@@ -145,6 +143,9 @@ export default function InsertForm({user}) {
 
 
     const onSubmit = (data) => {
+
+        //if(update)
+        //else
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
