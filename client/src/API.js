@@ -328,7 +328,29 @@ async function getAllProposals() {
     } else {
       throw 0;
     }
-  }  
+  } 
+  
+  async function getTeacherProposals(teacherId) {
+    const response = await fetch(`${URL}proposals/teacher/${teacherId}`);
+    const res = await response.json();
+    if (response.ok) {
+      return proposals.map((e) => ({
+        Cds:e.cds,
+        Title: e.title,
+        CoSupervisor: e.coSupervisors,
+        Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
+        Groups:e.groups,
+        Level:e.level,
+        Type:e.type,
+        Description:e.description,
+        Notes: e.notes,
+        RequiredKnowledge: e.requiredKnowledge,
+        titleDegree: e.degree.TITLE_DEGREE
+      }));
+    } else {
+      throw proposals;
+    }
+  }
   
   async function getProposalById(proposalId) {
     const response = await fetch(`${URL}applications/proposal/${proposalId}`);
@@ -376,6 +398,7 @@ const API = {
   getProposalsByCds, 
   getProposalsByType, 
   getProposalsByExpirationDate, 
-  filterProposals
+  filterProposals,
+  getTeacherProposals
 };
 export default API;
