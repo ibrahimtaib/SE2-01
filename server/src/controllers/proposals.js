@@ -3,6 +3,7 @@ const prisma = require("./prisma");
 const { resolve } = require("path");
 
 module.exports = {
+
   createProposal: async (body) => {
     const {title, supervisor, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree} = body;
     return new Promise((resolve, reject) =>
@@ -165,7 +166,7 @@ module.exports = {
               select: {
                 surname: true,
               }
-            },  // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+            },  
             degree: {
               select: {
                 TITLE_DEGREE: true,
@@ -231,7 +232,42 @@ module.exports = {
       throw new Error("An error occurred while querying the database");
     }
   },
+/*
+  getTeacherProposals: async (teacherId) => {
+    return new Promise((resolve, reject) => {
+      prisma.Proposal
+      .findMany({
+        where: {
+            supervisor: teacherId,          
+        },
+      })
+        .then((proposals) => {
+          resolve(proposals)
+        })
+        .catch(() => {
+          reject(new Error("Unable to fetch teacher proposals"));
+        });
+    });
+  },*/
 
+  getProposalsByTeacherId: async (teacherId) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany({
+          where: {
+              supervisor: parseInt(teacherId),
+          },
+        })
+        .then((proposals) => {
+          return resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database for applications",
+          });
+        })
+    );
+},
 
   getProposalsByKeywords: async (keywords) => {
     const separatedKeywords = keywords.split(',').map(keyword => keyword.trim().toLowerCase());
@@ -567,27 +603,5 @@ module.exports = {
     }
   },
   
-  getApplicationsBySupervisorId: async (teacherId) => {
-    return new Promise((resolve, reject) =>
-      prisma.Application
-        .findMany({
-          where: {
-            proposal: {
-              supervisor: {
-                id: teacherId,
-              },
-            },
-          },
-        })
-        .then((applications) => {
-          return resolve(applications);
-        })
-        .catch((error) => {
-          console.error(error);
-          return reject({
-            error: "An error occurred while querying the database for applications",
-          });
-        })
-    );
-},
+  
 };
