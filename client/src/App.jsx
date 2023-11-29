@@ -71,11 +71,6 @@ function App() {
           path='/applications/*'
           element={user === undefined ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <ApplicationsPage /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
         />
-        <Route
-          path="/myproposals"
-          element={
-            user === null ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <MyProposalsPage /> : <Navigate replace to="/" />}
-        />
         <Route path="/students/:id" element={<StudentDetailsPage />} />
         <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user} />} />
         <Route path='/*' element={<DefaultRoute />} />

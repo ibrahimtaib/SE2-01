@@ -17,7 +17,7 @@ function FilterProposals(props) {
 
     let disabledFilters = {};
     let visibleFilters = {};
-    
+
     if (props.user.role === "teacher") {
         disabledFilters = { ...disabledFilters, supervisor: false }
     }
@@ -28,11 +28,10 @@ function FilterProposals(props) {
     visibleFilters = { ...allFilters, ...disabledFilters };
 
 
-    console.log("FilterProposals", props.ProposalsList)
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
-                <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} userRole={props.user.role}></LeftSide></Col>
+                <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
                 <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList}></RightSide></Col>
             </Row>
         </Container>
@@ -145,7 +144,7 @@ function LeftSide(props) {
         setCds(event.target.value);
     };
 
-    const handleFilter = () => {
+    const handleFilter = (event) => {
         event.preventDefault();
         const flt = {
             title: title,
@@ -173,7 +172,7 @@ function LeftSide(props) {
         setCds("");
         setType("");
         setDate("");
-        setSelectedDate(null); // Imposta il DatePicker a vuoto
+        setSelectedDate(null); 
         setDate("");
         setClickReset(true);
     };
@@ -218,7 +217,7 @@ function LeftSide(props) {
                             </Form.Group>
                         )}
                     </Col>
-                    <Col md={props.userRole === 'teacher' ? 12 : 6}>
+                    <Col md={props.user.role === 'teacher' ? 12 : 6}>
                         {props.visibleFilters.cosupervisor && (
                             <Form.Group className="mb-3">
                                 <Form.Label>Filter by Co-Supervisor</Form.Label>
@@ -227,7 +226,7 @@ function LeftSide(props) {
                                     placeholder="Co-Supervisor"
                                     value={cosupervisor}
                                     onChange={handleCosupervisorChange}
-                                    className={props.userRole === 'teacher' ? 'w-100' : 'form-control-sm'}
+                                    className={props.user.role === 'teacher' ? 'w-100' : 'form-control-sm'}
                                 />
                             </Form.Group>
                         )}
@@ -380,6 +379,7 @@ function LeftSide(props) {
 
 
 function RightSide(props) {
+    console.log('ProposalsList:', props.ProposalsList);
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return null;
     }
