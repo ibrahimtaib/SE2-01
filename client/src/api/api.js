@@ -36,8 +36,6 @@ export const getUserInfo = async () => {
     });
 
     const userInfo = response.data;
-    console.log(userInfo);
-
     return userInfo;
   } catch (error) {
     throw error;
@@ -49,6 +47,15 @@ export const logout = async () => {
   try {
     const response = await api.get("/logout");
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addPageUpdate = async (proposal) => {
+  try {
+    const response = await api.post('/proposals/update', proposal);
+    return response.data;
   } catch (error) {
     throw error;
   }

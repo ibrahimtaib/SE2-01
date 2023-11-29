@@ -160,6 +160,16 @@ router.get("/cds/:cds", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
+
+  //update proposals
+  router.post("/update", async (req, res) => {
+    proposalsController
+      .updateProposal(req.body)
+      .then((proposal) => {
+        res.status(200).json(proposal);
+      })
+      .catch((error) => res.status(500).json(error));
+  });
   
   
 
