@@ -68,7 +68,6 @@ function App() {
       }
     };
     
-
     fetchData();
   }, [user]); // Adding props.user.teacherId as a dependency
 
