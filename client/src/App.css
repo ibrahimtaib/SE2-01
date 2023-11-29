@@ -16,3 +16,7 @@
     padding-right: 40px; /* Sostituisci con il valore di padding desiderato */
     padding-top: 20px; /* Sostituisci con il valore di padding desiderato */
   }
+
+  .form-control::placeholder {
+    font-size: 0.9em; /* Modifica la dimensione del testo del suggerimento */
+  }
