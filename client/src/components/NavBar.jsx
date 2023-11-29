@@ -37,7 +37,7 @@ function NavBar({ user }) {
             variant="outline-light"
             className="mr-3"
             style={{ marginRight: '10px' }}
-            onClick={() => window.location.href = "/"}
+            onClick={() => window.location.href = "/logout"}
           >Log out</Button>
         </>
       ) : (

@@ -8,10 +8,11 @@ function ProposalCard(props) {
   const [isVisible, setIsVisible] = useState(false);
   const navigateTo = useNavigate();
 
+
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
-
+  //FIXME: Why we have no name here?
   return (
     <Card className="text-left m-3">
       {props.user.role != "teacher" && (

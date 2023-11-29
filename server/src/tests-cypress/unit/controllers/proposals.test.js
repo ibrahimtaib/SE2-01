@@ -1,8 +1,7 @@
-const { getAllCds, getAllTypes, getAllLevels, getProposals, getProposalsByTitle, getProposalsByCosupervisor, getProposalsBySupervisor, getProposalsByKeywords, getProposalsByGroups, getProposalsByExpirationDate, getProposalsByLevel, getProposalsByType, getProposalsByCDS } = require("../../../controllers/proposals.js");
+const { getAllCds, getAllTypes, getAllLevels, getProposals, getProposalsByTitle, getProposalsByCosupervisor, getProposalsBySupervisor, getProposalsByKeywords, getProposalsByGroups, getProposalsByExpirationDate, getProposalsByLevel, getProposalsByType, getProposalsByCDS, getTeacherProposals } = require("../../../controllers/proposals.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
-
 
 jest.mock("../../../controllers/prisma.js", () => ({
   Degree: {
@@ -14,7 +13,13 @@ jest.mock("../../../controllers/prisma.js", () => ({
   Teacher: {
     findMany: jest.fn(() => {}),
   },
+  Application: { 
+    findUnique: jest.fn(() => {}),
+    findMany: jest.fn(() => {}),
+    update: jest.fn(() => {}),
+  },
 }));
+
 
 
 describe("getAllCds function", () => {
@@ -599,5 +604,49 @@ describe("getProposalsByCDS function", () => {
   });
 });
 
+describe('getTeacherProposals function', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should resolve with teacher proposals matching the teacherId from the database', async () => {
+    const teacherId = '1'; 
+    const mockedTeacherProposals = [
+      { title: 'Example Proposal 1', supervisor: 1 },
+      { title: 'Example Proposal 2', supervisor: 1 },
+    ];
+
+    prisma.Proposal.findMany.mockResolvedValue(mockedTeacherProposals);
+
+    const result = await getTeacherProposals(teacherId);
+
+    expect(result).toEqual(mockedTeacherProposals);
+    expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
+      where: {
+        supervisor: parseInt(teacherId),
+      },
+    });
+  });
+
+  it('should reject with an error if there is a database error', async () => {
+    const teacherId = '2'; 
+    const mockedError = new Error('Database error');
+
+    prisma.Proposal.findMany.mockRejectedValueOnce(mockedError);
+
+    try {
+      await getTeacherProposals(teacherId);
+    } catch (error) {
+      expect(error).toEqual({
+        error: 'An error occurred while querying the database for applications',
+      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
+        where: {
+          supervisor: parseInt(teacherId),
+        },
+      });
+    }
+  });
+});
 
 

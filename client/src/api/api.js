@@ -16,14 +16,52 @@ export const addPage = async (proposal) => {
   }
 };
 
-export const addApplication = async (application) => {
-    try {
-      const response = await api.post("/applications/", application);
-      return response;
-    } catch (error) {
-      throw error;
-    }
+export const checkUser = async (user) => {
+  try {
+    const response = await api.post("/checkAuth", user, {
+      credentials: 'include', 
+      timeout: 5000// Add this line to include credentials
+    });
+    return response;
+  } catch (error) {
+    throw error;
   }
+}
+
+
+export const getUserInfo = async () => {
+  try {
+    const response = await api.get('sessions/current', {
+      withCredentials: true
+    });
+
+    const userInfo = response.data;
+    console.log(userInfo);
+
+    return userInfo;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export const logout = async () => {
+  try {
+    const response = await api.get("/logout");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addApplication = async (application) => {
+  try {
+    const response = await api.post("/applications/", application);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
 const applicationApi = {
   addApplication: async (application) => {
     const response = await api.post("/applications/", application);
