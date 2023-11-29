@@ -196,7 +196,10 @@ module.exports = {
       })
         .then((proposals) => {
           proposals.forEach((proposal) => {
-            if (proposal.applications.length > 0) {
+            if (
+              proposal.applications.length > 0 ||
+              proposal.expiration > new Date()
+            ) {
               proposal.deletable = false;
             } else {
               proposal.deletable = true;
