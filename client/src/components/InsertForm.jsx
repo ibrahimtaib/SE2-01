@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
-import api, { addPage } from "../api/api";
+import api, { addPage, addPageUpdate } from "../api/api";
 
 const Types = {
     experimental: "Experimental",
@@ -142,32 +142,59 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
     const navigateTo = useNavigate();
 
-    const { register, formState: { errors }, handleSubmit } = useForm()
+    const { register, formState: { errors }, handleSubmit } = useForm({
+        defaultValues: {
+            cds: proposalToInsert.degree.COD_DEGREE
+        }
+    })
     const inputRef = useRef(null);
 
 
     const onSubmit = (data) => {
 
-        addPage({
-            ...data,
-            expiration: new Date(data.expiration).toISOString(),
-            supervisor: user.id,
-            coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()), //TODO: Fix in database or here sending of cosupervisors
-            keywords: keywords.map((keyword) => keyword.trim()),
-            groups: [],
-        }).then(() => {
-            setServerError(false);
-            setSuccesfullySent(true);
-            setTimeout(() => {
+        if (update) {
+            addPageUpdate({
+                ...data,
+                id: proposalToInsert.id,
+                expiration: new Date(data.expiration).toISOString(),
+                supervisor: user.id,
+                coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
+                keywords: keywords.map((keyword) => keyword.trim()),
+                groups: [], //TODO: Issue with groups
+            }).then(() => {
+                setServerError(false);
+                setSuccesfullySent(true);
+                setTimeout(() => {
 
-                navigateTo('/');
-            }, 4000);
+                    navigateTo('/');
+                }, 4000);
 
-        })
-            .catch((error) => {
-                setServerError(true);
-            });
+            })
+                .catch((error) => {
+                    setServerError(true);
+                });
+        }
+        else {
+            addPage({
+                ...data,
+                expiration: new Date(data.expiration).toISOString(),
+                supervisor: user.id,
+                coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
+                keywords: keywords.map((keyword) => keyword.trim()),
+                groups: [],
+            }).then(() => {
+                setServerError(false);
+                setSuccesfullySent(true);
+                setTimeout(() => {
 
+                    navigateTo('/');
+                }, 4000);
+
+            })
+                .catch((error) => {
+                    setServerError(true);
+                });
+        }
 
     }
 
@@ -266,7 +293,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                             id='expiration-date'
                             style={styles.select}
                             min={new Date().toISOString().split('T')[0]}
-                            value={proposalToInsert?.expiration}
+                            defaultValue={proposalToInsert?.expiration}
                         />
 
                     </div>
@@ -300,7 +327,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                         {...register("cds", { required: true })}
                         id="cds"
                         style={styles.select}
-                        value={proposalToInsert.degree.COD_DEGREE}
+                        defaultValue={proposalToInsert.degree.COD_DEGREE}
                     >
                         {degrees.map(degree => <option key={degree.COD_DEGREE} value={degree.COD_DEGREE}>{degree.TITLE_DEGREE}</option>)}
                     </select>
@@ -335,7 +362,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 </div>
 
                 <div style={styles.container}>
-                    <label style={styles.label}> knowledge
+                    <label style={styles.label}> Required knowledge
                     </label>
                     {errors.requiredKnowledge?.type === "required" && (
                         <a style={{ color: "red" }}>Field is required</a>
@@ -358,7 +385,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                         id="notes"
                         rows={4}
                         style={styles.textarea}
-                        defaultValue={''}
+                        defaultValue={proposalToInsert?.notes}
                         placeholder="Notes about the thesis..."
                     />
                 </div>
@@ -376,7 +403,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
                 {successfullySent ?
                     <Alert variant="success" style={{ width: "100%" }}>
-                        Proposal successfully inserted! Redirecting to home page...
+                        {update ? 'Proposal successfully updated! Redirecting to home page...' : 'Proposal successfully inserted! Redirecting to home page...'}
                     </Alert> : <div
                         style={styles.buttonContainer}
                     >
@@ -427,7 +454,6 @@ function CosupervisorsInput(props) {
 
         tagify.on('remove', (e) => {
             const removedCosupervisor = e.detail.data.value;
-            // Remove the tag from the state (props.cosupervisors)
             props.setCosupervisors((prevCosupervisors) =>
                 prevCosupervisors.filter((tag) => tag !== removedCosupervisor)
             );
@@ -468,7 +494,6 @@ function KeywordsInput(props) {
 
         tagify.on('remove', (e) => {
             const removedKeyword = e.detail.data.value;
-            // Remove the tag from the state (props.cosupervisors)
             props.setKeywords((prevKeywords) =>
                 prevKeywords.filter((tag) => tag !== removedKeyword)
             );

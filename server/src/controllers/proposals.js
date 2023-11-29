@@ -599,7 +599,7 @@ module.exports = {
     const { id, title, supervisor, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.update({
-        where: { id },
+        where: { id : id },
         data: {
           title,
           supervisor,
