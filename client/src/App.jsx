@@ -65,11 +65,16 @@ function App() {
         />
         <Route path="/login" element={<LoginPage setUser={setUser} />} />
         <Route path="/add" element={
-            user === null ? <Navigate replace to="/login" /> : <InsertPage isLoggedIn={loggedIn} />} />
+          user === null ? <Navigate replace to="/login" /> : <InsertPage isLoggedIn={loggedIn} />} />
         <Route
           exact
           path='/applications/*'
           element={user === undefined ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <ApplicationsPage /> : <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} />}
+        />
+        <Route
+          path="/myproposals"
+          element={
+            user === null ? <Navigate replace to="/login" /> : user?.role === "teacher" ? <MyProposalsPage /> : <Navigate replace to="/" />}
         />
         <Route path="/students/:id" element={<StudentDetailsPage />} />
         <Route path="proposals/:proposalId/apply" element={<ApplyPage user={user} />} />
