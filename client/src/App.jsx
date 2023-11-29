@@ -67,6 +67,7 @@ function App() {
         console.log("Error fetching proposals:", error);
       }
     };
+    
 
     fetchData();
   }, [user]); // Adding props.user.teacherId as a dependency
