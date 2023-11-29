@@ -142,7 +142,11 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
     const navigateTo = useNavigate();
 
-    const { register, formState: { errors }, handleSubmit } = useForm()
+    const { register, formState: { errors }, handleSubmit } = useForm({
+        defaultValues: {
+            cds: proposalToInsert.degree.COD_DEGREE
+          }
+    })
     const inputRef = useRef(null);
 
 
@@ -300,7 +304,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                         {...register("cds", { required: true })}
                         id="cds"
                         style={styles.select}
-                        value={proposalToInsert.degree.COD_DEGREE}
+                        defaultValue={proposalToInsert.degree.COD_DEGREE}
                     >
                         {degrees.map(degree => <option key={degree.COD_DEGREE} value={degree.COD_DEGREE}>{degree.TITLE_DEGREE}</option>)}
                     </select>
@@ -335,7 +339,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 </div>
 
                 <div style={styles.container}>
-                    <label style={styles.label}> knowledge
+                    <label style={styles.label}> Required knowledge
                     </label>
                     {errors.requiredKnowledge?.type === "required" && (
                         <a style={{ color: "red" }}>Field is required</a>
