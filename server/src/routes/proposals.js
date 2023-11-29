@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const proposalsController = require("../controllers/proposals");
+const { teacher } = require("../controllers/prisma");
 
 router.post("/", async (req, res) => {
   proposalsController
@@ -80,6 +81,19 @@ router.get("/supervisor/:surname", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.get("/teacher/:teacherId", async (req, res) => {
+  const teacherId = req.params.teacherId;
+
+  try {
+    const proposals = await proposalsController.getProposalsByTeacherId(teacherId);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 router.get("/keywords/:keywords", async (req, res) => {
   const keywords = req.params.keywords;
