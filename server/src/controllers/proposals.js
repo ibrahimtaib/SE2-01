@@ -619,7 +619,7 @@ updateProposal: async (body) => {
       .catch((error) => {
         console.error(error);
         return reject({
-          error: "An error occurred while updating propsal",
+          error: "An error occurred while updating proposal",
         });
       })
   );
