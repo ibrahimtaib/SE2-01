@@ -3,7 +3,6 @@ const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
 
-
 jest.mock("../../../controllers/prisma.js", () => ({
   Degree: {
     findMany: jest.fn(() => {}),
@@ -14,7 +13,13 @@ jest.mock("../../../controllers/prisma.js", () => ({
   Teacher: {
     findMany: jest.fn(() => {}),
   },
+  Application: { 
+    findUnique: jest.fn(() => {}),
+    findMany: jest.fn(() => {}),
+    update: jest.fn(() => {}),
+  },
 }));
+
 
 
 describe("getAllCds function", () => {
@@ -598,6 +603,5 @@ describe("getProposalsByCDS function", () => {
     }
   });
 });
-
 
 

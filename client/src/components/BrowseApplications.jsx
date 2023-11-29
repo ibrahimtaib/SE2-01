@@ -1,18 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
+import { sendMail } from '../api/api';
 
-const ProposalList = ({ applications , loading }) => {
-  const [hoveredTitle, setHoveredTitle] = useState(null);
-  const [hoveredStudent, setHoveredStudent] = useState(null);
+const ProposalCard = ({ application, onAccept, onReject }) => {
+  const [hoveredTitle, setHoveredTitle] = useState(false);
+  const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
-
-
-  const handleApplicationAction = (applicationId, studentId, action) => {
-    console.log(`Application ID: ${applicationId}, Student ID: ${studentId}, Action: ${action}`);
-  };
 
   const handleTitleClick = async (selectedApplication) => {
     if (selectedApplication) {
@@ -29,28 +25,7 @@ const ProposalList = ({ applications , loading }) => {
               student,
               status,
               comment,
-              date
-            }
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-  };
-
-
-  
-  const handleStudentClick = async (selectedApplication) => {
-    if (selectedApplication) {
-      const { student } = selectedApplication;
-      if (student) {
-        try {
-          const studentDetails = await API.getExamAndStudentById(student.id);
-  
-          navigate(`/students/${student.id}`, {
-            state: {
-              student: studentDetails.student, 
+              date,
             },
           });
         } catch (error) {
@@ -60,69 +35,126 @@ const ProposalList = ({ applications , loading }) => {
     }
   };
 
+  const handleStudentClick = async () => {
+    if (application) {
+      const { student } = application;
+      if (student) {
+        try {
+          const studentDetails = await API.getExamAndStudentById(student.id);
+  
+          navigate(`/students/${student.id}`, {
+            state: {
+              student: studentDetails.student,
+            },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  };
+
+  const handleAccept = async () => {
+    try {
+      await onAccept(application.application.id);
+      await sendMail(application.application.id, application.student, 'accept')
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      await onReject(application.application.id);
+      await sendMail(application.application.id, application.student, 'accept')
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <Card className="mb-3">
+      <Card.Body>
+        <Row>
+          <Col md={4}>
+            <Card.Title
+              style={{
+                cursor: 'pointer',
+                fontWeight: hoveredTitle ? 'bold' : 'normal',
+                textDecoration: hoveredTitle ? 'underline' : 'none',
+              }}
+              onClick={handleTitleClick}
+              onMouseEnter={() => setHoveredTitle(true)}
+              onMouseLeave={() => setHoveredTitle(false)}
+            >
+              {application.proposal.title}
+            </Card.Title>
+          </Col>
+          <Col md={4}>
+            <Card.Subtitle
+              className="mb-2 text-muted"
+              style={{
+                cursor: 'pointer',
+                fontWeight: hoveredStudent ? 'bold' : 'normal',
+                color: 'black',
+                textDecoration: hoveredStudent ? 'underline' : 'none',
+              }}
+              onClick={handleStudentClick}
+              onMouseEnter={() => setHoveredStudent(true)}
+              onMouseLeave={() => setHoveredStudent(false)}
+            >
+              {`${application.student.name} ${application.student.surname}`}
+              <br />
+              Degree: {application.student.degree.TITLE_DEGREE}
+            </Card.Subtitle>
+          </Col>
+          <Col md={4} className="d-flex justify-content-end align-items-center">
+            <div style={{ marginRight: '10px' }}>
+              {application.application.status === 'accept' && (
+                <div style={{ color: 'green' }}>Accepted</div>
+              )}
+              {application.application.status === 'refuse' && (
+                <div style={{ color: 'red' }}>Refused</div>
+              )}
+            </div>
+
+            {application.application.status === 'pending' && (
+              <>
+                <Button onClick={handleAccept} variant="success" style={{ marginRight: '10px' }}>
+                  Accept
+                </Button>
+                <Button onClick={handleReject} variant="danger">
+                  Refuse
+                </Button>
+              </>
+            )}
+          </Col>
+        </Row>
+      </Card.Body>
+    </Card>
+  );
+};
+
+const ProposalList = ({ applications, loading, onAccept, onReject }) => {
+  console.log(applications)
   return (
     <Container>
-      <br></br>
-    <div>
+      <br />
       <h1>Thesis Applications</h1>
-      <br></br>
+      <br />
       {loading ? (
-        <div>Loading...</div>
+        <Spinner animation="border" role="status">
+          <span className="sr-only"></span>
+        </Spinner>
       ) : applications ? (
         applications.length > 0 ? (
           applications.map((selectedApplication, index) => (
-            <>
-            <div
+            <ProposalCard
               key={index}
-              onMouseLeave={() => {
-                setHoveredTitle(null);
-                setHoveredStudent(null);
-              }}
-            >
-              <div
-                onClick={() => handleTitleClick(selectedApplication)}
-                onMouseEnter={() => setHoveredTitle(index)}
-                onMouseLeave={() => setHoveredTitle(null)}
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  textDecoration: hoveredTitle === index ? 'underline' : 'none'
-                }}
-                className="hover:underline"
-              >
-                {selectedApplication.proposal.title}
-              </div>
-              <div
-                onClick={() => handleStudentClick(selectedApplication)}
-                onMouseEnter={() => setHoveredStudent(index)}
-                onMouseLeave={() => setHoveredStudent(null)}
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  color: 'black',
-                  textDecoration: hoveredStudent === index ? 'underline' : 'none'
-                }}
-                className="hover:underline font-semibold text-black mb-2"
-              >
-                {`${selectedApplication.student.name} ${selectedApplication.student.surname}`}
-                <br />
-                Degree: {selectedApplication.student.degree.TITLE_DEGREE}
-              </div>
-              <button
-                onClick={() => handleApplicationAction(selectedApplication.id, selectedApplication.student.id, 'accept')}
-                className="bg-success text-white px-3 py-1 rounded hover:bg-green-600 transition duration-300 mx-2"
-              >
-                Accept
-              </button>
-              <button
-                onClick={() => handleApplicationAction(selectedApplication.id, selectedApplication.student.id, 'reject')}
-                className="bg-danger text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
-              >
-                Refuse
-              </button>
-            </div>
-            <br></br>
-            </>
+              application={selectedApplication}
+              onAccept={onAccept}
+              onReject={onReject}
+            />
           ))
         ) : (
           <div>No applications found.</div>
@@ -130,7 +162,6 @@ const ProposalList = ({ applications , loading }) => {
       ) : (
         <div>Applications not defined.</div>
       )}
-    </div>
     </Container>
   );
 };

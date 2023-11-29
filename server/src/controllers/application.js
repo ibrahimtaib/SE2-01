@@ -56,6 +56,7 @@ module.exports = {
         }
 
         // Check student is suitable
+        console.log(student.COD_DEGREE, proposal.cds);
         if (student.COD_DEGREE !== proposal.cds) {
           return reject({
             status: 400,
@@ -89,7 +90,6 @@ module.exports = {
 
         resolve(application);
       } catch (error) {
-        console.error(error);
         reject({
           status: 500,
           error: "An error occurred",
@@ -118,7 +118,6 @@ module.exports = {
 
         resolve(application);
       } catch (error) {
-        console.error(error);
         reject({
           status: 500,
           error: "An error occurred",

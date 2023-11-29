@@ -14,7 +14,7 @@ import { Alert } from 'react-bootstrap';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function FilterProposals(props) {
-    console.log("FilterProposals", props.ProposalsList)
+    //console.log("FilterProposals", props.ProposalsList)
     return (
         <Container fluid className="m-0">
             <Row className="h-100">

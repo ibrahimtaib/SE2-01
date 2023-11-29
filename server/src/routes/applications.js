@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
 
 router.get("/:teacherId/", async (req, res) => {
   const teacherId = req.params.teacherId;
-
   try {
     const applications =
       await applicationsController.getApplicationsStudentsProposalsDegreesByTeacherId(
@@ -63,8 +62,6 @@ router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
     });
 });
 
-module.exports = router;
-
 router.get("/proposal/:proposalId", async (req, res) => {
   const proposalId = req.params.proposalId;
 
@@ -83,6 +80,54 @@ router.get("/student/:studentId", async (req, res) => {
   try {
     const student = await applicationsController.getStudentById(studentId);
     res.status(200).json(student);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/accept-application/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+
+  try {
+    const result = await applicationsController.acceptApplication(applicationId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/refuse-application/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+
+  try {
+    const result = await applicationsController.refuseApplication(applicationId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/get-proposal-id/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+
+  try {
+    const proposalId = await applicationsController.getProposalIdByApplicationId(applicationId);
+    res.status(200).json({ proposalId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/reject-waiting-applications/:proposalId", async (req, res) => {
+  const proposalId = req.params.proposalId;
+
+  try {
+    const result = await applicationsController.rejectWaitingApplicationsByProposalId(proposalId);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

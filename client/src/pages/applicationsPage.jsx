@@ -10,6 +10,27 @@ function ApplicationsPage({user}) {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
+  const handleAcceptApplication = async (applicationId) => {
+    try {
+      await API.acceptApplication(applicationId);
+      const updatedApplications = await API.getApplicationsByTeacherId(user.id);
+      setApplications(updatedApplications);
+    } catch (error) {
+      console.error("Error accepting application", error);
+    }
+  };
+
+  const handleRejectApplication = async (applicationId) => {
+    try {
+      // Implementa la logica per il rifiuto dell'applicazione
+      await API.refuseApplication(applicationId);
+      // Aggiorna la lista delle applicazioni dopo il rifiuto
+      const updatedApplications = await API.getApplicationsByTeacherId(user.id);
+      setApplications(updatedApplications);
+    } catch (error) {
+      console.error("Error rejecting application", error);
+    }
+  };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,11 +48,22 @@ function ApplicationsPage({user}) {
   return (
     <>
       <Routes>
-        <Route path="/" element={<ApplicationsList applications={applications} loading={loading} setLoading={setLoading}/>} />
+        <Route
+          path="/"
+          element={
+            <ApplicationsList
+              applications={applications}
+              loading={loading}
+              setLoading={setLoading}
+              onAccept={handleAcceptApplication}
+              onReject={handleRejectApplication}
+            />
+          }
+        />
         <Route path="/proposal/:id" element={<ProposalDetails />} />
       </Routes>
     </>
-  )
+  );
 }
 
-export default ApplicationsPage
+export default ApplicationsPage;
