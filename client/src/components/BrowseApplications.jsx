@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
@@ -8,9 +8,14 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
 
-  const handleTitleClick = async () => {
-    if (application) {
-      const { proposal, student, status, comment, date } = application;
+
+  const handleApplicationAction = (applicationId, studentId, action) => {
+    console.log(`Application ID: ${applicationId}, Student ID: ${studentId}, Action: ${action}`);
+  };
+
+  const handleTitleClick = async (selectedApplication) => {
+    if (selectedApplication) {
+      const { proposal, student, status, comment, date } = selectedApplication;
       if (proposal && student) {
         try {
           const proposalDetails = await API.getProposalById(proposal.id);
@@ -39,7 +44,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
       if (student) {
         try {
           const studentDetails = await API.getExamAndStudentById(student.id);
-
+  
           navigate(`/students/${student.id}`, {
             state: {
               student: studentDetails.student,
