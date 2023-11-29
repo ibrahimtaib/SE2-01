@@ -148,8 +148,8 @@ export default function InsertForm({ user, update, proposalToInsert }) {
         }
     })
     const inputRef = useRef(null);
-
-
+    console.log("proposal to insert ")
+    console.log(proposalToInsert)
     const onSubmit = (data) => {
 
         if (update) {
@@ -327,7 +327,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                         {...register("cds", { required: true })}
                         id="cds"
                         style={styles.select}
-                        defaultValue={proposalToInsert.degree.COD_DEGREE}
+                        value={proposalToInsert?.degree?.COD_DEGREE}
                     >
                         {degrees.map(degree => <option key={degree.COD_DEGREE} value={degree.COD_DEGREE}>{degree.TITLE_DEGREE}</option>)}
                     </select>
