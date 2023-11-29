@@ -36,8 +36,6 @@ export const getUserInfo = async () => {
     });
 
     const userInfo = response.data;
-    console.log(userInfo);
-
     return userInfo;
   } catch (error) {
     throw error;

@@ -126,11 +126,15 @@ const styles = {
 
 
 
-export default function InsertForm({user}) {
+
+
+export default function InsertForm({ user, update, proposalToInsert }) {
+
+
     const [levels, setLevels] = useState(["Bachelor", "Master"]);
     const [supervisors, setSupervisors] = useState([]);
     const [degrees, setDegrees] = useState([]);
-    const [keywords, setKeywords] = useState([]);
+    const [keywords, setKeywords] = useState(proposalToInsert?.keywords);
     const [cosupervisors, setCosupervisors] = useState([]);
 
     const [serverError, setServerError] = useState(false);
@@ -144,8 +148,6 @@ export default function InsertForm({user}) {
 
     const onSubmit = (data) => {
 
-        //if(update)
-        //else
         addPage({
             ...data,
             expiration: new Date(data.expiration).toISOString(),
@@ -165,9 +167,12 @@ export default function InsertForm({user}) {
             .catch((error) => {
                 setServerError(true);
             });
+
+
     }
 
     useEffect(() => {
+
         const getSupervisors = () => {
             api.get('/teachers')
                 .then((response) => {
@@ -185,7 +190,10 @@ export default function InsertForm({user}) {
                 )
         }
         getDegrees();
-    }, [])
+        setKeywords(proposalToInsert?.keywords);
+        setCosupervisors(proposalToInsert?.coSupervisors);
+
+    }, [proposalToInsert])
 
     return (
         <>
@@ -194,10 +202,13 @@ export default function InsertForm({user}) {
                 onSubmit={handleSubmit(onSubmit)}
                 style={styles.form}
             >
+
                 <h1
                     className="sans-serif"
                     style={styles.header}
-                >New Proposal</h1>
+                >
+                    {update ? 'Update Proposal' : 'New Proposal'}
+                </h1>
                 <div style={styles.container}>
                     <label style={styles.label} htmlFor='title'>
                         Title
@@ -211,6 +222,7 @@ export default function InsertForm({user}) {
                         autoComplete="title"
                         style={styles.input}
                         placeholder="Title of the thesis"
+                        defaultValue={proposalToInsert?.title || ''}
                     />
                 </div>
 
@@ -226,7 +238,7 @@ export default function InsertForm({user}) {
                         id="description"
                         rows={3}
                         style={styles.textarea}
-                        defaultValue={''}
+                        defaultValue={proposalToInsert?.description || ''}
                         placeholder="Short description about the thesis..."
                     />
 
@@ -254,6 +266,7 @@ export default function InsertForm({user}) {
                             id='expiration-date'
                             style={styles.select}
                             min={new Date().toISOString().split('T')[0]}
+                            value={proposalToInsert?.expiration}
                         />
 
                     </div>
@@ -287,6 +300,7 @@ export default function InsertForm({user}) {
                         {...register("cds", { required: true })}
                         id="cds"
                         style={styles.select}
+                        value={proposalToInsert.degree.COD_DEGREE}
                     >
                         {degrees.map(degree => <option key={degree.COD_DEGREE} value={degree.COD_DEGREE}>{degree.TITLE_DEGREE}</option>)}
                     </select>
@@ -317,12 +331,11 @@ export default function InsertForm({user}) {
                     <label style={styles.label}>
                         Co-Supervisors
                     </label>
-                    <CosupervisorsInput setCosupervisors={setCosupervisors} />
+                    <CosupervisorsInput setCosupervisors={setCosupervisors} initialCosupervisors={proposalToInsert?.coSupervisors} />
                 </div>
 
                 <div style={styles.container}>
-                    <label style={styles.label}>
-                        Required knowledge
+                    <label style={styles.label}> knowledge
                     </label>
                     {errors.requiredKnowledge?.type === "required" && (
                         <a style={{ color: "red" }}>Field is required</a>
@@ -331,6 +344,7 @@ export default function InsertForm({user}) {
                         {...register("requiredKnowledge", { required: true })}
                         id="requiredKnowledge"
                         style={styles.select}
+                        defaultValue={proposalToInsert?.requiredKnowledge}
                     />
                 </div>
 
@@ -357,38 +371,37 @@ export default function InsertForm({user}) {
                         <a style={{ color: "red" }}>Field is required</a>
                     )}
 
-                    <KeywordsInput setKeywords={setKeywords} />
+                    <KeywordsInput setKeywords={setKeywords} initialKeywords={proposalToInsert?.keywords} />
                 </div>
 
-                {successfullySent && (
+                {successfullySent ?
                     <Alert variant="success" style={{ width: "100%" }}>
                         Proposal successfully inserted! Redirecting to home page...
-                    </Alert>
-                )}
+                    </Alert> : <div
+                        style={styles.buttonContainer}
+                    >
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => navigateTo('/')}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant='dark'
+                            style={styles.add}
+                        >
+                            {update ? 'Update' : 'Add'}
+                        </Button>
+
+                    </div>
+                }
                 {serverError && (
                     <Alert variant="error">
                         An error occurred while inserting the proposal: try again.
                     </Alert>
                 )}
 
-                <div
-                    style={styles.buttonContainer}
-                >
-                    <Button
-                        variant="outline-secondary"
-                        onClick={() => navigateTo('/')}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        type="submit"
-                        variant='dark'
-                        style={styles.add}
-                    >
-                        Add
-                    </Button>
-
-                </div>
             </form>
             <br></br>
             <br></br>
@@ -406,6 +419,8 @@ function CosupervisorsInput(props) {
             enforceWhitelist: false,
         });
 
+        tagify.addTags(props.initialCosupervisors);
+
         tagify.on('add', (e) => {
             props.setCosupervisors((prevCosupervisors) => [...prevCosupervisors, e.detail.data.value]);
         });
@@ -413,7 +428,7 @@ function CosupervisorsInput(props) {
         tagify.on('remove', (e) => {
             const removedCosupervisor = e.detail.data.value;
             // Remove the tag from the state (props.cosupervisors)
-            props.setKeywords((prevCosupervisors) =>
+            props.setCosupervisors((prevCosupervisors) =>
                 prevCosupervisors.filter((tag) => tag !== removedCosupervisor)
             );
         });
@@ -442,7 +457,10 @@ function KeywordsInput(props) {
     useEffect(() => {
         const tagify = new Tagify(inputRef.current, {
             enforceWhitelist: false,
+            value: props.initialKeywords
         });
+
+        tagify.addTags(props.initialKeywords);
 
         tagify.on('add', (e) => {
             props.setKeywords((prevKeywords) => [...prevKeywords, e.detail.data.value]);
@@ -451,8 +469,8 @@ function KeywordsInput(props) {
         tagify.on('remove', (e) => {
             const removedKeyword = e.detail.data.value;
             // Remove the tag from the state (props.cosupervisors)
-            props.setKeywords((prevCosupervisors) =>
-                prevCosupervisors.filter((tag) => tag !== removedKeyword)
+            props.setKeywords((prevKeywords) =>
+                prevKeywords.filter((tag) => tag !== removedKeyword)
             );
         });
 
