@@ -27,6 +27,11 @@ jest.mock("../../controllers/prisma.js", () => ({
   Teacher: {
     findMany: jest.fn(() => {}),
   },
+  Application: {
+    findUnique: jest.fn(() => {}),
+    findMany: jest.fn(() => {}),
+    update: jest.fn(() => {}),
+  },
 }));
 
 describe("getAllCds function", () => {

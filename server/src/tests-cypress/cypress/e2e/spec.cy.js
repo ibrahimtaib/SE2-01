@@ -4,6 +4,58 @@ describe('template spec', () => {
   })
 })
 
+describe('ProposalList API and front-end', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:5173/applications');
+  });
+
+  it('renders ProposalList component with mock data', () => {
+    cy.intercept('GET', '/proposals').as('getProposalList');
+
+    cy.get('h1').should('exist').and('have.text', 'Thesis Applications');
+
+    cy.get('.spinner-border').should('not.exist');
+
+    cy.get('.card.mb-3').each((proposalListItem, index) => {
+      const proposalTitle = proposalListItem.find('.card-title').first();
+      const studentSubtitle = proposalListItem.find('.card-subtitle').first();
+      const acceptButton = proposalListItem.find('button:contains("Accept")').first();
+      const rejectButton = proposalListItem.find('button:contains("Refuse")').first();
+
+      cy.wrap(proposalTitle).should('exist');
+      cy.wrap(studentSubtitle).should('exist');
+      cy.wrap(acceptButton).should('exist');
+      cy.wrap(rejectButton).should('exist');
+    });
+  });
+
+  it('handles API calls for proposal details', () => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+    cy.intercept('GET', 'applications/proposal/*').as('getProposalDetails');
+
+    cy.get('.card-title').first().click();
+
+    cy.wait('@getProposalDetails').should(({ request, response }) => {
+      expect(request.url).to.include('/applications/proposal/');
+    });
+  });
+
+  it('handles API calls for student details', () => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+
+    cy.intercept('GET', 'applications/student/*').as('getStudentDetails');
+
+    cy.get('.card-subtitle').first().click();
+
+    cy.wait('@getStudentDetails').should(({ request, response }) => {
+      expect(request.url).to.include('/applications/student/');
+    });
+  });
+});
+
+
 describe('ProposalList Component', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5173/applications');
@@ -11,24 +63,19 @@ describe('ProposalList Component', () => {
 
   it('renders the ProposalList component with mock data', () => {
     cy.get('h1').should('exist').and('have.text', 'Thesis Applications');
-    cy.get('h2').should('exist').and('be.visible');
   });
 
   it('navigates to proposal details on title click', () => {
-    cy.get('h2').first().click();
-  
+    cy.get('.card-title').first().click();
+
     cy.get('a').contains('Back').should('exist');
 
-    cy.get('h1').contains('Proposal Details').should('exist');
-
+    cy.get('h1').should('exist');
     cy.get('.max-w-2xl').should('exist');
-
     cy.get('.grid-cols-1').should('exist');
     cy.get('.md\\:grid-cols-2').should('exist');
 
     cy.get('.text-indigo-600').should('exist');
-    cy.contains('Title:').should('exist');
-    cy.contains('Supervisor:').should('exist');
     cy.contains('Co-supervisors:').should('exist');
     cy.contains('Type:').should('exist');
     cy.contains('Level:').should('exist');
@@ -40,8 +87,6 @@ describe('ProposalList Component', () => {
     cy.contains('Groups:').should('exist');
     cy.contains('Required Knowledge:').should('exist');
 
-    cy.contains('Title:').next().should('exist');
-    cy.contains('Supervisor:').next().should('exist');
     cy.contains('Co-supervisors:').next().should('exist');
     cy.contains('Type:').next().should('exist');
     cy.contains('Level:').next().should('exist');
@@ -51,27 +96,33 @@ describe('ProposalList Component', () => {
     cy.contains('Groups:').next().should('exist');
     cy.contains('Required Knowledge:').next().should('exist');
   });
-  
-  it('handles application action on button click', () => {
-    cy.intercept('POST', 'application/*', { statusCode: 200 }).as('postApplication');
-    cy.contains('button', 'Accetta').click();
-    cy.contains('button', 'Rifiuta').click();
+
+  it('handles API calls for application action buttons', () => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+
+    cy.intercept('POST', '/applications/accept-application/*').as('acceptApplication');
+
+    cy.contains('button', 'Accept').as('acceptButton').click();
+
+    cy.wait('@acceptApplication').its('request.url').should('match', /\/applications\/accept-application\//);
+
+    cy.intercept('POST', '/applications/refuse-application/*').as('refuseApplication');
+
+    cy.contains('button', 'Refuse').as('refuseButton').click();
+
+    cy.wait('@refuseApplication').its('request.url').should('match', /\/applications\/refuse-application\//);
   });
 
   it('navigates to student details on student name click', () => {
-    cy.get('.font-semibold.text-black').first().click();
+    cy.get('.card-subtitle').first().click();
 
-    cy.url().should('include', '/applications/student/');
- 
-    cy.url().should('include', '/applications/student/');
+    cy.url().should('include', '/students/');
 
     cy.get('a').contains('Back').should('exist');
 
-    cy.get('h1').contains('Student Details').should('exist');
-
     cy.get('.card').should('exist');
 
-    cy.contains('Name:').should('exist');
     cy.contains('Email:').should('exist');
     cy.contains('Gender:').should('exist');
     cy.contains('Nationality:').should('exist');
@@ -89,54 +140,4 @@ describe('ProposalList Component', () => {
 
     cy.get('.table tbody tr').should('have.length.greaterThan', 0);
   });
-
-});
-
-describe('ProposalList API and front-end', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:5173/applications');
-  });
-
-  it('renders ProposalList component with mock data', () => {
-    cy.intercept('GET', '/proposals').as('getProposalList');
-
-    cy.get('h1').should('exist').and('have.text', 'Thesis Applications');
-
-    cy.get('.text-center mt-5').should('not.exist');
-
-    cy.get('.border.rounded.p-4.bg-white.shadow-md').should('have.length.greaterThan', 0);
-
-    cy.get('.border.rounded.p-4.bg-white.shadow-md').each((proposalListItem, index) => {
-      cy.wrap(proposalListItem).find('h2').should('exist');
-      cy.wrap(proposalListItem).find('.font-semibold.text-black').should('exist');
-      cy.wrap(proposalListItem).find('.text-sm.text-gray-600').should('exist');
-      cy.wrap(proposalListItem).find('Button').should('exist');
-    });
-  });
-
-  it('handles API calls for proposal details', () => {
-    cy.clearCookies(); 
-    cy.clearLocalStorage(); 
-    cy.intercept('GET', 'applications/proposal/*').as('getProposalDetails');
-  
-    cy.get('h2').first().click();
-  
-    cy.wait('@getProposalDetails').should(({ request, response }) => {
-      expect(request.url).to.include('/applications/proposal/');
-    });
-  });
-  
-  it('handles API calls for student details', () => {
-    cy.clearCookies(); 
-    cy.clearLocalStorage(); 
-  
-    cy.intercept('GET', 'applications/student/*').as('getStudentDetails');
-  
-    cy.get('.font-semibold.text-black').first().click();
-    
-    cy.wait('@getStudentDetails').should(({ request, response }) => {
-      expect(request.url).to.include('/applications/student/');
-    });
-  });
-  
 });
