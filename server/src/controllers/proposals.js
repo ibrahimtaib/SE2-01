@@ -250,7 +250,7 @@ module.exports = {
     });
   },*/
 
-  getProposalsByTeacherId: async (teacherId) => {
+  getTeacherProposals: async (teacherId) => {
     return new Promise((resolve, reject) =>
       prisma.Proposal
         .findMany({
