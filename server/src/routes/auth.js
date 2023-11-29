@@ -26,7 +26,6 @@ const isLoggedIn = (req, res, next) => {
 
     router.post(
         "/checkAuth", async (req, res) => {
-            //TODO: Substitute it with the userID passed after SAML authentication
             authController.
                 checkUser(req.body.id)
                 .then((obj) => {

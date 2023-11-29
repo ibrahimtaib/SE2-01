@@ -9,11 +9,15 @@ async function getAllProposals() {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
       Cds: e.cds,
       id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format('YYYY-MM-DD'),
       Groups: e.groups,
       Level: e.level,
       Type: e.type,

@@ -6,13 +6,13 @@ import { Container } from 'react-bootstrap';
 
 import FilterProposals from '../components/FilterProposals';
 
-function MainPage({ProposalsList, setProposalsList, user}) {
+function MainPage({ProposalsList, setProposalsList, user, setUpdate, setProposalToInsert}) {
   return (   
         <>
         {user !== null ?(
           <>
           <Container fluid className="App p-0">
-          <FilterProposals user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList}/>
+          <FilterProposals user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert}/>
           </Container>
         </>
         ):(
