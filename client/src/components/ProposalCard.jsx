@@ -56,7 +56,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     coSupervisors: proposal.CoSupervisor,
                     keywords: proposal.Keywords,
                     degree: {
-                      COD_DEGREE: proposal.cds
+                      COD_DEGREE: proposal.Cds
                     },
                     teacherID: proposal.teacherID,
                     date: proposal.date,
@@ -85,7 +85,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                         coSupervisors: proposal.CoSupervisor,
                         keywords: proposal.Keywords,
                         degree: {
-                          COD_DEGREE: proposal.cds
+                          COD_DEGREE: proposal.Cds
                         },
                         teacherID: proposal.teacherID,
                         date: proposal.date,
