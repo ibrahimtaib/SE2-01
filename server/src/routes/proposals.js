@@ -85,7 +85,7 @@ router.get("/teacher/:teacherId", async (req, res) => {
   const teacherId = req.params.teacherId;
 
   try {
-    const proposals = await proposalsController.getProposalsByTeacherId(teacherId);
+    const proposals = await proposalsController.getTeacherProposals(teacherId);
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
