@@ -10,7 +10,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
   const navigateTo = useNavigate();
 
   const toggleVisibility = () => {
-    setIsVisible(!isVisible);
+    setIsVisible(prevVisibility => !prevVisibility);
   };
 
   return (
