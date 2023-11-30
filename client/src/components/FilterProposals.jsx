@@ -18,7 +18,7 @@ function FilterProposals(props) {
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
-                <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList}></LeftSide></Col>
+                <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList} user={props.user}></LeftSide></Col>
                 <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
@@ -45,6 +45,7 @@ function LeftSide(props) {
     const [levelList, setLevelList] = useState([]);
 
     const [level, setLevel] = useState("");
+    const [cds, setCds] = useState(props.user.cds);
 
     const [type, setType] = useState("");
 
@@ -58,7 +59,7 @@ function LeftSide(props) {
         if (clickReset) {
             const init = async () => {
                 try {
-                    API.getProposalsByCds(props.user.cds).then((a) => {
+                    API.getProposalsByCds(cds).then((a) => {
                         props.setProposalsList(a)
                         setClickReset(false);
                     })
@@ -73,9 +74,9 @@ function LeftSide(props) {
 
     useEffect(() => {
         const init = async () => {
-          if (props.user && props.user.cds) {
+          if (props.user && cds) {
             try {
-              const proposals = await API.getProposalsByCds(props.user.cds);
+              const proposals = await API.getProposalsByCds(cds);
               props.setProposalsList(proposals);
               setClickReset(false);
             } catch (err) {
@@ -130,22 +131,28 @@ function LeftSide(props) {
         setType(event.target.value);
     };
 
-    const handleFilter = () => {
+    const handleFilter = (event) => {
         event.preventDefault();
-        const flt={
-            title:title,
-            coSupervisor:cosupervisor,
-            level:level,
-            type:type,
-            cds:props.user.cds,
-            expiration:date,
-            keywords:keywords,
-            groups:groups,
-            supervisor:supervisor
+      
+        if (props.user && cds) {
+          const flt = {
+            title: title,
+            coSupervisor: cosupervisor,
+            level: level,
+            type: type,
+            cds: cds,
+            expiration: date,
+            keywords: keywords,
+            groups: groups,
+            supervisor: supervisor
+          };
+      
+          setFilter(flt);
+          setClick(true);
+        } else {
+          console.error("User or cds is undefined.");
         }
-        setFilter(flt);
-        setClick(true);
-    };
+      };
 
     const handleReset = () => {
         event.preventDefault();
