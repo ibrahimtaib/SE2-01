@@ -605,10 +605,6 @@ module.exports = {
       throw new Error("An error occurred while filtering proposals");
     }
   },
-<<<<<<< HEAD
-  
-  
-=======
 
   getApplicationsBySupervisorId: async (teacherId) => {
     return new Promise((resolve, reject) =>
@@ -667,5 +663,4 @@ module.exports = {
       })
   );
 },
->>>>>>> merge
 };

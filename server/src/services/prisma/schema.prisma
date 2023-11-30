@@ -78,7 +78,7 @@ model Proposal {
   id                Int           @id @default(autoincrement())
   title             String
   supervisor        String
-  coSupervisors     String[]
+  coSupervisors     String
   keywords          String[]
   applications      Application[]
   type              String
