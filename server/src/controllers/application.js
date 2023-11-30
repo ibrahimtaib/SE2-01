@@ -56,6 +56,7 @@ module.exports = {
         }
 
         // Check student is suitable
+        console.log(student.COD_DEGREE, proposal.cds);
         if (student.COD_DEGREE !== proposal.cds) {
           return reject({
             status: 400,

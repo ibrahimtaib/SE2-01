@@ -36,8 +36,6 @@ export const getUserInfo = async () => {
     });
 
     const userInfo = response.data;
-    console.log(userInfo);
-
     return userInfo;
   } catch (error) {
     throw error;
@@ -54,6 +52,15 @@ export const logout = async () => {
   }
 };
 
+export const addPageUpdate = async (proposal) => {
+  try {
+    const response = await api.post('/proposals/update', proposal);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addApplication = async (application) => {
   try {
     const response = await api.post("/applications/", application);
@@ -62,14 +69,14 @@ export const addApplication = async (application) => {
     throw error;
   }
 }
-const applicationApi = {
-  addApplication: async (application) => {
-    const response = await api.post("/applications/", application);
-    if (response.status === 500) {
-      throw new Error("Internal Server Error");
-    }
-    return response;
-  },
+
+export const sendMail = async (applicationId, studentDetails, action) => {
+  try {
+    const response = await api.post('/notifications/send-email', {applicationId, student : studentDetails, action});
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default api;

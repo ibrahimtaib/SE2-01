@@ -5,27 +5,28 @@ const { resolve } = require("path");
 module.exports = {
 
   createProposal: async (body) => {
-    const {title, supervisor, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree} = body;
+    const { title, supervisor, coSupervisors, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree } = body;
     return new Promise((resolve, reject) =>
-        prisma.Proposal.create({
-        data:{
-            title, 
-            supervisor,
-            keywords, 
-            type, 
-            groups, 
-            description, 
-            notes, 
-            expiration,
-            level,
-            cds,
-            teacher,
-            requiredKnowledge,
-            degree
-           }
-        })
+      prisma.Proposal.create({
+        data: {
+          title,
+          supervisor,
+          coSupervisors,
+          keywords,
+          type,
+          groups,
+          description,
+          notes,
+          expiration,
+          level,
+          cds,
+          teacher,
+          requiredKnowledge,
+          degree
+        }
+      })
         .then((proposal) => {
-            return resolve(proposal);
+          return resolve(proposal);
         })
         .catch((error) => {
           console.error(error);
@@ -100,8 +101,10 @@ module.exports = {
           teacher: {
             select: {
               surname: true,
+              name: true,
+              id: true,
             }
-          },  
+          },
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -109,17 +112,17 @@ module.exports = {
           },
         },
       })
-      .then((proposals) => {
-        resolve(proposals);
-      })
-      .catch(() => {
-        return reject({
-          error: "An error occurred while querying the database",
-        });
-      })
+        .then((proposals) => {
+          resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database",
+          });
+        })
     });
   },
-  
+
 
 
 
@@ -213,7 +216,7 @@ module.exports = {
             select: {
               surname: true,
             }
-          },  
+          },
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -418,7 +421,7 @@ module.exports = {
               select: {
                 surname: true,
               }
-            },  
+            },
             degree: {
               select: {
                 TITLE_DEGREE: true,
@@ -602,6 +605,67 @@ module.exports = {
       throw new Error("An error occurred while filtering proposals");
     }
   },
+<<<<<<< HEAD
   
   
+=======
+
+  getApplicationsBySupervisorId: async (teacherId) => {
+    return new Promise((resolve, reject) =>
+      prisma.Application
+        .findMany({
+          where: {
+            proposal: {
+              supervisor: {
+                id: teacherId,
+              },
+            },
+          },
+        })
+        .then((applications) => {
+          return resolve(applications);
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database for applications",
+          });
+        })
+    );
+  },
+
+  //for updating proposals
+  updateProposal: async (body) => {
+    const { id, title, supervisor, keywords, type, groups, description, notes, expiration, level, cds, teacher, requiredKnowledge, degree } = body;
+    return new Promise((resolve, reject) =>
+      prisma.Proposal.update({
+        where: { id : id },
+        data: {
+          title,
+          supervisor,
+          keywords,
+          type,
+          groups,
+          description,
+          notes,
+          expiration,
+          level,
+          cds,
+          teacher,
+          requiredKnowledge,
+          degree
+        }
+      })
+        .then((proposal) => {
+          return resolve(proposal);
+      })
+      .catch((error) => {
+        console.error(error);
+        return reject({
+          error: "An error occurred while updating proposal",
+        });
+      })
+  );
+},
+>>>>>>> merge
 };
