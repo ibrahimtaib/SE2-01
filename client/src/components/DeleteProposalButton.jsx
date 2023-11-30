@@ -28,6 +28,7 @@ function DeleteProposalButton({proposal}) {
 
   const handleNavigate = async () => {
     //TODO refresh page
+    modalClose();
   }
  
 	function modalClose() {
