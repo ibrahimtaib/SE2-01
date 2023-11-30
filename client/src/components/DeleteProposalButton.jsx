@@ -41,7 +41,7 @@ function DeleteProposalButton({proposal}) {
     setAlertBody("Are you sure you want to delete this proposal?");
 	}
 	return (
-		<div>
+		<>
 		<Button variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
 
 		<Modal animation={false} {...backdrop} show={showAlert} onHide={modalClose}>
@@ -63,7 +63,7 @@ function DeleteProposalButton({proposal}) {
      
 		</Modal.Footer>  
 		</Modal>  
-		</div>
+		</>
 	);
 }
 
