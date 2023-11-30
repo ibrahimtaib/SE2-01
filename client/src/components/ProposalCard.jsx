@@ -46,11 +46,10 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
             </Button>
           ) : (
             <>
-              <DeleteProposalButton proposal={proposal}/>
+              
               <Button
                 style={{
                   borderColor: "#1a365d",
-                  marginRight: "10px",
                   marginLeft: "10px",
                 }}
                 onClick={() => {
@@ -81,6 +80,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     style={{
                       backgroundColor: "#1a365d",
                       color: "#fff",
+                      marginLeft: "10px",
                     }}
                     onClick={() => {
                       setUpdate(true);
@@ -104,6 +104,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     variant="">
                     Update
                   </Button>
+                  <DeleteProposalButton proposal={proposal}/>
                 </>
               ) : ''}
             </>
