@@ -13,15 +13,13 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import LogoutPage from "./pages/LogoutPage";
 import CallbackLogin from "./components/CallbackLogin";
-
-
-import './App.css';
-
-
 import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
+import StudentApplicationsPage from './pages/StudentApplicationsPage';
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
+import './App.css';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -75,7 +73,7 @@ function App() {
       }
     };
     init();
-  }, [user]);
+  }, []);
 
   if(loading){
     return (<LoadingSpinner />);
@@ -88,6 +86,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
         <Route path="/*" element={<DefaultRoute />} />
+        <Route path="/student/applications" element={<StudentApplicationsPage user={user}/>} />
         <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
         <Route
           path="/"

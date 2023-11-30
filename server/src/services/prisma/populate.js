@@ -1,4 +1,3 @@
-const { PrismaClient } = require("@prisma/client");
 const faker = require("faker");
 
 const prisma = require("../../controllers/prisma");
@@ -116,5 +115,7 @@ async function populateDatabase() {
     console.log("Database populated successfully!");
   });
 }
+
+populateDatabase();
 
 module.exports = populateDatabase;
