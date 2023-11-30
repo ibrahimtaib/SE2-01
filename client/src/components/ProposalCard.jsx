@@ -26,10 +26,10 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
           {proposal.Groups.map((group, index) => (
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
           ))}
-          <br/><b>Type</b>: {props.proposal.Type}
-          <br/><b>Cds</b>: {props.proposal.titleDegree}
-          <br/><b>Notes</b>: {props.proposal.Notes}
-          <br/><b>Required Knowledge</b>: {props.proposal.RequiredKnowledge}
+          <br/><b>Type</b>: {proposal.Type}
+          <br/><b>Cds</b>: {proposal.titleDegree}
+          <br/><b>Notes</b>: {proposal.Notes}
+          <br/><b>Required Knowledge</b>: {proposal.RequiredKnowledge}
         </Card.Text>
         <div className="d-flex justify-content-between">
           <Button variant="outline-secondary" onClick={toggleVisibility}>
