@@ -209,6 +209,7 @@ module.exports = {
             } else {
               proposal.deletable = true;
             }
+            delete proposal.applications;
           });
 
           resolve(proposals);
