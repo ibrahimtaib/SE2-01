@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from 'react-router-dom';
+import DeleteProposalButton from './DeleteProposalButton';
 
 function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -36,7 +37,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
           </Button>
-          <div id='buttons'>
+          <div id='buttons' className=''>
           {user.role === "student" ? (
             <Button
               onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
@@ -45,6 +46,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
             </Button>
           ) : (
             <>
+              <DeleteProposalButton proposal={proposal}/>
               <Button
                 onClick={() => {
                   setUpdate(false);
