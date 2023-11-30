@@ -188,8 +188,12 @@ router.post("/update", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
 
+  if (isNaN(id)) {
+    res.status(400).json({ status: 400, error: "Wrong Id format" });
+    return;
+  }
   proposalsController
-    .deleteProposal(id)
+    .deleteProposal(+id)
     .then((message) => res.status(message.status).json(message))
     .catch((error) => res.status(error.status).json(error));
 });

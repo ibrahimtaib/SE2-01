@@ -114,6 +114,7 @@ module.exports = {
           message: "Operation successful!",
         });
       } catch (error) {
+        console.error(error);
         return reject({
           status: 500,
           error: "An error occurred while deleting the proposal",
