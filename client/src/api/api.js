@@ -74,15 +74,6 @@ export const addPageUpdate = async (proposal) => {
   }
 };
 
-export const addApplication = async (application) => {
-  try {
-    const response = await api.post("/applications/", application);
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const sendMail = async (applicationId, studentDetails, action) => {
   try {
     const response = await api.post("/notifications/send-email", {

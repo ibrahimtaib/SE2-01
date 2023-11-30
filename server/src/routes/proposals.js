@@ -185,4 +185,13 @@ router.post("/update", async (req, res) => {
     .catch((error) => res.status(500).json(error));
 });
 
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+
+  proposalsController
+    .deleteProposal(id)
+    .then((message) => res.status(message.status).json(message))
+    .catch((error) => res.status(error.status).json(error));
+});
+
 module.exports = router;
