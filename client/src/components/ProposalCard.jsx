@@ -37,7 +37,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
           </Button>
-          <div id='buttons' className=''>
+          <div id='buttons' >
           {user.role === "student" ? (
             <Button
               onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
@@ -46,8 +46,12 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
             </Button>
           ) : (
             <>
-              <DeleteProposalButton proposal={proposal}/>
+              
               <Button
+                style={{
+                  borderColor: "#1a365d",
+                  marginLeft: "10px",
+                }}
                 onClick={() => {
                   setUpdate(false);
                   setProposalToInsert({
@@ -76,6 +80,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     style={{
                       backgroundColor: "#1a365d",
                       color: "#fff",
+                      marginLeft: "10px",
                     }}
                     onClick={() => {
                       setUpdate(true);
@@ -99,6 +104,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     variant="">
                     Update
                   </Button>
+                  <DeleteProposalButton proposal={proposal}/>
                 </>
               ) : ''}
             </>

@@ -42,7 +42,7 @@ function DeleteProposalButton({proposal}) {
 	}
 	return (
 		<>
-		<Button variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
+		<Button style={{marginLeft : "10px"}} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
 
 		<Modal animation={false} {...backdrop} show={showAlert} onHide={modalClose}>
 		<Modal.Header closeButton>  
