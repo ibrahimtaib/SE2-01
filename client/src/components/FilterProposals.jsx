@@ -16,6 +16,7 @@ function FilterProposals(props) {
     const allFilters = { title: true, supervisor: true, cosupervisor: true, cds: true, keywords: true, groups: true, level: true, type: true, date: true, };
 
     let disabledFilters = {};
+    
     let visibleFilters = {};
 
     if (props.user.role === "teacher") {
