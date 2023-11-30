@@ -10,6 +10,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import API from '../API';
 import ProposalCard from './ProposalCard';
+import { Alert } from 'react-bootstrap';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function FilterProposals(props) {
     //console.log("FilterProposals", props.ProposalsList)
@@ -17,7 +19,7 @@ function FilterProposals(props) {
         <Container fluid className="m-0">
             <Row className="h-100">
                 <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList}></RightSide></Col>
+                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -46,11 +48,11 @@ function LeftSide(props) {
 
     const [type, setType] = useState("");
 
-    const [date, setDate]= useState("");
+    const [date, setDate] = useState("");
 
     const [selectedDate, setSelectedDate] = useState("");
 
-    const [filter, setFilter]=useState([]);
+    const [filter, setFilter] = useState([]);
 
     useEffect(() => {
         if (clickReset) {
@@ -168,10 +170,10 @@ function LeftSide(props) {
                         props.setProposalsList(a)
                         setClick(false)
                     })
-                    .catch((err) => {
-                        console.log(err)
-                        setClick(false)
-                    });
+                        .catch((err) => {
+                            console.log(err)
+                            setClick(false)
+                        });
                 } catch (err) {
                     setClick(false)
                 }
@@ -249,13 +251,16 @@ function LeftSide(props) {
 
 
 function RightSide(props) {
+    const navigate = useNavigate();
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
-        return null; // O qualsiasi altra cosa vuoi restituire quando la lista è vuota
+        return <Alert variant="info" style={{ width: "100%" }}>
+            There are no proposals available at this moment. 
+        </Alert>;
     }
     return (
         <>
             {props.ProposalsList.map((proposal, index) => (
-                <ProposalCard user={props.user} key={index} proposal={proposal} />
+                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} />
             ))}
         </>
     );
@@ -269,12 +274,12 @@ const MyDatePicker = (props) => {
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
         return `${year}-${month}-${day}`;
-      };
+    };
     const handleDateChange = (date) => {
         props.setSelectedDate(date)
         props.setDate(formatDate(date))
     };
-    
+
     return (
         <>
             <br />

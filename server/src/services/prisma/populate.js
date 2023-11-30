@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const faker = require("faker");
-
+const { STATUS } = require("../../constants/application");
 const prisma = require("../../controllers/prisma");
 
 async function populateDatabase() {
@@ -100,11 +100,9 @@ async function populateDatabase() {
       Array.from({ length: 15 }).map(async () => {
         return prisma.application.create({
           data: {
-            status: faker.random.arrayElement([
-              "Pending",
-              "Approved",
-              "Rejected",
-            ]),
+            status: faker.random.arrayElement(
+              Array.from(Object.values(STATUS))
+            ),
             comment: faker.lorem.sentence(),
             STUDENT_ID: faker.random.arrayElement(students).id,
             PROPOSAL_ID: faker.random.arrayElement(proposals).id,
@@ -116,5 +114,6 @@ async function populateDatabase() {
     console.log("Database populated successfully!");
   });
 }
+(async () => await populateDatabase())();
 
 module.exports = populateDatabase;

@@ -1,29 +1,29 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from 'react-router-dom';
+import DeleteProposalButton from './DeleteProposalButton';
 
-function ProposalCard(props) {
+function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
   const [isVisible, setIsVisible] = useState(false);
   const navigateTo = useNavigate();
-
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
-  //FIXME: Why we have no name here?
+
   return (
     <Card className="text-left m-3">
-      <Card.Header>Prof. {props.proposal.Teacher}</Card.Header>
+      <Card.Header>{proposal.Name} {proposal.Teacher}</Card.Header>
       <Card.Body>
-        <Card.Title>{props.proposal.Title}</Card.Title>
+        <Card.Title>{proposal.Title}</Card.Title>
         <Card.Text>
-          {props.proposal.Description}
+          {proposal.Description}
         </Card.Text>
         <Card.Text className={isVisible ? '' : 'nascondi'}>
-          <br /><b>Level</b>: {props.proposal.Level}
-          {props.proposal.Groups.map((group, index) => (
+          <br /><b>Level</b>: {proposal.Level}
+          {proposal.Groups.map((group, index) => (
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
           ))}
           <br/><b>Type</b>: {props.proposal.Type}
@@ -35,18 +35,84 @@ function ProposalCard(props) {
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
           </Button>
-          {
-            props.user.role === "student" ? <Button
-              onClick={() => navigateTo(`/proposals/${props.proposal.id}/apply`)}
+          <div id='buttons' >
+          {user.role === "student" ? (
+            <Button
+              onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
               variant="success">
               Apply
-            </Button> : <></>
-          }
+            </Button>
+          ) : (
+            <>
+              
+              <Button
+                style={{
+                  borderColor: "#1a365d",
+                  marginLeft: "10px",
+                }}
+                onClick={() => {
+                  setUpdate(false);
+                  setProposalToInsert({
+                    id: proposal.id,
+                    title: proposal.Title,
+                    description: proposal.Description,
+                    expiration: proposal.date,
+                    coSupervisors: proposal.CoSupervisor,
+                    keywords: proposal.Keywords,
+                    degree: {
+                      COD_DEGREE: proposal.Cds
+                    },
+                    teacherID: proposal.teacherID,
+                    date: proposal.date,
+                    requiredKnowledge: proposal.RequiredKnowledge,
+                    notes: proposal.Notes
+                  });
+                  navigateTo(`/add`);
+                }}
+                variant="">
+                Copy
+              </Button>
+              {user.id === proposal.teacherID ? (
+                <>
+                  <Button
+                    style={{
+                      backgroundColor: "#1a365d",
+                      color: "#fff",
+                      marginLeft: "10px",
+                    }}
+                    onClick={() => {
+                      setUpdate(true);
+                      setProposalToInsert({
+                        id: proposal.id,
+                        title: proposal.Title,
+                        description: proposal.Description,
+                        expiration: proposal.date,
+                        coSupervisors: proposal.CoSupervisor,
+                        keywords: proposal.Keywords,
+                        degree: {
+                          COD_DEGREE: proposal.Cds
+                        },
+                        teacherID: proposal.teacherID,
+                        date: proposal.date,
+                        requiredKnowledge: proposal.RequiredKnowledge,
+                        notes: proposal.Notes
+                      });
+                      navigateTo(`/add`);
+                    }}
+                    variant="">
+                    Update
+                  </Button>
+                  <DeleteProposalButton proposal={proposal}/>
+                </>
+              ) : ''}
+            </>
+          )}
+          </div>
         </div>
       </Card.Body>
-      <Card.Footer className="text-muted">Expiration: {props.proposal.Expiration}</Card.Footer>
+      <Card.Footer className="text-muted">Expiration: {proposal.Expiration}</Card.Footer>
     </Card>
   );
 }
 
-export default ProposalCard
+export default ProposalCard;

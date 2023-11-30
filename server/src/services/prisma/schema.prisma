@@ -14,7 +14,7 @@ datasource db {
 //TODO should the COD_* be a string? ex: a course code is usually a combination
 // of letters and numbers
 model Teacher {
-  id             String        @id @unique
+  id             String     @id @unique
   surname        String
   name           String
   email          String
@@ -50,7 +50,7 @@ model Career {
 }
 
 model Student {
-  id              String           @id @unique
+  id              String        @id @unique
   surname         String
   name            String
   gender          String
@@ -69,16 +69,16 @@ model Application {
   status      String
   comment     String?
   STUDENT_ID  String
-  PROPOSAL_ID Int
+  PROPOSAL_ID Int?
   student     Student  @relation(fields: [STUDENT_ID], references: [id])
-  proposal    Proposal @relation(fields: [PROPOSAL_ID], references: [id])
+  proposal    Proposal? @relation(fields: [PROPOSAL_ID], references: [id])
 }
 
 model Proposal {
   id                Int           @id @default(autoincrement())
   title             String
   supervisor        String
-  coSupervisors     String?
+  coSupervisors     String[]
   keywords          String[]
   applications      Application[]
   type              String

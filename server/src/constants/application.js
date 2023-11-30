@@ -1,7 +1,7 @@
 module.exports = {
   STATUS: {
-    accepted: "accepted",
-    rejected: "rejected",
+    accepted: "accept",
+    rejected: "refuse",
     pending: "pending",
     canceled: "canceled",
   },
