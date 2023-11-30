@@ -59,7 +59,7 @@ function DeleteProposalButton({proposal}) {
 		<Modal.Footer>  
 		{!(deleting || succesfulDelete != null) && <Button variant="danger" onClick={() => handleDelete(proposal)}>Confirm</Button> } 
 		{!(deleting || succesfulDelete === true) && <Button variant="secondary" onClick={modalClose}>Cancel</Button>} 
-		{(succesfulDelete && !deleting) && <Button variant="primary" onClick={handleNavigate}>Close</Button> } 
+		{(succesfulDelete && !deleting) && <Button variant="primary" disabled={!proposal.deletable} onClick={handleNavigate}>Close</Button> } 
      
 		</Modal.Footer>  
 		</Modal>  
