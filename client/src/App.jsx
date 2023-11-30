@@ -22,6 +22,7 @@ import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
+import StudentApplicationsPage from "./pages/StudentApplicationsPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -53,6 +54,15 @@ function App() {
         try {
           const proposals = await API.getAllProposals();
           setProposalsList(proposals);
+
+          if (userInfo.role === 'teacher') {
+            const teacherId = userInfo.id;
+            const teacherProposals = await API.getTeacherProposals(teacherId);
+            setProposalsList(teacherProposals);
+          } else {
+            const proposals = await API.getProposalsByCds(userInfo.cds);
+            setProposalsList(proposals);
+          }
           setLoading(false);
         } catch (proposalError) {
           console.error("Error fetching proposals:", proposalError);
@@ -78,6 +88,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
         <Route path="/*" element={<DefaultRoute />} />
+        <Route path="/student/applications" element={<StudentApplicationsPage user={user}/>} />
         <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
         <Route
           path="/"

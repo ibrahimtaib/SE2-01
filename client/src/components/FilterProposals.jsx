@@ -38,8 +38,6 @@ function LeftSide(props) {
 
     const [clickReset, setClickReset] = useState(false);
 
-    const [cdsList, setCdsList] = useState([]);
-
     const [typeList, setTypeList] = useState([]);
 
     const [levelList, setLevelList] = useState([]);
@@ -58,7 +56,7 @@ function LeftSide(props) {
         if (clickReset) {
             const init = async () => {
                 try {
-                    API.getAllProposals().then((a) => {
+                    API.getProposalsByCds(props.user.cds).then((a) => {
                         props.setProposalsList(a)
                         setClickReset(false);
                     })
@@ -73,23 +71,34 @@ function LeftSide(props) {
 
     useEffect(() => {
         const init = async () => {
-            API.getAllProposals().then((a) => {
-                props.setProposalsList(a)
-                setClickReset(false);
-            })
-                .catch((err) => console.log(err));
-
-            API.getAllTypes().then((a) => {
-                setTypeList(a)
-            }).catch((err) => console.log(err));
-            
-            API.getAllLevels().then((a) => {
-                setLevelList(a)
-            }).catch((err) => console.log(err));
-            
+          if (props.user && props.user.cds) {
+            try {
+              const proposals = await API.getProposalsByCds(props.user.cds);
+              props.setProposalsList(proposals);
+              setClickReset(false);
+            } catch (err) {
+              console.error(err);
+            }
+          }
+      
+          try {
+            const types = await API.getAllTypes();
+            setTypeList(types);
+          } catch (err) {
+            console.error(err);
+          }
+      
+          try {
+            const levels = await API.getAllLevels();
+            setLevelList(levels);
+          } catch (err) {
+            console.error(err);
+          }
         };
+      
         init();
-    }, []);
+      }, [props.user]);  
+      
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -119,10 +128,6 @@ function LeftSide(props) {
         setType(event.target.value);
     };
 
-    const handleCdsSelectedChange = (event) => {
-        setCds(event.target.value);
-    };
-
     const handleFilter = () => {
         event.preventDefault();
         const flt={
@@ -130,7 +135,7 @@ function LeftSide(props) {
             coSupervisor:cosupervisor,
             level:level,
             type:type,
-            cds:cds,
+            cds:props.user.cds,
             expiration:date,
             keywords:keywords,
             groups:groups,
@@ -148,7 +153,6 @@ function LeftSide(props) {
         setKeywords("");
         setGroups("");
         setLevel("");
-        setCds("");
         setType("");
         setDate("");
         setSelectedDate(null); // Imposta il DatePicker a vuoto

@@ -149,11 +149,7 @@ module.exports = {
 
   getApplicationsDecisionsByStudentId: async (studentId) => {
     try {
-      const studentIdInt = parseInt(studentId, 10);
-  
-      if (isNaN(studentIdInt)) {
-        throw { error: "Invalid studentId provided" };
-      }
+      const studentIdInt = studentId;
   
       const applications = await prisma.Application.findMany({
         where: {

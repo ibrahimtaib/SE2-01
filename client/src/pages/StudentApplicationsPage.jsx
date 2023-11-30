@@ -14,7 +14,7 @@ function StudentApplicationsPage({user }) {
     useEffect(() => {
         const init = async () => {
             try {
-                API.getApplicationsByStudentId(1).then((a) => {
+                API.getApplicationsByStudentId(user.id).then((a) => {
                     setApplicationList(a)
                 })
                     .catch((err) => console.log(err));
