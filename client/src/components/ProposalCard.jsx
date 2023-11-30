@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from 'react-router-dom';
+import DeleteProposalButton from './DeleteProposalButton';
 
 function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,18 +26,16 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
           {proposal.Groups.map((group, index) => (
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
           ))}
-          <br /><b>Type</b>: {proposal.Type}
-          <br /><b>Degree</b>: {proposal.titleDegree}
-          <br /><b>Notes:</b> {proposal.Notes ? proposal.Notes : "None"}
-          <br /><b>Required Knowledge</b>: {proposal.RequiredKnowledge}
-          <br /><b>Co-Supervisors:</b> {proposal.CoSupervisor.length > 0 ? proposal.CoSupervisor.join(', ') : 'None'}
-          <br /><b>Keywords:</b> {proposal.Keywords.length > 0 ? proposal.Keywords.join(', ') : 'None'}
+          <br/><b>Type</b>: {proposal.Type}
+          <br/><b>Cds</b>: {proposal.titleDegree}
+          <br/><b>Notes</b>: {proposal.Notes}
+          <br/><b>Required Knowledge</b>: {proposal.RequiredKnowledge}
         </Card.Text>
         <div className="d-flex justify-content-between">
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
           </Button>
-          <div id='buttons'>
+          <div id='buttons' >
           {user.role === "student" ? (
             <Button
               onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
@@ -45,7 +44,12 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
             </Button>
           ) : (
             <>
+              
               <Button
+                style={{
+                  borderColor: "#1a365d",
+                  marginLeft: "10px",
+                }}
                 onClick={() => {
                   setUpdate(false);
                   setProposalToInsert({
@@ -74,6 +78,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     style={{
                       backgroundColor: "#1a365d",
                       color: "#fff",
+                      marginLeft: "10px",
                     }}
                     onClick={() => {
                       setUpdate(true);
@@ -97,6 +102,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                     variant="">
                     Update
                   </Button>
+                  <DeleteProposalButton proposal={proposal}/>
                 </>
               ) : ''}
             </>

@@ -22,7 +22,9 @@ router.get("/cds", async (req, res) => {
 });
 
 router.get("/types", async (req, res) => {
-  proposalsController.getAllTypes().then((typeList) => {
+  proposalsController
+    .getAllTypes()
+    .then((typeList) => {
       res.status(200).json(typeList);
     })
     .catch((error) => res.status(500).json(error));
@@ -50,7 +52,9 @@ router.get("/title/:searchString", async (req, res) => {
   const searchString = req.params.searchString;
 
   try {
-    const proposals = await proposalsController.getProposalsByTitle(searchString);
+    const proposals = await proposalsController.getProposalsByTitle(
+      searchString
+    );
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
@@ -62,7 +66,9 @@ router.get("/cosupervisor/:surname", async (req, res) => {
   const surname = req.params.surname;
 
   try {
-    const proposals = await proposalsController.getProposalsByCosupervisor(surname);
+    const proposals = await proposalsController.getProposalsByCosupervisor(
+      surname
+    );
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
@@ -74,7 +80,9 @@ router.get("/supervisor/:surname", async (req, res) => {
   const surname = req.params.surname;
 
   try {
-    const proposals = await proposalsController.getProposalsBySupervisor(surname);
+    const proposals = await proposalsController.getProposalsBySupervisor(
+      surname
+    );
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
@@ -98,7 +106,9 @@ router.get("/teacher/:teacherId", async (req, res) => {
 router.get("/keywords/:keywords", async (req, res) => {
   const keywords = req.params.keywords;
   try {
-    const proposals = await proposalsController.getProposalsByKeywords(keywords);
+    const proposals = await proposalsController.getProposalsByKeywords(
+      keywords
+    );
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
@@ -133,7 +143,9 @@ router.get("/expiration/:date", async (req, res) => {
   const date = req.params.date;
 
   try {
-    const proposals = await proposalsController.getProposalsByExpirationDate(date);
+    const proposals = await proposalsController.getProposalsByExpirationDate(
+      date
+    );
     res.status(200).json(proposals);
   } catch (error) {
     console.error(error);
@@ -154,39 +166,50 @@ router.get("/level/:level", async (req, res) => {
 });
 
 router.get("/cds/:cds", async (req, res) => {
-    const cds = req.params.cds;
-    try {
-      const proposals = await proposalsController.getProposalsByCDS(cds);
-      res.status(200).json(proposals);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+  const cds = req.params.cds;
+  try {
+    const proposals = await proposalsController.getProposalsByCDS(cds);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-  router.post("/filter", async (req, res) => { 
-    const filters = req.body.filters; 
-    try {
-      const filteredProposals = await proposalsController.filterProposals(filters);
-      res.status(200).json(filteredProposals);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
+router.post("/filter", async (req, res) => {
+  const filters = req.body.filters;
+  try {
+    const filteredProposals = await proposalsController.filterProposals(
+      filters
+    );
+    res.status(200).json(filteredProposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-  //update proposals
-  router.post("/update", async (req, res) => {
-    proposalsController
-      .updateProposal(req.body)
-      .then((proposal) => {
-        res.status(200).json(proposal);
-      })
-      .catch((error) => res.status(500).json(error));
-  });
-  
-  
+//update proposals
+router.post("/update", async (req, res) => {
+  proposalsController
+    .updateProposal(req.body)
+    .then((proposal) => {
+      res.status(200).json(proposal);
+    })
+    .catch((error) => res.status(500).json(error));
+});
 
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
 
+  if (isNaN(id)) {
+    res.status(400).json({ status: 400, error: "Wrong Id format" });
+    return;
+  }
+  proposalsController
+    .deleteProposal(+id)
+    .then((message) => res.status(message.status).json(message))
+    .catch((error) => res.status(error.status).json(error));
+});
 
 module.exports = router;

@@ -18,8 +18,6 @@ import StudentDetailsPage from "./pages/StudentDetailsPage";
 import StudentApplicationsPage from './pages/StudentApplicationsPage';
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
-import './App.css';
-
 
 function App() {
 
@@ -80,7 +78,6 @@ function App() {
             const proposals = await API.getProposalsByCds(userInfo.cds);
             setProposalsList(proposals);
           }
-
           setLoading(false);
         } catch (proposalError) {
           console.error("Error fetching proposals:", proposalError);

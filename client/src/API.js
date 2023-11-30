@@ -26,6 +26,7 @@ async function getAllProposals() {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable
     }));
   } else {
     throw proposals;
@@ -323,6 +324,7 @@ async function filterProposals(data) {
         RequiredKnowledge: e.requiredKnowledge,
         Teacher: e.teacher.surname,
         titleDegree: e.degree.TITLE_DEGREE,
+        deletable: e.deletable
       }));
     } else {
       throw new Error("Failed to submit proposal");
@@ -471,6 +473,17 @@ async function getUserInfo() {
   }
 }
 
+async function getApplicationsByStudentId(id) {
+  const response = await fetch(`${URL}applications/decisions/${id}`);
+  const data = await response.json();
+
+  if (response.ok) {
+    return data;
+  } else {
+    throw new Error(data.error || "Failed to fetch proposal");
+  }
+}
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -492,6 +505,7 @@ const API = {
   acceptApplication,
   refuseApplication,
   getUserInfo,
-  getTeacherProposals
+  getApplicationsByStudentId,
+  getTeacherProposals,
 };
 export default API;

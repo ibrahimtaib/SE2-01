@@ -61,6 +61,41 @@ router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
       res.status(error?.status !== undefined ? error.status : 500).json(error);
     });
 });
+router.get("/decisions/:studentId/", async (req, res) => {
+  const studentId = req.params.studentId;
+
+  try {
+    const applications = await applicationsController.getApplicationsDecisionsByStudentId(studentId);
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
+  const PROPOSAL_ID = req.params.proposalId;
+  const STUDENT_ID = req.params.studentId;
+
+  if (isNaN(PROPOSAL_ID)) {
+    return res.status(400).json({
+      error: "Invalid proposal id",
+    });
+  }
+  applicationController
+    .getStudentApplication({
+      PROPOSAL_ID: +PROPOSAL_ID,
+      STUDENT_ID: STUDENT_ID,
+    })
+    .then((applications) => {
+      res.status(200).json(applications);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error?.status !== undefined ? error.status : 500).json(error);
+    });
+});
 
 router.get("/proposal/:proposalId", async (req, res) => {
   const proposalId = req.params.proposalId;

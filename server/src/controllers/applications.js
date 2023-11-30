@@ -146,4 +146,29 @@ module.exports = {
     throw new Error('An error occurred while rejecting pending applications for the proposal');
     }
     },
+
+  getApplicationsDecisionsByStudentId: async (studentId) => {
+    try {
+      const studentIdInt = studentId;
+  
+      const applications = await prisma.Application.findMany({
+        where: {
+          STUDENT_ID: studentIdInt,
+        },
+        include: {
+          proposal: {
+            include: {
+                teacher: true,
+                degree: true,
+            },
+        },
+        },
+      });
+  
+      return applications;
+    } catch (error) {
+      console.error("Error in getApplicationsDecisionsByStudentId:", error);
+      throw { error: "An error occurred while querying the database" };
+    }
+  }  
 }
