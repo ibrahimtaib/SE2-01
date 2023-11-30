@@ -46,8 +46,6 @@ function LeftSide(props) {
 
     const [level, setLevel] = useState("");
 
-    const [cds, setCds] = useState("");
-
     const [type, setType] = useState("");
 
     const [date, setDate]= useState("");
@@ -75,10 +73,6 @@ function LeftSide(props) {
 
     useEffect(() => {
         const init = async () => {
-            API.getAllCds().then((a) => {
-                setCdsList(a)
-            }).catch((err) => console.log(err));
-
             API.getAllProposals().then((a) => {
                 props.setProposalsList(a)
                 setClickReset(false);
@@ -223,17 +217,6 @@ function LeftSide(props) {
                     </Form.Select>
 
 
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by CDS</Form.Label>
-                    <Form.Select name="cds" value={cds} onChange={handleCdsSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
-                        {cdsList.map((proposal, index) => (
-                            <option key={index} value={proposal.cod}>
-                                {proposal.title}
-                            </option>
-                        ))}
-                    </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Type</Form.Label>

@@ -28,7 +28,7 @@ function ProposalCard(props) {
           ))}
           <br/><b>Type</b>: {props.proposal.Type}
           <br/><b>Cds</b>: {props.proposal.titleDegree}
-          <br/><b>Notes:</b>: {props.proposal.Notes}
+          <br/><b>Notes</b>: {props.proposal.Notes}
           <br/><b>Required Knowledge</b>: {props.proposal.RequiredKnowledge}
         </Card.Text>
         <div className="d-flex justify-content-between">
