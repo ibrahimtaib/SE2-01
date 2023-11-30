@@ -42,7 +42,7 @@ function DeleteProposalButton({proposal}) {
 	}
 	return (
 		<>
-		<Button style={{marginLeft : "10px"}} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
+		<Button style={{marginLeft : "10px"}} disabled={!proposal.deletable} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
 
 		<Modal animation={false} {...backdrop} show={showAlert} onHide={modalClose}>
 		<Modal.Header closeButton>  
@@ -57,7 +57,7 @@ function DeleteProposalButton({proposal}) {
 		</Modal.Body>  
 
 		<Modal.Footer>  
-		{!(deleting || succesfulDelete != null) && <Button variant="danger" disabled={!proposal.deletable} onClick={() => handleDelete(proposal)}>Confirm</Button> } 
+		{!(deleting || succesfulDelete != null) && <Button variant="danger" onClick={() => handleDelete(proposal)}>Confirm</Button> } 
 		{!(deleting || succesfulDelete === true) && <Button variant="secondary" onClick={modalClose}>Cancel</Button>} 
 		{(succesfulDelete && !deleting) && <Button variant="primary" onClick={handleNavigate}>Close</Button> } 
      
