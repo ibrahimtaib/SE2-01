@@ -197,11 +197,6 @@ module.exports = {
               status: STATUS.accepted,
             },
           },
-          applications: {
-            where: {
-              status: STATUS.accepted,
-            },
-          },
         },
       })
         .then((proposals) => {
@@ -214,7 +209,6 @@ module.exports = {
             } else {
               proposal.deletable = true;
             }
-            delete proposal.applications;
           });
 
           resolve(proposals);

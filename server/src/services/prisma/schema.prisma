@@ -69,9 +69,9 @@ model Application {
   status      String
   comment     String?
   STUDENT_ID  String
-  PROPOSAL_ID Int
+  PROPOSAL_ID Int?
   student     Student  @relation(fields: [STUDENT_ID], references: [id])
-  proposal    Proposal @relation(fields: [PROPOSAL_ID], references: [id])
+  proposal    Proposal? @relation(fields: [PROPOSAL_ID], references: [id])
 }
 
 model Proposal {
