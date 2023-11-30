@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useNavigate } from 'react-router-dom';
 
-function NavBar({ user }) {
+function NavBar({ user , resetProposal }) {
   const navigateTo = useNavigate();
   return (
     <Navbar style={{ backgroundColor : "rgb(252, 122, 8)"}} className="sticky-top" expand="sm" variant="dark">
@@ -30,14 +30,17 @@ function NavBar({ user }) {
             variant="outline-light"
             className="mr-3"
             style={{ marginRight: '10px' }}
-            onClick={() => navigateTo('/add')}
+            onClick={() => {
+              resetProposal()
+              navigateTo('/add');
+            }}
           >Add proposal</Button> : <></>}
           
           <Button
             variant="outline-light"
             className="mr-3"
             style={{ marginRight: '10px' }}
-            onClick={() => window.location.href = "/"}
+            onClick={() => window.location.href = "/logout"}
           >Log out</Button>
         </>
       ) : (
