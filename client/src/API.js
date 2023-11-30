@@ -26,6 +26,7 @@ async function getAllProposals() {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable
     }));
   } else {
     throw proposals;
@@ -323,6 +324,7 @@ async function filterProposals(data) {
         RequiredKnowledge: e.requiredKnowledge,
         Teacher: e.teacher.surname,
         titleDegree: e.degree.TITLE_DEGREE,
+        deletable: e.deletable
       }));
     } else {
       throw new Error("Failed to submit proposal");

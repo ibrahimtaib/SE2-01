@@ -3,7 +3,6 @@ const {
   createProposal,
   updateProposal
 } = require("../src/controllers/proposals.js");
-//
 const prisma = require("../src/controllers/prisma.js");
 
 // Mocking PrismaClient
@@ -21,27 +20,34 @@ beforeEach(() => {
 
 describe("getProposals", () => {
   test("should return empty list if there are no propsals", async () => {
-    const mockProposal = {
-      title: "test",
-      supervisor: "ikhan",
-      keywords: [],
-      type: "ikhan",
-      groups: "ikhana",
-      description: "iji",
-      notes: "tamara",
-      expiration: "iui",
-      level: "ihk",
-      cds: "ijji",
-      teacher: "ihi",
-      requiredKnowledge: "uytu",
-      degree: "er",
-    };
+    const mockProposal = [
+      {
+        title: "test",
+        supervisor: "ikhan",
+        keywords: [],
+        type: "ikhan",
+        groups: "ikhana",
+        description: "iji",
+        notes: "tamara",
+        expiration: "iui",
+        level: "ihk",
+        cds: "ijji",
+        applications: [],
+        teacher: "ihi",
+        requiredKnowledge: "uytu",
+        degree: "er",
+        applications: [],
+      },
+    ];
+    const mockResponse = [
+      { ...mockProposal[0], applications: undefined, deletable: true },
+    ];
     prisma.Proposal.findMany.mockResolvedValue(mockProposal);
 
     const response = await getProposals();
 
     expect(prisma.Proposal.findMany).toHaveBeenCalled();
-    expect(response).toEqual(mockProposal);
+    expect(response).toEqual(mockResponse);
   });
 });
 
