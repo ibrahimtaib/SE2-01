@@ -6,11 +6,11 @@ TEMPLATE FOR RETROSPECTIVE (Team 01)
 ### Macro statistics
 
 - Number of stories committed: 7
-  Number of stories done: 7
+- Number of stories done: 7
 - Total points committed: 27
-  Total points done: 27
+- Total points done: 27
 - Nr of hours planned: 116h 45m
-  Nr of hours spent: 116h 15m
+- Nr of hours spent: 116h 15m
 
 ### Detailed statistics
 
@@ -33,11 +33,11 @@ TEMPLATE FOR RETROSPECTIVE (Team 01)
 - _#7_ : Update Proposal
 
 - Hours per task average:
-    estimate: 2h40m
-    actual: 2h20m
-  Standard deviation
-    estimate: 3.30
-    actual: 4.21
+    - estimate: 2h40m
+    - actual: 2h20m
+- Standard deviation
+    - estimate: 3.30
+    -actual: 4.21
 - Total task estimation error ratio: [4.21 / 3.30] - 1 = 0.27
 
   
