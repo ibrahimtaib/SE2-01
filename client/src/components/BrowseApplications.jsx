@@ -57,7 +57,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   const handleAccept = async () => {
     try {
       await onAccept(application.application.id);
-      await sendMail(application.application.id, application.student, 'accept')
+      await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept')
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +66,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   const handleReject = async () => {
     try {
       await onReject(application.application.id);
-      await sendMail(application.application.id, application.student, 'accept')
+      await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept')
     } catch (error) {
       console.error(error);
     }
