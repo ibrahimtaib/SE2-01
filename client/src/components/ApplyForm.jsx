@@ -1,13 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
+import { Alert, Modal, Spinner } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { addApplication } from '../api/api.js';
+import { addApplication, sendMail } from '../api/api.js';
 import './ApplyForm.css';
 import DismissableAlert from './DismissableAlert.jsx';
 
 function ApplyForm({proposal, user}) {
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const navigateTo = useNavigate();
   const { register, handleSubmit, formState } = useForm();
   const [showAlert, setShowAlert] = useState(false);
@@ -15,20 +18,28 @@ function ApplyForm({proposal, user}) {
 
 
   const onSubmit = async (data) => {
+    setLoading(true);
     addApplication({
       STUDENT_ID: user?.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.status === 200 || res.status === 201)
       {
-        navigateTo("/");
+        const student = {name: user.name.split(' ')[0], surname: user.name.split(' ')[1], email: user.email}
+        await sendMail(proposal.title, student, proposal.teacher, 'apply')
+        setSubmitted(true);
       }
       setMessageAlert(res.data.error);
       setShowAlert(true);
+    }).then(async() => {
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setLoading(false);
+      navigateTo("/");
     }).catch(() => {
       setMessageAlert("There was an error while submitting your application, please try again in a few moments.")
       setShowAlert(true)
+      setLoading(false);
     })
   };
 
@@ -59,6 +70,16 @@ function ApplyForm({proposal, user}) {
       >Submit Application
       </Button>
     </div>
+    <Modal show={loading} onHide={() => {}}>
+      <Modal.Body>
+        {submitted?  <Alert className='w-100' variant='success'> Submitted  successfully </Alert>
+        :<div className="d-flex justify-content-center align-items-center">
+          <p className='text-primary px-2 m-0' >Submitting your application</p>
+
+          <Spinner animation="border" variant="primary" size="sm"/>
+        </div>}
+      </Modal.Body>
+    </Modal>
     </>
   );
 }

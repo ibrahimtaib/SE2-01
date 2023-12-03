@@ -21,4 +21,23 @@ module.exports = {
         })
     );
   },
+  getTeachersById: async (id) => {
+    return new Promise((resolve, reject) =>
+      prisma.Teacher
+        .findUnique({
+          where: {
+            id: id,
+          },
+        })
+        .then((teacher) => {
+          return resolve(teacher);
+        })
+        .catch((error) => {
+          console.error(error);
+          return reject({
+            error: "An error occurred while querying the database for teachers",
+          });
+        })
+    );
+  }
 };
