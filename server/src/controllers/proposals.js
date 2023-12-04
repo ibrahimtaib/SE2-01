@@ -257,7 +257,10 @@ module.exports = {
   },
 
   getProposalsByCosupervisor: async (surname) => {
-    return new Promise((resolve, reject) =>
+    const separatedCoSupervisors = surname
+      .split(",")
+      .map((surname) => surname.trim().toLowerCase());
+    return new Promise((resolve, reject) => {
       prisma.Proposal.findMany({
         include: {
           teacher: {
@@ -271,22 +274,25 @@ module.exports = {
             },
           },
         },
-        where: {
-          coSupervisors: {
-            contains: surname,
-            mode: "insensitive",
-          },
-        },
       })
         .then((proposals) => {
-          return resolve(proposals);
+          const filteredProposals = proposals.filter((proposal) => {
+            const proposalCoSup = proposal.coSupervisors.map((group) =>
+              group.toLowerCase()
+            );
+            return separatedCoSupervisors.some((group) =>
+              proposalCoSup.includes(group)
+            );
+          });
+
+          resolve(filteredProposals);
         })
         .catch(() => {
-          return reject({
+          reject({
             error: "An error occurred while querying the database",
           });
-        })
-    );
+        });
+    });
   },
 
   getProposalsBySupervisor: async (surname) => {
@@ -509,33 +515,53 @@ module.exports = {
   },
 
   getProposalsByCDS: async (cds) => {
-    return new Promise((resolve, reject) =>
+    return new Promise((resolve, reject) => {
       prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
               surname: true,
+              name: true,
+              id: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          },
           degree: {
             select: {
               TITLE_DEGREE: true,
             },
           },
+          applications: {
+            where: {
+              status: STATUS.accepted,
+            },
+          },
         },
-        where: {
-          cds: cds,
-        },
+        where:{
+          cds:cds
+        }
       })
         .then((proposals) => {
-          return resolve(proposals);
+          proposals.forEach((proposal) => {
+            if (
+              proposal.applications.length > 0 ||
+              proposal.expiration < new Date()
+            ) {
+              proposal.deletable = false;
+            } else {
+              proposal.deletable = true;
+            }
+            delete proposal.applications;
+          });
+
+          resolve(proposals);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
           return reject({
             error: "An error occurred while querying the database",
           });
-        })
-    );
+        });
+    });
   },
 
   filterProposals: async (filter) => {

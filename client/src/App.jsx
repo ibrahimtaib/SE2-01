@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import LogoutPage from "./pages/LogoutPage";
 import CallbackLogin from "./components/CallbackLogin";
+import StudentApplicationsPage from './pages/StudentApplicationPage';
 
 
 import './App.css';
@@ -30,14 +31,14 @@ function App() {
     title: "Thesis Proposal Title",
     description: "This is a thesis description, it contains information about the thesis. This should be filled with relevant information that the student must know before applying to the thesis proposal.",
     expiration: "2024-12-31",
-    degree :{
-      COD_DEGREE : "0"
+    degree: {
+      COD_DEGREE: "0"
     },
-    level: "Master", 
+    level: "Master",
     type: "Experimental",
-    coSupervisors: ["s654321@polito.it", "externalsup@polito.it"], 
+    coSupervisors: ["s654321@polito.it", "externalsup@polito.it"],
     requiredKnowledge: "sample",
-    keywords: ["keywordsample"], 
+    keywords: ["keywordsample"],
   };
 
   const [user, setUser] = useState(null);
@@ -65,14 +66,17 @@ function App() {
 
   //FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
   useEffect(() => {
-
     const init = async () => {
       try {
         const userInfo = await getUserInfo();
         setLoggedIn(true);
         setUser(userInfo);
-        try {
-          const proposals = await API.getAllProposals();
+    
+        if (userInfo && userInfo.role === "teacher") {
+          // Codice per teacher
+          setLoading(false);
+        } else if(userInfo && userInfo.role === "student"){
+          const proposals = await API.getProposalsByCds(userInfo.cds);
           setProposalsList(proposals);
 
           if (userInfo.role === 'teacher') {
@@ -84,14 +88,12 @@ function App() {
             setProposalsList(proposals);
           }
           setLoading(false);
-        } catch (proposalError) {
-          console.error("Error fetching proposals:", proposalError);
         }
-      } catch (err) {
+      } catch (error) {
+        console.error("Error in init:", error);
         setLoggedIn(false);
         setUser(null);
         setLoading(false);
-        console.log(err);
       }
     };
     init();
@@ -104,18 +106,18 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header/>
+      <Header />
       <NavBar user={user} resetProposal={resetProposal} />
       <Routes>
         <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
         <Route path="/*" element={<DefaultRoute />} />
-        <Route path="/student/applications" element={<StudentApplicationsPage user={user}/>} />
+        <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
         <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
         <Route
           path="/"
           element={
             loggedIn ? (
-              <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert}/>
+              <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} />
             ) : (
               <Navigate to="/login" />
             )
@@ -148,7 +150,7 @@ function App() {
         )}
         {user?.role === "teacher" && (
           <>
-            <Route path="/add" element={<InsertPage user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert}/>} />
+            <Route path="/add" element={<InsertPage user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
             <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
             <Route path="/students/:id" element={<StudentDetailsPage />} />
           </>
