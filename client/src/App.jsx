@@ -127,7 +127,9 @@ function App() {
         {user?.role === "student" && (
           <>
             <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
-            <Route path="/students/:id" element={<StudentDetailsPage />} />
+            <Route path="/students/:id" element={loggedIn ?(<StudentDetailsPage />):(
+                  <Navigate to="/login" />
+                )} />
             <Route
               path="/proposals/:proposalId/apply"
               element={
