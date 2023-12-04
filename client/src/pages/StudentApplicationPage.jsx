@@ -5,11 +5,12 @@ import { Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ApplicationDecisionCard from '../components/ApplicationDecisionCard';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import API from '../API';
+import { Alert } from 'react-bootstrap';
 
-function StudentApplicationsPage({user }) {
-    const[applicationList, setApplicationList]=useState([]);
+function StudentApplicationsPage({ user }) {
+    const [applicationList, setApplicationList] = useState([]);
 
     useEffect(() => {
         const init = async () => {
@@ -34,7 +35,9 @@ function StudentApplicationsPage({user }) {
 
 function Body(props) {
     if (!props.applicationList || props.applicationList.length === 0) {
-        return null; // O qualsiasi altra cosa vuoi restituire quando la lista è vuota
+        return <Alert variant="info" style={{ width: "100%" }}>
+            There are no applications available at this moment.
+        </Alert>; // O qualsiasi altra cosa vuoi restituire quando la lista è vuota
     }
     return (
         <>
