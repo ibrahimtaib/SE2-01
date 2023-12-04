@@ -457,6 +457,17 @@ async function getUserInfo() {
   }
 }
 
+async function getApplicationsByStudentId(id) {
+  const response = await fetch(`${URL}applications/decisions/${id}`);
+  const data = await response.json();
+
+  if (response.ok) {
+    return data;
+  } else {
+    throw new Error(data.error || "Failed to fetch proposal");
+  }
+}
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -478,5 +489,6 @@ const API = {
   acceptApplication,
   refuseApplication,
   getUserInfo,
+  getApplicationsByStudentId
 };
 export default API;

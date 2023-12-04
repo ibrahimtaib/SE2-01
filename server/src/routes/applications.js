@@ -134,4 +134,15 @@ router.post("/reject-waiting-applications/:proposalId", async (req, res) => {
   }
 });
 
+router.get("/decisions/:studentId", async (req, res) => {
+  const studentId = req.params.studentId;
+  try {
+    const applications = await applicationsController.getApplicationsDecisionsByStudentId(studentId);
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;

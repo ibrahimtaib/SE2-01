@@ -16,6 +16,7 @@ function NavBar({ user , resetProposal }) {
             <Nav className="mr-auto ml-3">
               <Nav.Link onClick={() => navigateTo(`/`)} active>Proposals</Nav.Link>
               {user.role === "teacher" ? <Nav.Link onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link> : <></>}
+              {user.role === "student" ? <Nav.Link onClick={() => navigateTo(`student/applications`)}  >Applications</Nav.Link> : <></>}
             </Nav>
           </Navbar.Collapse>
           <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white", paddingInline: 10 }}>

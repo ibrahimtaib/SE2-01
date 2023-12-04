@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import LogoutPage from "./pages/LogoutPage";
 import CallbackLogin from "./components/CallbackLogin";
+import StudentApplicationsPage from './pages/StudentApplicationPage';
 
 
 import './App.css';
@@ -103,6 +104,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
         <Route path="/*" element={<DefaultRoute />} />
+        <Route path="/student/applications" element={<StudentApplicationsPage user={user}/>} />
         <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
         <Route
           path="/"
