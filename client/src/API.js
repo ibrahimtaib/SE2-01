@@ -327,7 +327,7 @@ async function filterProposals(data) {
         Description: e.description,
         Notes: e.notes,
         RequiredKnowledge: e.requiredKnowledge,
-        Teacher: e.teacher.surname,
+        Teacher: e.teacher.name+" "+e.teacher.surname,
         titleDegree: e.degree.TITLE_DEGREE,
         deletable: e.deletable
       }));
