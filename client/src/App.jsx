@@ -103,7 +103,6 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
         <Route path="/*" element={<DefaultRoute />} />
-        <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
         <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
         <Route
           path="/"
@@ -127,6 +126,7 @@ function App() {
         />
         {user?.role === "student" && (
           <>
+            <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
             <Route path="/students/:id" element={<StudentDetailsPage />} />
             <Route
               path="/proposals/:proposalId/apply"
