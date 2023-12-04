@@ -23,7 +23,6 @@ import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
-import StudentApplicationsPage from "./pages/StudentApplicationsPage";
 
 function App() {
 
@@ -73,20 +72,13 @@ function App() {
         setUser(userInfo);
     
         if (userInfo && userInfo.role === "teacher") {
+          const proposals = await API.getAllProposals();
+          setProposalsList(proposals);
           // Codice per teacher
           setLoading(false);
         } else if(userInfo && userInfo.role === "student"){
           const proposals = await API.getProposalsByCds(userInfo.cds);
           setProposalsList(proposals);
-
-          if (userInfo.role === 'teacher') {
-            const teacherId = userInfo.id;
-            const teacherProposals = await API.getTeacherProposals(teacherId);
-            setProposalsList(teacherProposals);
-          } else {
-            const proposals = await API.getProposalsByCds(userInfo.cds);
-            setProposalsList(proposals);
-          }
           setLoading(false);
         }
       } catch (error) {
