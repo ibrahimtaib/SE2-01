@@ -39,6 +39,7 @@ module.exports = {
                             name: `${student.name} ${student.surname}`,
                             role: "student",
                             email: student.email,
+                            cds: student.COD_DEGREE
                         };
                         resolve(customStudentObject);
                     } else {

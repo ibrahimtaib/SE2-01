@@ -71,9 +71,13 @@ function App() {
         setLoggedIn(true);
         setUser(userInfo);
         try {
-          const proposals = await API.getAllProposals();
-          setProposalsList(proposals);
-          setLoading(false);
+          if(userInfo.role=="teacher"){
+
+          }else{
+            const proposals = await API.getProposalsByCds(userInfo.cds);
+            setProposalsList(proposals);
+            setLoading(false);
+          }
         } catch (proposalError) {
           console.error("Error fetching proposals:", proposalError);
         }
