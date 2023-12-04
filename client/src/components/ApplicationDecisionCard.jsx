@@ -42,7 +42,7 @@ function ApplicationDecisionCard(props) {
             <Button variant="outline-secondary" disabled>
               Status <br /><Badge bg="secondary">Pending..</Badge>
               <span className="visually-hidden">unread messages</span>
-            </Button> : props.application.status === "approved" ?
+            </Button> : props.application.status === "accepted" ?
               <Button variant="outline-success" disabled>
                 Status <br /><Badge bg="success">Approved</Badge>
                 <span className="visually-hidden">unread messages</span>
