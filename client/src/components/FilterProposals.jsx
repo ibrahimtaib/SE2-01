@@ -72,11 +72,17 @@ function LeftSide(props) {
         if (clickReset) {
             const init = async () => {
                 try {
-                    API.getProposalsByCds(props.user.cds).then((a) => {
-                        props.setProposalsList(a)
-                        setClickReset(false);
-                    })
-                        .catch((err) => console.log(err));
+                    if(props.user.role=="student"){
+                        API.getProposalsByCds(props.user.cds).then((a) => {
+                            props.setProposalsList(a)
+                            setClickReset(false);
+                        }).catch((err) => console.log(err));
+                    }else if(props.user.role=="teacher"){
+                        API.getAllProposals().then((a) => {
+                            props.setProposalsList(a)
+                            setClickReset(false);
+                        }).catch((err) => console.log(err));
+                    }
                 } catch (err) {
                     setClickReset(false);
                 }
@@ -131,7 +137,7 @@ function LeftSide(props) {
     const handleFilter = () => {
         event.preventDefault();
       
-        if (props.user && props.user.cds) {
+        if (props.user && props.user.cds && props.user.role==="student") {
           const flt = {
             title: title,
             coSupervisor: cosupervisor,
@@ -142,12 +148,24 @@ function LeftSide(props) {
             keywords: keywords,
             groups: groups,
             supervisor: supervisor
-          };
+          }
       
           setFilter(flt);
           setClick(true);
-        } else {
-          console.error("User or cds is undefined.");
+        } else if(props.user && props.user.role==="teacher"){
+            const flt = {
+                title: title,
+                coSupervisor: cosupervisor,
+                level: level,
+                type: type,
+                expiration: date,
+                keywords: keywords,
+                groups: groups,
+                supervisor: supervisor
+              }
+          
+              setFilter(flt);
+              setClick(true);
         }
       };
 
