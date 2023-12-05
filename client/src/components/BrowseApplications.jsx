@@ -55,21 +55,34 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   };
 
   const handleAccept = async () => {
-    try {
-      await onAccept(application.application.id);
-      await sendMail(application.application.id, application.student, 'accept')
-    } catch (error) {
-      console.error(error);
+    const confirmation = window.confirm("Are you sure you want to accept this proposal?");
+    
+    if (confirmation) {
+      try {
+        await onAccept(application.application.id);
+        await sendMail(application.application.id, application.student, 'accept');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
+  const handleReject = async () => {
+    const confirmation = window.confirm("Are you sure you want to reject this proposal?");
+    
+    if (confirmation) {
+      try {
+        await onReject(application.application.id);
+        await sendMail(application.application.id, application.student, 'reject');
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
-  const handleReject = async () => {
-    try {
-      await onReject(application.application.id);
-      await sendMail(application.application.id, application.student, 'accept')
-    } catch (error) {
-      console.error(error);
-    }
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
   };
 
   return (
@@ -106,6 +119,8 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
               {`${application.student.name} ${application.student.surname}`}
               <br />
               Degree: {application.student.degree.TITLE_DEGREE}
+              <br />
+              Date: {formatDate(application.application.date)}
             </Card.Subtitle>
           </Col>
           <Col md={4} className="d-flex justify-content-end align-items-center">
@@ -136,7 +151,6 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
 };
 
 const ProposalList = ({ applications, loading, onAccept, onReject }) => {
-  console.log(applications)
   return (
     <Container>
       <br />

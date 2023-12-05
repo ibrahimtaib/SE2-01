@@ -12,9 +12,24 @@ import API from '../API';
 import ProposalCard from './ProposalCard';
 import { Alert } from 'react-bootstrap';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { FaArchive, FaHome } from 'react-icons/fa';
+
 
 function FilterProposals(props) {
     const allFilters = { title: true, supervisor: true, cosupervisor: true, cds: true, keywords: true, groups: true, level: true, type: true, date: true, };
+
+    
+    const [showArchived, setShowArchived] = useState(false);
+    const [showHomeButton, setShowHomeButton] = useState(false);
+
+    const handleArchiveClick = () => {
+        setShowArchived(true);
+        setShowHomeButton(true);
+    };
+    const handleHomeClick = () => {
+        setShowArchived(false);
+        setShowHomeButton(false);
+    };
 
     let disabledFilters = {};
     
@@ -28,12 +43,17 @@ function FilterProposals(props) {
     }
 
     visibleFilters = { ...allFilters, ...disabledFilters };
+
+    const filteredProposal = showArchived
+        ? props.ProposalsList.filter(pro => pro.archived)
+        : props.ProposalsList.filter(pro => !pro.archived);
+    
     //console.log("FilterProposals", props.ProposalsList)
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
-                <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
+                <Col sm={4} className="bg-light custom-padding"><LeftSide showHomeButton={showHomeButton} handleArchiveClick={handleArchiveClick}  handleHomeClick={handleHomeClick} setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
+                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -41,31 +61,18 @@ function FilterProposals(props) {
 
 function LeftSide(props) {
     const [title, setTitle] = useState("");
-
     const [cosupervisor, setCosupervisor] = useState("");
-
     const [supervisor, setSupervisor] = useState("");
-
     const [keywords, setKeywords] = useState("");
-
     const [groups, setGroups] = useState("");
-
     const [click, setClick] = useState(false);
-
     const [clickReset, setClickReset] = useState(false);
-
     const [typeList, setTypeList] = useState([]);
-
     const [levelList, setLevelList] = useState([]);
-
     const [level, setLevel] = useState("");
-
     const [type, setType] = useState("");
-
     const [date, setDate] = useState("");
-
     const [selectedDate, setSelectedDate] = useState("");
-
     const [filter, setFilter] = useState([]);
 
     useEffect(() => {
@@ -189,7 +196,6 @@ function LeftSide(props) {
     return (
         <>
         <Form>
-
             {props.visibleFilters.title && (
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Title</Form.Label>
@@ -286,6 +292,24 @@ function LeftSide(props) {
             <Form.Group className="mb-3 d-flex justify-content-start">
                 <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
                 <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
+    
+                {props.showHomeButton ? (
+                <Button
+                    variant="primary"
+                    style={{ marginLeft: 'auto' }}
+                    onClick={props.handleHomeClick}
+                >
+                    <FaHome /> Home
+                </Button>
+                ) : (
+                <Button
+                    variant="primary"
+                    style={{ marginLeft: 'auto' }}
+                    onClick={props.handleArchiveClick}
+                >
+                    <FaArchive /> Archive
+                </Button>
+                )}
             </Form.Group>
         </Form>
 

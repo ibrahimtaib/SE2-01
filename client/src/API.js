@@ -26,7 +26,8 @@ async function getAllProposals() {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
-      deletable: e.deletable
+      deletable: e.deletable,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
