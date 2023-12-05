@@ -491,6 +491,16 @@ async function getApplicationsByStudentId(id) {
   }
 }
 
+async function getTeachers() {
+  const response = await fetch(`${URL}teachers/`);
+  const data = await response.json();
+  if (response.ok) {
+    return data;
+  } else {
+    throw new Error(data.error || "Failed to fetch proposal");
+  }
+}
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -513,6 +523,7 @@ const API = {
   refuseApplication,
   getUserInfo,
   getApplicationsByStudentId,
-  getTeacherProposals
+  getTeacherProposals,
+  getTeachers
 };
 export default API;
