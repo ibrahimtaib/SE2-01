@@ -19,6 +19,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
+      archived
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.create({

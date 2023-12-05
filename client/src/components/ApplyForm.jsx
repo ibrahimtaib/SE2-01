@@ -15,7 +15,7 @@ function ApplyForm({proposal, user}) {
 
 
   const onSubmit = async (data) => {
-    addApplication({
+        addApplication({
       STUDENT_ID: user?.id,
       PROPOSAL_ID: proposal.id,
       comment: data.comment.trim()
