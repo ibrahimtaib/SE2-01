@@ -30,6 +30,7 @@ module.exports = {
                             },
                         });
                     }
+                    console.log(teacher)
                 })
                 .then((student) => {
                     console.log(student);

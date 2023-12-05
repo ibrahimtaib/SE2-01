@@ -13,6 +13,7 @@ function DeleteProposalButton({proposal}) {
   const backdrop = deleting || succesfulDelete?{backdrop: 'static'}:{};
 
   const handleDelete = async (proposal) => {
+    console.log(proposal)
     setDeleting(true);
     const res = await deleteProposal(proposal);
     if (res) {

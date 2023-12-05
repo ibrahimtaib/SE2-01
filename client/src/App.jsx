@@ -23,6 +23,7 @@ import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
+import StudentRequestPage from "./pages/StudentRequestPage";
 
 function App() {
 
@@ -80,7 +81,8 @@ function App() {
         setUser(userInfo);
 
         if (userInfo && userInfo.role === "teacher") {
-          const proposals = await API.getAllProposals();
+          const teacherId = userInfo.id;
+          const proposals = await API.getTeacherProposals(teacherId);
           setProposalsList(proposals);
           // Codice per teacher
           setLoading(false);

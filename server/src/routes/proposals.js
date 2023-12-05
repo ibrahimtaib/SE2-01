@@ -162,6 +162,19 @@ router.get("/cds/:cds", async (req, res) => {
   }
 });
 
+router.get("/teacher/:teacherId", async (req, res) => {
+  const teacherId = req.params.teacherId;
+
+  try {
+    const proposals = await proposalsController.getTeacherProposals(teacherId);
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 router.post("/filter", async (req, res) => {
   const filters = req.body.filters;
   try {
