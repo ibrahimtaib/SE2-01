@@ -33,7 +33,7 @@ function FilterProposals(props) {
         <Container fluid className="m-0">
             <Row className="h-100">
                 <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
+                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} refetchDynamicContent={props.refetchDynamicContent}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -305,9 +305,9 @@ function RightSide(props) {
     }
     return (
         <>
-            {props.ProposalsList.filter((proposal) => (props.user && props.user.role === "teacher") ? proposal.teacherID === props.user.id : true)
+            {props.ProposalsList.filter((proposal) => (props.user && props.user.role === "teacher") ? proposal.teacherID === props.user.id && proposal.archived === false : true)
             .map((proposal, index) => (
-                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} />
+                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} refetchDynamicContent={props.refetchDynamicContent}/>
             ))}
         </>
     );

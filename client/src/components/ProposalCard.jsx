@@ -9,7 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { addPageUpdate } from '../api/api';
 import { Modal, Alert, Spinner, CloseButton, ModalFooter } from 'react-bootstrap';
 
-function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
+function ProposalCard({ user, proposal, setUpdate, setProposalToInsert, refetchDynamicContent }) {
   const [isVisible, setIsVisible] = useState(false);
   const [archived, setArchived] = useState(false);
   const [loadingArchived, setLoadingArchived] = useState(false);
@@ -25,6 +25,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
       ...proposal,
       archived: true
     }).then(() => {
+      refetchDynamicContent();
       setArchived(true);
       setLoadingArchived(false);
       setTimeout(() => {

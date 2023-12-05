@@ -63,12 +63,15 @@ function App() {
     API.getAllProposals().then((proposals) => setProposalsList(proposals));
   }
 
+  const refectProposalAfterArchiving = (proposal) => {
+    setProposalsList((oldProposalList) => oldProposalList.filter((item) => item.id != id));
+  }
+
   const resetProposal = () => {
     setProposalToInsert(proposalStateMock);
     setUpdate(false);
   }
 
-  //FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
   useEffect(() => {
     const init = async () => {
       try {
@@ -112,7 +115,7 @@ function App() {
             path="/"
             element={
               loggedIn ? (
-                <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} />
+                <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} refetchDynamicContent={refetchDynamicContentTeacher} />
               ) : (
                 <Navigate to="/login" />
               )
