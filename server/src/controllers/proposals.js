@@ -735,6 +735,11 @@ module.exports = {
                 id: true,
               },
             },
+            degree: {
+              select: {
+                TITLE_DEGREE: true,
+              },
+            },
             applications: {
               where: {
                 status: STATUS.accepted,
@@ -756,6 +761,7 @@ module.exports = {
               proposal.deletable = true;
             }
           });
+          console.log(proposals);
           resolve(proposals);
         })
         .catch(() => {

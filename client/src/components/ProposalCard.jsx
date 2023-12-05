@@ -19,15 +19,16 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert, refetchD
     setIsVisible(!isVisible);
   };
 
+
+  //This doesnt work i dont know why it was working before the API disaster
   const handleArchive = () => {
     setLoadingArchived(true);
     addPageUpdate({
       ...proposal,
       archived: true
-    }).then(() => {
-      refetchDynamicContent();
+    }).then((proposal) => {
       setArchived(true);
-      setLoadingArchived(false);
+      refetchDynamicContent();
       setTimeout(() => {
         setArchived(false);
       }, 4000);
@@ -41,7 +42,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert, refetchD
   return (
     <>
       <Card className="text-left m-3">
-        <Card.Header>{proposal.Name} {proposal.Teacher}</Card.Header>
+        <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header>
         <Card.Body>
           <Card.Title>{proposal.Title}</Card.Title>
           <Card.Text>
@@ -53,8 +54,8 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert, refetchD
               <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
             ))}
             <br /><b>Type</b>: {proposal.Type}
-            <br /><b>Cds</b>: {proposal.titleDegree}
-            <br /><b>Notes</b>: {proposal.Notes}
+            <br /><b>Degree</b>: {proposal.titleDegree}
+            <br /><b>Notes</b>: {proposal.Notes ? proposal.Notes : 'None'}
             <br /><b>Required Knowledge</b>: {proposal.RequiredKnowledge}
           </Card.Text>
           <div className="d-flex justify-content-between">
