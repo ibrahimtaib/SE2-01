@@ -128,7 +128,7 @@ const styles = {
 
 
 
-export default function InsertForm({ user, update, proposalToInsert }) {
+export default function InsertForm({ user, update, proposalToInsert, refetchDynamicContent }) {
 
 
     const [levels, setLevels] = useState(["Bachelor", "Master"]);
@@ -163,6 +163,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 groups: [], //TODO: Issue with groups
                 archived: false
             }).then(() => {
+                refetchDynamicContent();
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {
@@ -185,6 +186,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 groups: [],
                 archived: false
             }).then(() => {
+                refetchDynamicContent();
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {

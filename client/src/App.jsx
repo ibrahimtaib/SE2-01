@@ -44,7 +44,8 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
-  //This is the proposal to send to InsertForm, it will contain 
+  const [dirty,setDirty] = useState(false);
+  //This is the proposal to send to InsertForm
   const [proposalToInsert, setProposalToInsert] = useState(proposalStateMock);
 
   //FIXME: This state, we should put it in the correct component to be loaded after login
@@ -56,6 +57,10 @@ function App() {
     else if (String(err) === "string") msg = String(err);
     else msg = "Unknown Error";
     setMessage(msg);
+  }
+
+  const refetchDynamicContentTeacher = async () => {
+    API.getAllProposals().then((proposals) => setProposalsList(proposals));
   }
 
   const resetProposal = () => {
@@ -143,7 +148,7 @@ function App() {
           )}
           {user?.role === "teacher" && (
             <>
-              <Route path="/add" element={<InsertPage user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
+              <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
               <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
             </>
