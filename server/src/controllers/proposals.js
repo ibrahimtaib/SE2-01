@@ -762,6 +762,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
+      archived,
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.update({
@@ -780,6 +781,7 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
+          archived
         },
       })
         .then((proposal) => {

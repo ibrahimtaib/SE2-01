@@ -144,7 +144,8 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
-            cds: proposalToInsert.degree.COD_DEGREE
+            cds: proposalToInsert.degree.COD_DEGREE,
+            archived: false,
         }
     })
     const inputRef = useRef(null);
