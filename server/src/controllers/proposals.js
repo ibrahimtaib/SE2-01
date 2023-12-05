@@ -37,6 +37,7 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
+          archived
         },
       })
         .then((proposal) => {

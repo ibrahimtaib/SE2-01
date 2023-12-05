@@ -145,7 +145,6 @@ export default function InsertForm({ user, update, proposalToInsert }) {
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
             cds: proposalToInsert.degree.COD_DEGREE,
-            archived: false,
         }
     })
     const inputRef = useRef(null);
@@ -162,6 +161,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
                 keywords: keywords.map((keyword) => keyword.trim()),
                 groups: [], //TODO: Issue with groups
+                archived: false
             }).then(() => {
                 setServerError(false);
                 setSuccesfullySent(true);
@@ -183,6 +183,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
                 keywords: keywords.map((keyword) => keyword.trim()),
                 groups: [],
+                archived: false
             }).then(() => {
                 setServerError(false);
                 setSuccesfullySent(true);
