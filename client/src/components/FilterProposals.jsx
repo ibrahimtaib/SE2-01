@@ -131,7 +131,7 @@ function LeftSide(props) {
     const handleFilter = () => {
         event.preventDefault();
       
-        if (props.user && cds) {
+        if (props.user && props.user.cds) {
           const flt = {
             title: title,
             coSupervisor: cosupervisor,
