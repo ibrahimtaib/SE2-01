@@ -9,6 +9,7 @@ async function getAllProposals() {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
       Name: e.teacher.name,
       teacherID: e.teacher.id,
       Cds: e.cds,
@@ -26,7 +27,8 @@ async function getAllProposals() {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
-      deletable: e.deletable
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -39,11 +41,16 @@ async function getProposalsByTitle(title) {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
       Cds: e.cds,
       id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
       Groups: e.groups,
       Level: e.level,
       Type: e.type,
@@ -52,6 +59,8 @@ async function getProposalsByTitle(title) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -64,11 +73,16 @@ async function getProposalsByCosupervisor(surname) {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
       Cds: e.cds,
       id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
       Groups: e.groups,
       Level: e.level,
       Type: e.type,
@@ -77,6 +91,8 @@ async function getProposalsByCosupervisor(surname) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -89,11 +105,16 @@ async function getProposalsBySupervisor(surname) {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
       Cds: e.cds,
       id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
       Groups: e.groups,
       Level: e.level,
       Type: e.type,
@@ -102,6 +123,8 @@ async function getProposalsBySupervisor(surname) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -151,81 +174,7 @@ async function getProposalsByKeywords(keywords) {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
-      Cds: e.cds,
-      id: e.id,
-      Title: e.title,
-      CoSupervisor: e.coSupervisors,
-      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
-      Groups: e.groups,
-      Level: e.level,
-      Type: e.type,
-      Description: e.description,
-      Notes: e.notes,
-      RequiredKnowledge: e.requiredKnowledge,
-      Teacher: e.teacher.surname,
-      titleDegree: e.degree.TITLE_DEGREE,
-    }));
-  } else {
-    throw proposals;
-  }
-}
-
-async function getProposalsByGroups(groups) {
-  const response = await fetch(`${URL}proposals/groups/${groups}`); // Attendere che la Promise si risolva
-  const proposals = await response.json(); // Attendere che la Promise si risolva
-  if (response.ok) {
-    return proposals.map((e) => ({
-      Supervisor: e.teacher.surname,
-      Cds: e.cds,
-      id: e.id,
-      Title: e.title,
-      CoSupervisor: e.coSupervisors,
-      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
-      Groups: e.groups,
-      Level: e.level,
-      Type: e.type,
-      Description: e.description,
-      Notes: e.notes,
-      RequiredKnowledge: e.requiredKnowledge,
-      Teacher: e.teacher.surname,
-      titleDegree: e.degree.TITLE_DEGREE,
-    }));
-  } else {
-    throw proposals;
-  }
-}
-
-async function getProposalsByLevel(level) {
-  const response = await fetch(`${URL}proposals/level/${level}`); // Attendere che la Promise si risolva
-  const proposals = await response.json(); // Attendere che la Promise si risolva
-  if (response.ok) {
-    return proposals.map((e) => ({
-      Supervisor: e.teacher.surname,
-      Cds: e.cds,
-      id: e.id,
-      Title: e.title,
-      CoSupervisor: e.coSupervisors,
-      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
-      Groups: e.groups,
-      Level: e.level,
-      Type: e.type,
-      Description: e.description,
-      Notes: e.notes,
-      RequiredKnowledge: e.requiredKnowledge,
-      Teacher: e.teacher.surname,
-      titleDegree: e.degree.TITLE_DEGREE,
-    }));
-  } else {
-    throw proposals;
-  }
-}
-
-async function getProposalsByCds(cds) {
-  const response = await fetch(`${URL}proposals/cds/${cds}`); // Attendere che la Promise si risolva
-  const proposals = await response.json(); // Attendere che la Promise si risolva
-  if (response.ok) {
-    return proposals.map((e) => ({
-      Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
       Name: e.teacher.name,
       teacherID: e.teacher.id,
       Cds: e.cds,
@@ -243,7 +192,104 @@ async function getProposalsByCds(cds) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
-      deletable: e.deletable
+      deletable: e.deletable,
+      archived: e.archived
+    }));
+  } else {
+    throw proposals;
+  }
+}
+
+async function getProposalsByGroups(groups) {
+  const response = await fetch(`${URL}proposals/groups/${groups}`); // Attendere che la Promise si risolva
+  const proposals = await response.json(); // Attendere che la Promise si risolva
+  if (response.ok) {
+    return proposals.map((e) => ({
+      Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
+      Cds: e.cds,
+      id: e.id,
+      Title: e.title,
+      Keywords: e.keywords,
+      CoSupervisor: e.coSupervisors,
+      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
+      Groups: e.groups,
+      Level: e.level,
+      Type: e.type,
+      Description: e.description,
+      Notes: e.notes,
+      RequiredKnowledge: e.requiredKnowledge,
+      Teacher: e.teacher.surname,
+      titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
+    }));
+  } else {
+    throw proposals;
+  }
+}
+
+async function getProposalsByLevel(level) {
+  const response = await fetch(`${URL}proposals/level/${level}`); // Attendere che la Promise si risolva
+  const proposals = await response.json(); // Attendere che la Promise si risolva
+  if (response.ok) {
+    return proposals.map((e) => ({
+      Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
+      Cds: e.cds,
+      id: e.id,
+      Title: e.title,
+      Keywords: e.keywords,
+      CoSupervisor: e.coSupervisors,
+      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
+      Groups: e.groups,
+      Level: e.level,
+      Type: e.type,
+      Description: e.description,
+      Notes: e.notes,
+      RequiredKnowledge: e.requiredKnowledge,
+      Teacher: e.teacher.surname,
+      titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
+    }));
+  } else {
+    throw proposals;
+  }
+}
+
+async function getProposalsByCds(cds) {
+  const response = await fetch(`${URL}proposals/cds/${cds}`); // Attendere che la Promise si risolva
+  const proposals = await response.json(); // Attendere che la Promise si risolva
+  if (response.ok) {
+    return proposals.map((e) => ({
+      Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
+      Cds: e.cds,
+      id: e.id,
+      Title: e.title,
+      Keywords: e.keywords,
+      CoSupervisor: e.coSupervisors,
+      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
+      Groups: e.groups,
+      Level: e.level,
+      Type: e.type,
+      Description: e.description,
+      Notes: e.notes,
+      RequiredKnowledge: e.requiredKnowledge,
+      Teacher: e.teacher.surname,
+      titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -256,11 +302,16 @@ async function getProposalsByType(type) {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
       Cds: e.cds,
       id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
       Groups: e.groups,
       Level: e.level,
       Type: e.type,
@@ -269,6 +320,8 @@ async function getProposalsByType(type) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -281,11 +334,16 @@ async function getProposalsByExpirationDate(date) {
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
       Cds: e.cds,
       id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
       Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
       Groups: e.groups,
       Level: e.level,
       Type: e.type,
@@ -294,6 +352,8 @@ async function getProposalsByExpirationDate(date) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -305,18 +365,27 @@ async function getTeacherProposals(teacherId) {
   const proposals = await response.json();
   if (response.ok) {
     return proposals.map((e) => ({
-      id:e.id,
-      Cds:e.cds,
+      Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
+      Cds: e.cds,
+      id: e.id,
       Title: e.title,
+      Keywords: e.keywords,
       CoSupervisor: e.coSupervisors,
-      Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
-      Groups:e.groups,
-      Level:e.level,
-      Type:e.type,
-      Description:e.description,
+      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
+      Groups: e.groups,
+      Level: e.level,
+      Type: e.type,
+      Description: e.description,
       Notes: e.notes,
       RequiredKnowledge: e.requiredKnowledge,
-      deletable: e.deletable
+      Teacher: e.teacher.surname,
+      titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
     }));
   } else {
     throw proposals;
@@ -352,7 +421,8 @@ async function filterProposals(data) {
         RequiredKnowledge: e.requiredKnowledge,
         Teacher: e.teacher.name+" "+e.teacher.surname,
         titleDegree: e.degree.TITLE_DEGREE,
-        deletable: e.deletable
+        deletable: e.deletable,
+        archived: e.archived
       }));
     } else {
       throw new Error("Failed to submit proposal");

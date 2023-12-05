@@ -4,5 +4,6 @@ module.exports = {
     rejected: "refuse",
     pending: "pending",
     canceled: "canceled",
+    archived: "archived",
   },
 };

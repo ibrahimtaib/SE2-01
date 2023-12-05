@@ -19,6 +19,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
+      archived
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.create({
@@ -37,6 +38,7 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
+          archived
         },
       })
         .then((proposal) => {
@@ -733,6 +735,11 @@ module.exports = {
                 id: true,
               },
             },
+            degree: {
+              select: {
+                TITLE_DEGREE: true,
+              },
+            },
             applications: {
               where: {
                 status: STATUS.accepted,
@@ -754,6 +761,7 @@ module.exports = {
               proposal.deletable = true;
             }
           });
+          console.log(proposals);
           resolve(proposals);
         })
         .catch(() => {
@@ -805,6 +813,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
+      archived,
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.update({
@@ -823,6 +832,7 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
+          archived
         },
       })
         .then((proposal) => {

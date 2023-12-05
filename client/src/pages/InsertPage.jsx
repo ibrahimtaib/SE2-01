@@ -4,7 +4,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import InsertForm from '../components/InsertForm';
 import { useEffect } from 'react';
 
-function InsertPage({user, loading, update, setLoading, proposalToInsert}) {
+function InsertPage({user, loading, update, setLoading, proposalToInsert, refetchDynamicContent}) {
 
   useEffect(() => {
     console.log(update);
@@ -18,7 +18,7 @@ function InsertPage({user, loading, update, setLoading, proposalToInsert}) {
   }
 
   return (
-    <InsertForm user={user} update={update} proposalToInsert={proposalToInsert} />
+    <InsertForm user={user} update={update} proposalToInsert={proposalToInsert} refetchDynamicContent={refetchDynamicContent} />
   )
 }
 

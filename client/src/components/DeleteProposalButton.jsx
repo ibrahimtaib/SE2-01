@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';  
-import {Modal, Button} from 'react-bootstrap'; 
+import {Modal, Button, Dropdown} from 'react-bootstrap'; 
 import {deleteProposal} from '../api/api';
 import { useState } from 'react';  
 
@@ -43,7 +43,7 @@ function DeleteProposalButton({proposal}) {
 	}
 	return (
 		<>
-		<Button style={{marginLeft : "10px"}} disabled={!proposal.deletable} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
+		<Button as={Dropdown.Item} style={{width : "100%" , color: "white", textAlign : "left", backgroundColor : "red"}} disabled={!proposal.deletable} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
 
 		<Modal animation={false} {...backdrop} show={showAlert} onHide={modalClose}>
 		<Modal.Header closeButton>  
