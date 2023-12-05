@@ -83,7 +83,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
                 fontWeight: hoveredTitle ? 'bold' : 'normal',
                 textDecoration: hoveredTitle ? 'underline' : 'none',
               }}
-              onClick={handleTitleClick}
+              onClick={() => handleTitleClick(application)}
               onMouseEnter={() => setHoveredTitle(true)}
               onMouseLeave={() => setHoveredTitle(false)}
             >
