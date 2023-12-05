@@ -23,6 +23,7 @@ import ApplicationsPage from "./pages/applicationsPage";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
+import StudentRequestPage from "./pages/StudentRequestPage";
 
 function App() {
 
@@ -127,6 +128,7 @@ function App() {
         {user?.role === "student" && (
           <>
             <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
+            <Route path="/student/requestForm" element={loggedIn ?(<StudentRequestPage user={user}/>):(<Navigate to="/login" />)}></Route>
             <Route path="/students/:id" element={loggedIn ?(<StudentDetailsPage />):(
                   <Navigate to="/login" />
                 )} />

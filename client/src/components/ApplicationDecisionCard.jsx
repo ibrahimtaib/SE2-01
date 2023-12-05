@@ -40,14 +40,14 @@ function ApplicationDecisionCard(props) {
           </Button>
           {props.application.status === "pending" ?
             <Button variant="outline-secondary" disabled>
-              Status <br /><Badge bg="secondary">Pending..</Badge>
+              Status <br /><Badge bg="secondary">{props.application.status}</Badge>
               <span className="visually-hidden">unread messages</span>
-            </Button> : props.application.status === "accepted" ?
+            </Button> : props.application.status === "accept" ?
               <Button variant="outline-success" disabled>
-                Status <br /><Badge bg="success">Approved</Badge>
+                Status <br /><Badge bg="success">{props.application.status}</Badge>
                 <span className="visually-hidden">unread messages</span>
               </Button> : <Button variant="outline-danger" disabled>
-                Status <br /><Badge bg="danger">Rejected</Badge>
+                Status <br /><Badge bg="danger">{props.application.status}</Badge>
                 <span className="visually-hidden">unread messages</span>
               </Button>}
 
