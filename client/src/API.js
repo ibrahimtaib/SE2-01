@@ -300,6 +300,27 @@ async function getProposalsByExpirationDate(date) {
   }
 }
 
+async function getTeacherProposals(teacherId) {
+  const response = await fetch(`${URL}proposals/teacher/${teacherId}`);
+  const proposals = await response.json();
+  if (response.ok) {
+    return proposals.map((e) => ({
+      Cds:e.cds,
+      Title: e.title,
+      CoSupervisor: e.coSupervisors,
+      Expiration: dayjs(e.expiration).format('DD/MM/YYYY'),
+      Groups:e.groups,
+      Level:e.level,
+      Type:e.type,
+      Description:e.description,
+      Notes: e.notes,
+      RequiredKnowledge: e.requiredKnowledge,
+    }));
+  } else {
+    throw proposals;
+  }
+}
+
 async function filterProposals(data) {
   try {
     const response = await fetch(`${URL}proposals/filter`, {
@@ -489,6 +510,7 @@ const API = {
   acceptApplication,
   refuseApplication,
   getUserInfo,
-  getApplicationsByStudentId
+  getApplicationsByStudentId,
+  getTeacherProposals
 };
 export default API;

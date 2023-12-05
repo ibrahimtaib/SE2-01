@@ -536,8 +536,8 @@ module.exports = {
             },
           },
         },
-        where:{
-          cds:cds
+        where: {
+          cds: cds
         }
       })
         .then((proposals) => {
@@ -719,6 +719,25 @@ module.exports = {
       console.error(error);
       throw new Error("An error occurred while filtering proposals");
     }
+  },
+
+  getTeacherProposals: async (teacherId) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany({
+          where: {
+            supervisor: teacherId,
+          },
+        })
+        .then((proposals) => {
+          return resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database for applications",
+          });
+        })
+    );
   },
 
   getApplicationsBySupervisorId: async (teacherId) => {

@@ -73,7 +73,8 @@ function App() {
         setUser(userInfo);
     
         if (userInfo && userInfo.role === "teacher") {
-          const proposals = await API.getAllProposals();
+          const teacherId = userInfo.id;
+          const proposals = await API.getTeacherProposals(teacherId);
           setProposalsList(proposals);
           // Codice per teacher
           setLoading(false);

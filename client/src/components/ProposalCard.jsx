@@ -72,7 +72,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                 variant="">
                 Copy
               </Button>
-              {user.id === proposal.teacherID ? (
+              
                 <>
                   <Button
                     style={{
@@ -104,7 +104,7 @@ function ProposalCard({ user, proposal, setUpdate, setProposalToInsert }) {
                   </Button>
                   <DeleteProposalButton proposal={proposal}/>
                 </>
-              ) : ''}
+              
             </>
           )}
           </div>
