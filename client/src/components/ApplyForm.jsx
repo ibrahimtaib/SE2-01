@@ -33,7 +33,7 @@ function ApplyForm({proposal, user}) {
       setMessageAlert('');
       setShowAlert(false);
     }).then(async() => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 3000));
       setLoading(false);
       navigateTo("/");
     }).catch(() => {
@@ -72,7 +72,7 @@ function ApplyForm({proposal, user}) {
     </div>
     <Modal show={loading} onHide={() => {}}>
       <Modal.Body>
-        {submitted?  <Alert className='w-100' variant='success'> Submitted  successfully </Alert>
+        {submitted?  <Alert className='w-100' variant='success'> Submitted  successfully. Returning to home page...</Alert>
         :<div className="d-flex justify-content-center align-items-center">
           <p className='text-primary px-2 m-0' >Submitting your application</p>
 

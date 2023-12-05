@@ -2,7 +2,7 @@
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useState } from 'react';
 import "react-datetime/css/react-datetime.css";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import API from './API';
 import DefaultRoute from './components/DefaultRoute';
 import Header from './components/Header';
@@ -70,13 +70,13 @@ function App() {
         const userInfo = await getUserInfo();
         setLoggedIn(true);
         setUser(userInfo);
-    
+
         if (userInfo && userInfo.role === "teacher") {
           const proposals = await API.getAllProposals();
           setProposalsList(proposals);
           // Codice per teacher
           setLoading(false);
-        } else if(userInfo && userInfo.role === "student"){
+        } else if (userInfo && userInfo.role === "student") {
           const proposals = await API.getProposalsByCds(userInfo.cds);
           setProposalsList(proposals);
           setLoading(false);
@@ -92,67 +92,77 @@ function App() {
     console.log(proposalToInsert.degree.COD_DEGREE);
   }, []);
 
-  if (loading) {
+  if (!loggedIn && loading) {
     return (<LoadingSpinner />);
   }
 
   return (
     <BrowserRouter>
-      <Header />
-      <NavBar user={user} resetProposal={resetProposal} />
       <Routes>
-        <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
-        <Route path="/*" element={<DefaultRoute />} />
-        <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
-        <Route
-          path="/"
-          element={
-            loggedIn ? (
-              <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/logout"
-          element={
-            loggedIn ? (
-              <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        {user?.role === "student" && (
-          <>
-            <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
-            <Route path="/students/:id" element={loggedIn ?(<StudentDetailsPage />):(
-                  <Navigate to="/login" />
-                )} />
-            <Route
-              path="/proposals/:proposalId/apply"
-              element={
-                loggedIn ? (
-                  <ApplyPage user={user} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-          </>
-        )}
-        {user?.role === "teacher" && (
-          <>
-            <Route path="/add" element={<InsertPage user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
-            <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
-            <Route path="/students/:id" element={<StudentDetailsPage />} />
-          </>
-        )}
+        <Route path="/" element={<HeaderPage user={user} resetProposal={resetProposal} />}>
+          <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
+          <Route path="/*" element={<DefaultRoute />} />
+          <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
+          <Route
+            path="/"
+            element={
+              loggedIn ? (
+                <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/logout"
+            element={
+              loggedIn ? (
+                <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {user?.role === "student" && (
+            <>
+              <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
+              <Route path="/students/:id" element={loggedIn ? (<StudentDetailsPage />) : (
+                <Navigate to="/login" />
+              )} />
+              <Route
+                path="/proposals/:proposalId/apply"
+                element={
+                  loggedIn ? (
+                    <ApplyPage user={user} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
+            </>
+          )}
+          {user?.role === "teacher" && (
+            <>
+              <Route path="/add" element={<InsertPage user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
+              <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
+              <Route path="/students/:id" element={<StudentDetailsPage />} />
+            </>
+          )}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
 
+}
+
+function HeaderPage({ user, resetProposal }) {
+  return (
+    <>
+      <Header />
+      <NavBar user={user} resetProposal={resetProposal} />
+      <Outlet />
+    </>
+  )
 }
 
 export default App
