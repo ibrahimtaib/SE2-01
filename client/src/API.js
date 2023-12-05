@@ -53,6 +53,7 @@ async function getProposalsByTitle(title) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -78,6 +79,7 @@ async function getProposalsByCosupervisor(surname) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -103,6 +105,7 @@ async function getProposalsBySupervisor(surname) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -165,6 +168,7 @@ async function getProposalsByKeywords(keywords) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -190,6 +194,7 @@ async function getProposalsByGroups(groups) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -215,6 +220,7 @@ async function getProposalsByLevel(level) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -244,7 +250,8 @@ async function getProposalsByCds(cds) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
-      deletable: e.deletable
+      deletable: e.deletable,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -270,6 +277,7 @@ async function getProposalsByType(type) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -295,6 +303,7 @@ async function getProposalsByExpirationDate(date) {
       RequiredKnowledge: e.requiredKnowledge,
       Teacher: e.teacher.surname,
       titleDegree: e.degree.TITLE_DEGREE,
+      archived: e.archived,
     }));
   } else {
     throw proposals;
@@ -330,7 +339,8 @@ async function filterProposals(data) {
         RequiredKnowledge: e.requiredKnowledge,
         Teacher: e.teacher.name+" "+e.teacher.surname,
         titleDegree: e.degree.TITLE_DEGREE,
-        deletable: e.deletable
+        deletable: e.deletable,
+        archived: e.archived,
       }));
     } else {
       throw new Error("Failed to submit proposal");
