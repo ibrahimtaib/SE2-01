@@ -27,13 +27,13 @@ function ApplyForm({proposal, user}) {
       if (res.status === 200 || res.status === 201)
       {
         const student = {name: user.name.split(' ')[0], surname: user.name.split(' ')[1], email: user.email}
-        await sendMail(proposal.title, student, proposal.teacher, 'apply')
+        /* await sendMail(proposal.title, student, proposal.teacher, 'apply') */ //TODO: Fix e-mail sending
         setSubmitted(true);
       }
-      setMessageAlert(res.data.error);
-      setShowAlert(true);
+      setMessageAlert('');
+      setShowAlert(false);
     }).then(async() => {
-      await new Promise(resolve => setTimeout(resolve, 400));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       setLoading(false);
       navigateTo("/");
     }).catch(() => {
