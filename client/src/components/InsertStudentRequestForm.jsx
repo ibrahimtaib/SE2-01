@@ -69,8 +69,7 @@ const InsertStudentRequestForm = () => {
 
               <Form.Group controlId="teacher">
                 <Form.Label>Teacher</Form.Label>
-                <Form.Control
-                  as="select"
+                <Form.Select
                   name="teacher"
                   value={formData.teacher}
                   onChange={handleInputChange}
@@ -78,13 +77,12 @@ const InsertStudentRequestForm = () => {
                   <option value="" disabled>Select a Teacher</option>
                   <option value="professor1">Professor 1</option>
                   <option value="professor2">Professor 2</option>
-                </Form.Control>
+                </Form.Select>
               </Form.Group>
 
               <Form.Group controlId="type">
                 <Form.Label>Type</Form.Label>
-                <Form.Control
-                  as="select"
+                <Form.Select
                   name="type"
                   value={formData.type}
                   onChange={handleInputChange}
@@ -92,7 +90,7 @@ const InsertStudentRequestForm = () => {
                   <option value="" disabled>Select a Type</option>
                   <option value="compilative">Compilative</option>
                   <option value="experimental">Experimental</option>
-                </Form.Control>
+                </Form.Select>
               </Form.Group>
 
               <Form.Group controlId="notes">
@@ -107,10 +105,10 @@ const InsertStudentRequestForm = () => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="mr-2">
+              <Button variant="primary" type="submit" style={{ marginTop: '10px'}}>
                 Submit
               </Button>
-              <Button variant="secondary" onClick={handleReset}>
+              <Button variant="danger" onClick={handleReset} style={{ marginTop: '10px', marginLeft:'10px'}}>
                 Reset
               </Button>
             </Form>

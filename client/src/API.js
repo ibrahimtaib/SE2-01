@@ -305,6 +305,7 @@ async function getTeacherProposals(teacherId) {
   const proposals = await response.json();
   if (response.ok) {
     return proposals.map((e) => ({
+      id:e.id,
       Cds:e.cds,
       Title: e.title,
       CoSupervisor: e.coSupervisors,
@@ -315,6 +316,7 @@ async function getTeacherProposals(teacherId) {
       Description:e.description,
       Notes: e.notes,
       RequiredKnowledge: e.requiredKnowledge,
+      deletable: e.deletable
     }));
   } else {
     throw proposals;

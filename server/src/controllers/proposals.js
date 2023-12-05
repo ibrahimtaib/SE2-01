@@ -725,12 +725,36 @@ module.exports = {
     return new Promise((resolve, reject) =>
       prisma.Proposal
         .findMany({
+          include: {
+            teacher: {
+              select: {
+                surname: true,
+                name: true,
+                id: true,
+              },
+            },
+            applications: {
+              where: {
+                status: STATUS.accepted,
+              },
+            },
+          },
           where: {
             supervisor: teacherId,
           },
         })
         .then((proposals) => {
-          return resolve(proposals);
+          proposals.forEach((proposal) => {
+            if (
+              proposal.applications.length > 0 ||
+              proposal.expiration < new Date()
+            ) {
+              proposal.deletable = false;
+            } else {
+              proposal.deletable = true;
+            }
+          });
+          resolve(proposals);
         })
         .catch(() => {
           return reject({
