@@ -5,7 +5,7 @@ const applicationController = require("../controllers/application.js");
 
 //TODO: This should be in application, we need to clarify about name of the files and we should make javadocs
 router.post("/", async (req, res) => {
-  const { PROPOSAL_ID, STUDENT_ID } = req.body;
+  const { PROPOSAL_ID, STUDENT_ID, comment } = req.body;
 
   console.log(PROPOSAL_ID);
   if (isNaN(PROPOSAL_ID)) {
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 
   applicationController
-    .createApplication({ PROPOSAL_ID, STUDENT_ID: "" + STUDENT_ID })
+    .createApplication({ PROPOSAL_ID, STUDENT_ID: "" + STUDENT_ID , comment })
     .then((application) => {
       res.status(200).json(application);
     })

@@ -16,28 +16,32 @@ function ApplicationDecisionCard(props) {
 
   return (
     <Card className="text-left m-3">
-      <Card.Header>Prof. {props.application.proposal.teacher.surname}</Card.Header>
+      <Card.Header> {props.application.proposal?"Prof"+props.application.proposal.teacher.surname:""}</Card.Header>
       <Card.Body>
-        <Card.Title>{props.application.proposal.title}</Card.Title>
+        <Card.Title>{props.application.proposal?props.application.proposal.title:""}</Card.Title>
         <Card.Text>
-          {props.application.proposal.description}
+          {props.application.proposal?props.application.proposal.description:""}
         </Card.Text>
         <Card.Text className={isVisible ? '' : 'nascondi'}>
-          <br /><b>Your comment</b>: {props.application.comment}
-
+            {props.application.proposal?(
+                <>
           <br /><b>Level</b>: {props.application.proposal.level}
           {props.application.proposal.groups.map((group, index) => (
             <span key={index}><br /><b>Group {index + 1}</b>: {group}</span>
           ))}
           <br /><b>Type</b>: {props.application.proposal.type}
           <br /><b>Cds</b>: {props.application.proposal.degree.TITLE_DEGREE}
-          <br /><b>Notes</b>: {props.application.comment}
           <br /><b>Required Knowledge</b>: {props.application.proposal.requiredKnowledge}
+          </>):"" }
+          <br /><b>Your comment</b>: {props.application.comment}
+          <br /><b>Notes</b>: {props.application.comment}
         </Card.Text>
         <div className="d-flex justify-content-between">
+            {props.application.proposal?(
           <Button variant="outline-secondary" onClick={toggleVisibility}>
             {isVisible ? 'Hide Details' : 'Show Details'}
-          </Button>
+          </Button>):"the application you made on "+dayjs(props.application.date).format('DD/MM/YYYY')+" has been deleted"
+            }
           {props.application.status === "pending" ?
             <Button variant="outline-secondary" disabled>
               Status <br /><Badge bg="secondary">{props.application.status}</Badge>
@@ -53,7 +57,7 @@ function ApplicationDecisionCard(props) {
 
         </div>
       </Card.Body>
-      <Card.Footer className="text-muted">Application date: {dayjs(props.application.date).format('DD/MM/YYYY')}</Card.Footer>
+      <Card.Footer className="text-muted"> {props.application.proposal?("Application date: "+dayjs(props.application.date).format('DD/MM/YYYY')):""}</Card.Footer>
     </Card>
   );
 }

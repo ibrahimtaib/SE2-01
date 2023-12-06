@@ -2,7 +2,7 @@ import InsertStudentRequestForm from "../components/InsertStudentRequestForm"
 
 function StudentRequestPage(props){
     return(
-        <InsertStudentRequestForm></InsertStudentRequestForm>
+        <InsertStudentRequestForm user={props.user}></InsertStudentRequestForm>
     )
 }
 

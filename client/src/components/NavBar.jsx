@@ -21,7 +21,7 @@ function NavBar({ user , resetProposal }) {
             </Nav>
           </Navbar.Collapse>
           <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white", paddingInline: 10 }}>
-            <NavDropdown.Item href="#action/3.1">My info</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.1">Archived</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#action/3.4">
               Settings

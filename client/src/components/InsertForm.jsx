@@ -128,7 +128,7 @@ const styles = {
 
 
 
-export default function InsertForm({ user, update, proposalToInsert }) {
+export default function InsertForm({ user, update, proposalToInsert, refetchDynamicContent }) {
 
 
     const [levels, setLevels] = useState(["Bachelor", "Master"]);
@@ -144,7 +144,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
-            cds: proposalToInsert.degree.COD_DEGREE
+            cds: proposalToInsert.degree.COD_DEGREE,
         }
     })
     const inputRef = useRef(null);
@@ -161,7 +161,9 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
                 keywords: keywords.map((keyword) => keyword.trim()),
                 groups: [], //TODO: Issue with groups
+                archived: false
             }).then(() => {
+                refetchDynamicContent();
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {
@@ -182,7 +184,9 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
                 keywords: keywords.map((keyword) => keyword.trim()),
                 groups: [],
+                archived: false
             }).then(() => {
+                refetchDynamicContent();
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {

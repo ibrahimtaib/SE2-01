@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -8,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import ProposalCard from './ProposalCard';
 import { Alert } from 'react-bootstrap';
@@ -339,6 +341,7 @@ function LeftSide(props) {
 
 function RightSide(props) {
     const navigate = useNavigate();
+    console.log("RightSide", props.ProposalsList)
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return <Alert variant="info" style={{ width: "100%" }}>
             There are no proposals available at this moment. 
@@ -346,8 +349,9 @@ function RightSide(props) {
     }
     return (
         <>
-            {props.ProposalsList.map((proposal, index) => (
-                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} />
+            {props.ProposalsList.filter((proposal) => (props.user && props.user.role === "teacher") ? proposal.teacherID === props.user.id && proposal.archived === false : true)
+            .map((proposal, index) => (
+                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} refetchDynamicContent={props.refetchDynamicContent}/>
             ))}
         </>
     );
