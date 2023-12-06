@@ -42,7 +42,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
   return (
     <>
       <Card className="text-left m-3">
-        <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header>
+        {user.role ==  "student" ? <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header> : ""}
         <Card.Body>
           <Card.Title>{proposal.Title}</Card.Title>
           <Card.Text>

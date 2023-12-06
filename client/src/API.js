@@ -407,6 +407,8 @@ async function filterProposals(data) {
       const result = await response.json();
       return result.map((e) => ({
         Supervisor: e.teacher.surname,
+        Surname: e.teacher.surname,
+        Name: e.teacher.name,
         Cds: e.cds,
         id: e.id,
         Keywords: e.keywords,
