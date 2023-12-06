@@ -20,23 +20,42 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
   };
 
 
-  //This doesnt work i dont know why it was working before the API disaster
   const handleArchive = () => {
     setLoadingArchived(true);
+    
     addPageUpdate({
       ...proposal,
       archived: true
     }).then((proposal) => {
       setArchived(true);
-      refetchDynamicContent();
       setTimeout(() => {
         setArchived(false);
-      }, 4000);
-    })
-      .catch((err) => {
-        setLoadingArchived(false);
-
-      })
+      }, 500);
+    }).finally(() => {
+      setTimeout(() => {
+        refetchDynamicContent();
+      }, 500);
+      setLoadingArchived(false);
+    });
+  }
+  
+  const handleExtract = () => {
+    setLoadingArchived(true);
+    
+    addPageUpdate({
+      ...proposal,
+      archived: false
+    }).then((proposal) => {
+      setArchived(true);
+      setTimeout(() => {
+        setArchived(false);
+      }, 500);
+    }).finally(() => {
+      setTimeout(() => {
+        refetchDynamicContent();
+      }, 500);
+      setLoadingArchived(false);
+    });
   }
 
   return (
@@ -117,7 +136,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
                           });
                           navigateTo(`/add`);
                         }}>Update</Dropdown.Item>
-                      {showArchived ? <Dropdown.Item onClick={handleArchive}>Extract</Dropdown.Item> : <Dropdown.Item onClick={handleArchive}>Archive</Dropdown.Item>}
+                      {showArchived ? <Dropdown.Item onClick={handleExtract}>Extract</Dropdown.Item> : <Dropdown.Item onClick={handleArchive}>Archive</Dropdown.Item>}
                       <DeleteProposalButton proposal={proposal} />
                     </Dropdown.Menu>
                   </Dropdown>
@@ -128,14 +147,13 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
         </Card.Body>
         <Card.Footer className="text-muted">Expiration: {proposal.Expiration}</Card.Footer>
       </Card>
-      <Modal show={archived} onHide={() => { setArchived(false); }}>
+      <Modal show={archived}>
         <Modal.Body>
           {!loadingArchived ? <>
-
-            <Alert className='w-100' variant='success'> Archived successfully</Alert>
+            {showArchived ? <Alert className='w-100' variant='success'> Etracted successfully</Alert> : <Alert className='w-100' variant='success'> Archived successfully</Alert>}
           </>
             : <div className="d-flex justify-content-center align-items-center">
-              <p className='text-primary px-2 m-0' >Archiving your application...</p>
+              {showArchived ? <p className='text-primary px-2 m-0' >Etracting your application...</p> : <p className='text-primary px-2 m-0' >Archiving your application...</p>}
 
               <Spinner animation="border" variant="primary" size="sm" />
             </div>}
