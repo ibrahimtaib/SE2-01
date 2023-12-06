@@ -44,9 +44,13 @@ function FilterProposals(props) {
 
     visibleFilters = { ...allFilters, ...disabledFilters };
 
-    const filteredProposal = showArchived
-        ? props.ProposalsList.filter(pro => pro.archived)
-        : props.ProposalsList.filter(pro => !pro.archived);
+    const filteredProposal = props.user.role === "teacher"
+        ? (showArchived
+            ? props.ProposalsList.filter(pro => pro.archived)
+            : props.ProposalsList.filter(pro => !pro.archived)
+            )
+        : props.ProposalsList;
+
     
     return (
         <Container fluid className="m-0">
@@ -310,23 +314,23 @@ function LeftSide(props) {
                 <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
                 <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
                 {props.user.role == "teacher" ?
-                props.showHomeButton ? (
-                <Button
-                    variant="primary"
-                    style={{ marginLeft: 'auto' }}
-                    onClick={props.handleHomeClick}
-                >
-                    <FaHome /> Home
-                </Button>
-                ) : (
-                <Button
-                    variant="primary"
-                    style={{ marginLeft: 'auto' }}
-                    onClick={props.handleArchiveClick}
-                >
-                    <FaArchive /> Archive
-                </Button>
-                )
+                    props.showHomeButton ? (
+                    <Button
+                        variant="primary"
+                        style={{ marginLeft: 'auto' }}
+                        onClick={props.handleHomeClick}
+                    >
+                        <FaHome /> Home
+                    </Button>
+                    ) : (
+                    <Button
+                        variant="primary"
+                        style={{ marginLeft: 'auto' }}
+                        onClick={props.handleArchiveClick}
+                    >
+                        <FaArchive /> Archive
+                    </Button>
+                    )
                 : " " }
             </Form.Group> 
             
