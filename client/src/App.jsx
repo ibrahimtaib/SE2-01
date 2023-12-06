@@ -60,8 +60,8 @@ function App() {
     setMessage(msg);
   }
 
-  const refetchDynamicContentTeacher = async () => {
-    API.getAllProposals().then((proposals) => setProposalsList(proposals));
+  const refetchDynamicContentTeacher = async (teacherId) => {
+    API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
   }
 
   const refectProposalAfterArchiving = (proposal) => {
