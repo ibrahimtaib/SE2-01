@@ -21,6 +21,7 @@ model Teacher {
   COD_GROUP      String
   COD_DEPARTMENT String
   Proposal       Proposal[]
+  thesisRequests ThesisRequest[]
 }
 
 model Degree {
@@ -61,6 +62,7 @@ model Student {
   applications    Application[]
   degree          Degree        @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
   Career          Career[]
+  thesisRequests ThesisRequest[]
 }
 
 model Application {
@@ -92,4 +94,17 @@ model Proposal {
   teacher           Teacher       @relation(fields: [supervisor], references: [id])
   requiredKnowledge String
   degree            Degree        @relation(fields: [cds], references: [COD_DEGREE])
+}
+
+model ThesisRequest {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  teacherId   String
+  studentId   String
+  type        String
+  notes       String?
+  status      String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id])
+  student     Student  @relation(fields: [studentId], references: [id])
 }

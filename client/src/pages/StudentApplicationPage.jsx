@@ -15,11 +15,13 @@ function StudentApplicationsPage({ user }) {
     useEffect(() => {
         const init = async () => {
             try {
-                API.getApplicationsByStudentId(user.id).then((a) => {
-                    setApplicationList(a)
-                })
-                    .catch((err) => console.log(err));
+                const applications1 = await API.getApplicationsByStudentId(user.id);
+                const applications2 = await API.getRequestedThesisByStudentId(user.id);
+                const combinedApplications = [...applications1, ...applications2];
+                console.log(combinedApplications)
+                setApplicationList(combinedApplications);
             } catch (err) {
+                console.log(err);
             }
         };
         init();
