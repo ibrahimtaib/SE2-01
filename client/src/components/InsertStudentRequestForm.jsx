@@ -4,12 +4,12 @@ import API from '../API';
 
 const InsertStudentRequestForm = (props) => {
     const [formData, setFormData] = useState({
+        studentId:props.user.id,
         title: '',
         description: '',
         teacher: '',
         type: '',
         notes: '',
-        cds: props.user.cds
     });
     const [teachers, setTeachers]=useState([]);
     const [types, setTypes]=useState([{title:"sperimentale"},{title:"compilativa"}]);
