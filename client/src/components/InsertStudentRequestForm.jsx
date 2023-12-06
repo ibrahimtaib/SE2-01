@@ -70,6 +70,7 @@ const InsertStudentRequestForm = (props) => {
             }
 
             setSubmitted(true);
+            handleReset();
         } catch (error) {
             console.error(error);
             setSubmitted(true);
