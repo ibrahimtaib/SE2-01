@@ -191,4 +191,16 @@ router.get("/requestedThesis/:studentId", async (req, res) => {
   }
 });
 
+router.post("/newThesisRequest", async (req, res) => {
+  const formData = req.body;
+
+  try {
+    const result = await applicationsController.submitNewThesisRequest(formData);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;

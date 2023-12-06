@@ -172,23 +172,44 @@ module.exports = {
     }
   },
 
-getThesisRequestByStudentId: async (studentId) => {
-  try {
-    const studentIdInt = studentId;
+  getThesisRequestByStudentId: async (studentId) => {
+    try {
+      const studentIdInt = studentId;
 
-    const requests = await prisma.ThesisRequest.findMany({
-      include: {
-        teacher: true,
-      },
-      where: {
-        studentId: studentIdInt,
-      },
-    });
+      const requests = await prisma.ThesisRequest.findMany({
+        include: {
+          teacher: true,
+        },
+        where: {
+          studentId: studentIdInt,
+        },
+      });
 
-    return requests;
-  } catch (error) {
-    console.error("Error in getApplicationsDecisionsByStudentId:", error);
-    throw { error: "An error occurred while querying the database" };
-  }
-}
+      return requests;
+    } catch (error) {
+      console.error("Error in getApplicationsDecisionsByStudentId:", error);
+      throw { error: "An error occurred while querying the database" };
+    }
+  },
+
+  submitNewThesisRequest: async (formData) => {
+    console.log(formData)
+    try {
+      const newThesisRequest = await prisma.ThesisRequest.create({
+        data: {
+          title: formData.title,
+          description: formData.description,
+          teacherId: formData.teacher,
+          studentId: formData.studentId,
+          type: formData.type,
+          notes: formData.notes,
+          status: "pending"
+        },
+      });
+
+      return newThesisRequest;
+    } catch (error) {
+      throw new Error("An error occurred while updating the application status to 'accept'");
+    }
+  },
 }

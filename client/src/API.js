@@ -589,6 +589,29 @@ async function getTeachers() {
   }
 }
 
+async function submitNewThesisRequest(formData){
+  try {
+    const response = await fetch(`${URL}applications/newThesisRequest`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to refuse application');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while refusing the application');
+  }
+}
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -613,6 +636,7 @@ const API = {
   getApplicationsByStudentId,
   getTeacherProposals,
   getTeachers,
-  getRequestedThesisByStudentId
+  getRequestedThesisByStudentId,
+  submitNewThesisRequest  
 };
 export default API;

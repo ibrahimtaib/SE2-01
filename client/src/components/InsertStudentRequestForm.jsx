@@ -4,15 +4,16 @@ import API from '../API';
 
 const InsertStudentRequestForm = (props) => {
     const [formData, setFormData] = useState({
-        studentId:props.user.id,
+        studentId: props.user.id,
         title: '',
         description: '',
         teacher: '',
         type: '',
         notes: '',
     });
-    const [teachers, setTeachers]=useState([]);
-    const [types, setTypes]=useState([{title:"sperimentale"},{title:"compilativa"}]);
+    const [teachers, setTeachers] = useState([]);
+    const [types, setTypes] = useState([{ title: "sperimentale" }, { title: "compilativa" }]);
+    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         const init = async () => {
@@ -45,7 +46,7 @@ const InsertStudentRequestForm = (props) => {
         setSubmitted(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Check if title, description, teacher, and type are empty
@@ -59,8 +60,21 @@ const InsertStudentRequestForm = (props) => {
         }
 
         // Inserisci qui la logica per gestire l'invio del modulo
-        console.log('Dati inviati:', formData);
-        setSubmitted(true);
+        try {
+            const data = await API.submitNewThesisRequest(formData);
+
+            // Check if the request was successful
+            if (data) {
+                // Show success alert
+                setShowAlert(true);
+            }
+
+            setSubmitted(true);
+        } catch (error) {
+            console.error(error);
+            setSubmitted(true);
+        }
+
     };
 
     const isFieldEmpty = (fieldName) => submitted && formData[fieldName] === '';
@@ -110,8 +124,8 @@ const InsertStudentRequestForm = (props) => {
                                 >
                                     <option value="" disabled>Select a Teacher</option>
                                     {teachers.map((teacher, index) => (
-                                        <option key={index} value={teacher.title}>
-                                            {teacher.name+" "+teacher.surname}
+                                        <option key={index} value={teacher.id}>
+                                            {teacher.name + " " + teacher.surname}
                                         </option>
                                     ))}
                                 </Form.Select>
@@ -150,7 +164,12 @@ const InsertStudentRequestForm = (props) => {
                                     {errorMessage}
                                 </Alert>
                             )}
-                            <Button variant="primary" type="submit" style={{ marginTop: '10px' }}>
+                            {showAlert && (
+                                <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
+                                    Request made successfully
+                                </Alert>
+                            )}
+                            <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={handleSubmit}>
                                 Submit
                             </Button>
                             <Button variant="danger" onClick={handleReset} style={{ marginTop: '10px', marginLeft: '10px' }}>
