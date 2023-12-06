@@ -45,7 +45,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
-  const [dirty,setDirty] = useState(false);
+  const [dirty, setDirty] = useState(false);
   //This is the proposal to send to InsertForm
   const [proposalToInsert, setProposalToInsert] = useState(proposalStateMock);
 
@@ -109,8 +109,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
         <Route path="/" element={<HeaderPage user={user} resetProposal={resetProposal} />}>
-          <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
           <Route path="/*" element={<DefaultRoute />} />
           <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
           <Route
@@ -136,7 +136,7 @@ function App() {
           {user?.role === "student" && (
             <>
               <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
-              <Route path="/student/requestForm" element={loggedIn ?(<StudentRequestPage user={user}/>):(<Navigate to="/login" />)}></Route>
+              <Route path="/student/requestForm" element={loggedIn ? (<StudentRequestPage user={user} />) : (<Navigate to="/login" />)}></Route>
               <Route path="/students/:id" element={loggedIn ? (<StudentDetailsPage />) : (
                 <Navigate to="/login" />
               )} />

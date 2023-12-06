@@ -44,12 +44,11 @@ function FilterProposals(props) {
 
     visibleFilters = { ...allFilters, ...disabledFilters };
 
-    const filteredProposal = props.user.role === "teacher"
-        ? (showArchived
+    const filteredProposal = 
+         (showArchived
             ? props.ProposalsList.filter(pro => pro.archived)
             : props.ProposalsList.filter(pro => !pro.archived)
             )
-        : props.ProposalsList;
 
     
     return (
