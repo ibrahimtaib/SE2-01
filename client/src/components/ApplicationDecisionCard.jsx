@@ -12,7 +12,8 @@ function ApplicationDecisionCard(props) {
 
     return (
         <>
-        {props.application.proposal?<ProposalDecisionCard application={props.application}></ProposalDecisionCard>:props.application.requestedThesis?<RequestThesisCard application={props.application}></RequestThesisCard>:""}
+        {props.application.proposal?<ProposalDecisionCard application={props.application}></ProposalDecisionCard>:""}
+        {props.application.requestedThesis?<RequestThesisCard application={props.application}></RequestThesisCard>:""}
         </>
     );
 }
