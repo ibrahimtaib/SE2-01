@@ -305,12 +305,12 @@ function LeftSide(props) {
                     <MyDatePicker date={date} setDate={setDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                 </Form.Group>
             )}
-
+            
             <Form.Group className="mb-3 d-flex justify-content-start">
                 <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
                 <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
-    
-                {props.showHomeButton ? (
+                {props.user.role == "teacher" ?
+                props.showHomeButton ? (
                 <Button
                     variant="primary"
                     style={{ marginLeft: 'auto' }}
@@ -326,8 +326,10 @@ function LeftSide(props) {
                 >
                     <FaArchive /> Archive
                 </Button>
-                )}
-            </Form.Group>
+                )
+                : " " }
+            </Form.Group> 
+            
         </Form>
 
     </>
