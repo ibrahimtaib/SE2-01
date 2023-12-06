@@ -11,15 +11,24 @@ import { Alert } from 'react-bootstrap';
 
 function StudentApplicationsPage({ user }) {
     const [applicationList, setApplicationList] = useState([]);
-
     useEffect(() => {
         const init = async () => {
             try {
                 const applications1 = await API.getApplicationsByStudentId(user.id);
+                console.log(applications1);
+        
+                setApplicationList([...applications1]);
+            } catch (err) {
+                console.log(err);
+            }
+            try {
                 const applications2 = await API.getRequestedThesisByStudentId(user.id);
-                const combinedApplications = [...applications1, ...applications2];
-                console.log(combinedApplications)
-                setApplicationList(combinedApplications);
+                console.log(applications2);
+        
+                // Se applications2 è definito, concatena i dati all'array esistente
+                if (applications2) {
+                    setApplicationList((prevApplications) => [...prevApplications, ...applications2]);
+                }
             } catch (err) {
                 console.log(err);
             }
