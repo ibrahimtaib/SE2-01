@@ -61,12 +61,12 @@ router.get("/title/:searchString", async (req, res) => {
   }
 });
 
-router.get("/cosupervisor/:surname", async (req, res) => {
-  const surname = req.params.surname;
+router.get("/cosupervisor/:cosupervisors", async (req, res) => {
+  const cosupervisors = req.params.cosupervisors;
 
   try {
     const proposals = await proposalsController.getProposalsByCosupervisor(
-      surname
+      cosupervisors
     );
     res.status(200).json(proposals);
   } catch (error) {
@@ -75,12 +75,12 @@ router.get("/cosupervisor/:surname", async (req, res) => {
   }
 });
 
-router.get("/supervisor/:surname", async (req, res) => {
-  const surname = req.params.surname;
+router.get("/supervisor/:nameOrSurname", async (req, res) => {
+  const nameOrSurname = req.params.nameOrSurname;
 
   try {
     const proposals = await proposalsController.getProposalsBySupervisor(
-      surname
+      nameOrSurname
     );
     res.status(200).json(proposals);
   } catch (error) {

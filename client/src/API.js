@@ -67,8 +67,8 @@ async function getProposalsByTitle(title) {
   }
 }
 
-async function getProposalsByCosupervisor(surname) {
-  const response = await fetch(`${URL}proposals/cosupervisor/${surname}`); // Attendere che la Promise si risolva
+async function getProposalsByCosupervisor(cosupervisors) {
+  const response = await fetch(`${URL}proposals/cosupervisor/${cosupervisors}`); // Attendere che la Promise si risolva
   const proposals = await response.json(); // Attendere che la Promise si risolva
   if (response.ok) {
     return proposals.map((e) => ({
@@ -99,9 +99,10 @@ async function getProposalsByCosupervisor(surname) {
   }
 }
 
-async function getProposalsBySupervisor(surname) {
-  const response = await fetch(`${URL}proposals/supervisor/${surname}`); // Attendere che la Promise si risolva
+async function getProposalsBySupervisor(nameOrSurname) {
+  const response = await fetch(`${URL}proposals/supervisor/${nameOrSurname}`); // Attendere che la Promise si risolva
   const proposals = await response.json(); // Attendere che la Promise si risolva
+  console.log(proposals)
   if (response.ok) {
     return proposals.map((e) => ({
       Supervisor: e.teacher.surname,
@@ -393,6 +394,7 @@ async function getTeacherProposals(teacherId) {
 }
 
 async function filterProposals(data) {
+  console.log(data)
   try {
     const response = await fetch(`${URL}proposals/filter`, {
       method: "POST",

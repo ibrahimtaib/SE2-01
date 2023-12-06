@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma");
 const { resolve } = require("path");
 const { STATUS } = require("../constants/application");
+const { rejects } = require("assert");
 module.exports = {
   createProposal: async (body) => {
     const {
@@ -258,10 +259,10 @@ module.exports = {
     });
   },
 
-  getProposalsByCosupervisor: async (surname) => {
-    const separatedCoSupervisors = surname
+  /*getProposalsByCosupervisor: async (cosupervisors) => {
+    const separatedCosupervisors = cosupervisors
       .split(",")
-      .map((surname) => surname.trim().toLowerCase());
+      .map((cosupervisor) => cosupervisor.trim().toLowerCase());
     return new Promise((resolve, reject) => {
       prisma.Proposal.findMany({
         include: {
@@ -279,11 +280,11 @@ module.exports = {
       })
         .then((proposals) => {
           const filteredProposals = proposals.filter((proposal) => {
-            const proposalCoSup = proposal.coSupervisors.map((group) =>
-              group.toLowerCase()
+            const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
+            cosupervisor.toLowerCase()
             );
-            return separatedCoSupervisors.some((group) =>
-              proposalCoSup.includes(group)
+            return separatedCosupervisors.every((cosupervisor) =>
+            proposalCosupervisors.includes(cosupervisor)
             );
           });
 
@@ -295,23 +296,129 @@ module.exports = {
           });
         });
     });
-  },
+  },*/
 
-  getProposalsBySupervisor: async (surname) => {
-    try {
-      const teachers = await prisma.Teacher.findMany({
-        where: {
-          surname: {
-            contains: surname,
-            mode: "insensitive",
+  getProposalsByCosupervisor: async (cosupervisors) => {
+    const separatedCosupervisors = cosupervisors
+      .split(",")
+      .map((cosupervisor) => cosupervisor.trim().toLowerCase());
+  
+    return new Promise((resolve, reject) => {
+      prisma.Proposal.findMany({
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+            },
+          },
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
           },
         },
-      });
-
-      if (!teachers) {
-        throw new Error("An error occurred while querying the database");
+      })
+        .then((proposals) => {
+          const filteredProposals = proposals.filter((proposal) => {
+            const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
+              cosupervisor.toLowerCase()
+            );
+  
+            return separatedCosupervisors.every((inputCosupervisor) => {
+              const [inputName, inputSurname] = inputCosupervisor.split(' ');
+  
+              return proposalCosupervisors.some((cos) => {
+                const [name, surname] = cos.split(' ');
+                if (inputSurname) {
+                  return surname === inputSurname && (inputName ? name === inputName : true);
+                } else {
+                  return name === inputName || surname === inputName;
+                }
+              });
+            });
+          });
+  
+          resolve(filteredProposals);
+        })
+        .catch(() => {
+          reject({
+            error: "An error occurred while querying the database",
+          });
+        });
+    });
+  },
+  
+  
+  
+  getProposalsBySupervisor: async (nameOrSurname) => {
+    try {
+      const [name, surname] = nameOrSurname.split(' ');
+  
+      let teachers;
+      if (surname && name) {
+        teachers = await prisma.Teacher.findMany({
+          where: {
+            OR: [
+              {
+                AND: [
+                  {
+                    name: {
+                      contains: name,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    surname: {
+                      contains: surname,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  {
+                    name: {
+                      contains: surname,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    surname: {
+                      contains: name,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        });
+      } else {
+        teachers = await prisma.Teacher.findMany({
+          where: {
+            OR: [
+              {
+                surname: {
+                  contains: nameOrSurname,
+                  mode: "insensitive",
+                },
+              },
+              {
+                name: {
+                  contains: nameOrSurname,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        });
       }
-
+  
+      if (!teachers || teachers.length === 0) {
+        throw new Error("No teachers found matching the given criteria");
+      }
+  
       const teacherIds = teachers.map((teacher) => teacher.id);
       const proposals = await prisma.Proposal.findMany({
         include: {
@@ -332,12 +439,15 @@ module.exports = {
           },
         },
       });
-
+  
       return proposals;
     } catch (error) {
       throw new Error("An error occurred while querying the database");
     }
   },
+  
+  
+
 
   getProposalsByKeywords: async (keywords) => {
     const separatedKeywords = keywords

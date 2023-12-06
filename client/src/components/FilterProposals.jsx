@@ -84,7 +84,7 @@ function LeftSide(props) {
                             setClickReset(false);
                         }).catch((err) => console.log(err));
                     }else if(props.user.role=="teacher"){
-                        API.getAllProposals().then((a) => {
+                        API.getTeacherProposals(props.user.id).then((a) => {
                             props.setProposalsList(a)
                             setClickReset(false);
                         }).catch((err) => console.log(err));
@@ -167,9 +167,8 @@ function LeftSide(props) {
                 expiration: date,
                 keywords: keywords,
                 groups: groups,
-                supervisor: supervisor
+                supervisor: props.user.name 
               }
-          
               setFilter(flt);
               setClick(true);
         }
@@ -230,19 +229,19 @@ function LeftSide(props) {
                     )}
                 </Col>
                 <Col md={props.user.role === 'teacher' ? 12 : 6}>
-                    {props.visibleFilters.cosupervisor && (
-                        <Form.Group className="mb-3">
-                            <Form.Label>Filter by Co-Supervisor</Form.Label>
-                            <Form.Control
-                                name="cosupervisor"
-                                placeholder="Co-Supervisor"
-                                value={cosupervisor}
-                                onChange={handleCosupervisorChange}
-                                className={props.user.role === 'teacher' ? 'w-100' : 'form-control-sm'}
-                            />
-                        </Form.Group>
-                    )}
-                </Col>
+                        {props.visibleFilters.cosupervisor && (
+                            <Form.Group className="mb-3">
+                                <Form.Label>Filter by Co-Supervisor</Form.Label>
+                                <Form.Control
+                                    name="cosupervisor"
+                                    placeholder="Name1 Surname1, ... "
+                                    value={cosupervisor}
+                                    onChange={handleCosupervisorChange}
+                                    className={props.user.role === 'teacher' ? 'w-100' : 'form-control-md'}
+                                />
+                            </Form.Group>
+                        )}
+                    </Col>
             </Row>
 
             <Row>
@@ -250,7 +249,7 @@ function LeftSide(props) {
                     {props.visibleFilters.keywords && (
                         <Form.Group className="mb-3">
                             <Form.Label>Filter by Keywords</Form.Label>
-                            <Form.Control name="keywords" placeholder="Keywords Separated By ," value={keywords} onChange={handleKeywordsChange} />
+                            <Form.Control name="keywords" placeholder="Keyword1,Keyword2,..." value={keywords} onChange={handleKeywordsChange} />
                         </Form.Group>
                     )}
                 </Col>
@@ -258,7 +257,7 @@ function LeftSide(props) {
                     {props.visibleFilters.groups && (
                         <Form.Group className="mb-3">
                             <Form.Label>Filter by Groups</Form.Label>
-                            <Form.Control name="groups" placeholder="Groups Separated By ," value={groups} onChange={handleGroupsChange} />
+                            <Form.Control name="groups" placeholder="Group1,Group2,..." value={groups} onChange={handleGroupsChange} />
                         </Form.Group>
                     )}
                 </Col>
