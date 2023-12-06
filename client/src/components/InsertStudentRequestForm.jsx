@@ -12,18 +12,13 @@ const InsertStudentRequestForm = (props) => {
         cds: props.user.cds
     });
     const [teachers, setTeachers]=useState([]);
-    const [types, setTypes]=useState([]);
+    const [types, setTypes]=useState([{title:"sperimentale"},{title:"compilativa"}]);
 
     useEffect(() => {
         const init = async () => {
-            API.getAllTypes().then((a) => {
-                setTypes(a);
-            }).catch((err) => console.log(err));
-
             API.getTeachers().then((a) => {
                 setTeachers(a);
             }).catch((err) => console.log(err));
-
         };
         init();
     }, [props.user]);

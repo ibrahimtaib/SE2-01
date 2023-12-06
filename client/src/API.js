@@ -563,6 +563,20 @@ async function getApplicationsByStudentId(id) {
   }
 }
 
+async function getRequestedThesisByStudentId(id) {
+  const response = await fetch(`${URL}applications/requestedThesis/${id}`);
+  const data = await response.json();
+
+  if (response.ok) {
+    return data.map((e) => ({
+      ...e,
+      requestedThesis: true,
+    }));
+  } else {
+    throw new Error(data.error || "Failed to fetch proposal");
+  }
+}
+
 async function getTeachers() {
   const response = await fetch(`${URL}teachers/`);
   const data = await response.json();
@@ -596,6 +610,7 @@ const API = {
   getUserInfo,
   getApplicationsByStudentId,
   getTeacherProposals,
-  getTeachers
+  getTeachers,
+  getRequestedThesisByStudentId
 };
 export default API;
