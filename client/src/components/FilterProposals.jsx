@@ -44,15 +44,19 @@ function FilterProposals(props) {
 
     visibleFilters = { ...allFilters, ...disabledFilters };
 
-    const filteredProposal = showArchived
-        ? props.ProposalsList.filter(pro => pro.archived)
-        : props.ProposalsList.filter(pro => !pro.archived);
+    const filteredProposal = props.user.role === "teacher"
+        ? (showArchived
+            ? props.ProposalsList.filter(pro => pro.archived)
+            : props.ProposalsList.filter(pro => !pro.archived)
+            )
+        : props.ProposalsList;
+
     
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
                 <Col sm={4} className="bg-light custom-padding"><LeftSide showHomeButton={showHomeButton} handleArchiveClick={handleArchiveClick}  handleHomeClick={handleHomeClick} setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide showArchived={showArchived} user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
+                <Col sm={8} className=" p-3"><RightSide refetchDynamicContent={props.refetchDynamicContent} showArchived={showArchived} user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -304,29 +308,31 @@ function LeftSide(props) {
                     <MyDatePicker date={date} setDate={setDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                 </Form.Group>
             )}
-
+            
             <Form.Group className="mb-3 d-flex justify-content-start">
                 <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
                 <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
-    
-                {props.showHomeButton ? (
-                <Button
-                    variant="primary"
-                    style={{ marginLeft: 'auto' }}
-                    onClick={props.handleHomeClick}
-                >
-                    <FaHome /> Home
-                </Button>
-                ) : (
-                <Button
-                    variant="primary"
-                    style={{ marginLeft: 'auto' }}
-                    onClick={props.handleArchiveClick}
-                >
-                    <FaArchive /> Archive
-                </Button>
-                )}
-            </Form.Group>
+                {props.user.role == "teacher" ?
+                    props.showHomeButton ? (
+                    <Button
+                        variant="primary"
+                        style={{ marginLeft: 'auto' }}
+                        onClick={props.handleHomeClick}
+                    >
+                        <FaHome /> Home
+                    </Button>
+                    ) : (
+                    <Button
+                        variant="primary"
+                        style={{ marginLeft: 'auto' }}
+                        onClick={props.handleArchiveClick}
+                    >
+                        <FaArchive /> Archive
+                    </Button>
+                    )
+                : " " }
+            </Form.Group> 
+            
         </Form>
 
     </>
