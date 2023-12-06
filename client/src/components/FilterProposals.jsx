@@ -12,8 +12,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import ProposalCard from './ProposalCard';
-import { Alert } from 'react-bootstrap';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { FaArchive, FaHome } from 'react-icons/fa';
 
 
@@ -50,12 +48,11 @@ function FilterProposals(props) {
         ? props.ProposalsList.filter(pro => pro.archived)
         : props.ProposalsList.filter(pro => !pro.archived);
     
-    //console.log("FilterProposals", props.ProposalsList)
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
                 <Col sm={4} className="bg-light custom-padding"><LeftSide showHomeButton={showHomeButton} handleArchiveClick={handleArchiveClick}  handleHomeClick={handleHomeClick} setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
+                <Col sm={8} className=" p-3"><RightSide showArchived={showArchived} user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -341,7 +338,6 @@ function LeftSide(props) {
 
 function RightSide(props) {
     const navigate = useNavigate();
-    console.log("RightSide", props.ProposalsList)
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return <Alert variant="info" style={{ width: "100%" }}>
             There are no proposals available at this moment. 
@@ -349,9 +345,16 @@ function RightSide(props) {
     }
     return (
         <>
-            {props.ProposalsList.filter((proposal) => (props.user && props.user.role === "teacher") ? proposal.teacherID === props.user.id && proposal.archived === false : true)
-            .map((proposal, index) => (
-                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} refetchDynamicContent={props.refetchDynamicContent}/>
+            {props.ProposalsList.map((proposal, index) => (
+            <ProposalCard
+                showArchived={props.showArchived}
+                user={props.user}
+                key={index}
+                proposal={proposal}
+                setUpdate={props.setUpdate}
+                setProposalToInsert={props.setProposalToInsert}
+                refetchDynamicContent={props.refetchDynamicContent}
+            />
             ))}
         </>
     );
