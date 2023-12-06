@@ -163,7 +163,7 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
                 groups: [], //TODO: Issue with groups
                 archived: false
             }).then(() => {
-                refetchDynamicContent();
+                refetchDynamicContent(user.id);
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {
@@ -186,7 +186,7 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
                 groups: [],
                 archived: false
             }).then(() => {
-                refetchDynamicContent();
+                refetchDynamicContent(user.id);
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {
