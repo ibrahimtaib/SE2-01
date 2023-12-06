@@ -15,16 +15,12 @@ function StudentApplicationsPage({ user }) {
         const init = async () => {
             try {
                 const applications1 = await API.getApplicationsByStudentId(user.id);
-                console.log(applications1);
-        
                 setApplicationList([...applications1]);
             } catch (err) {
                 console.log(err);
             }
             try {
                 const applications2 = await API.getRequestedThesisByStudentId(user.id);
-                console.log(applications2);
-        
                 // Se applications2 è definito, concatena i dati all'array esistente
                 if (applications2) {
                     setApplicationList((prevApplications) => [...prevApplications, ...applications2]);

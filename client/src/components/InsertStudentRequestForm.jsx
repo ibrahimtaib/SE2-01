@@ -110,7 +110,7 @@ const InsertStudentRequestForm = (props) => {
                                 >
                                     <option value="" disabled>Select a Teacher</option>
                                     {teachers.map((teacher, index) => (
-                                        <option key={index} value={teacher.title}>
+                                        <option key={index} value={teacher.id}>
                                             {teacher.name+" "+teacher.surname}
                                         </option>
                                     ))}
