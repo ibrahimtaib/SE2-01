@@ -238,7 +238,7 @@ function LeftSide(props) {
                                 placeholder="Co-Supervisor"
                                 value={cosupervisor}
                                 onChange={handleCosupervisorChange}
-                                className={props.user.role === 'teacher' ? 'w-100' : 'form-control-sm'}
+                                className={props.user.role === 'teacher' ? 'w-100' : 'form-control-md'}
                             />
                         </Form.Group>
                     )}
