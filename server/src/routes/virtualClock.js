@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { newDate } = req.body;
-  let virtualClock = virtualClockController.setVirtualClock(newDate);
+  let virtualClock = virtualClockController.setVirtualClock(new Date(newDate));
   res.status(200).json(virtualClock);
 });
 
