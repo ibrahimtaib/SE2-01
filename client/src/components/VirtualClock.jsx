@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {forwardRef, useState, useEffect} from 'react'
 import { FaRegClock } from "react-icons/fa";
 import Button from 'react-bootstrap/Button';
@@ -10,7 +11,7 @@ function VirtualClock() {
   const [virtualDate, setVirtualDate] = useState(undefined);
   const [showCalendar, setShowCalendar] = useState(false);
   const [buttonVariant, setButtonVariant] = useState('outline-light');
-  const CustomInput = forwardRef(function CustomInput({ value, onClick }, ref) {
+  const CustomInput = forwardRef(function CustomInput({ onClick }, ref) {
     return (
     <Button variant={buttonVariant} className="mr-3" style={{ marginLeft: '10px'}} onClick={() => {
       onClick()
