@@ -74,7 +74,7 @@ function VirtualClock() {
       selected={startDate}
       open={showCalendar}
       shouldCloseOnSelect={false}
-      onChange={(date) => setStartDate(date)}
+      onSelect={(date) => setStartDate(date)}
       customInput={<CustomInput />}
       calendarClassName="custom-calendar"
       >
