@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma.js");
 const { STATUS } = require("../constants/application.js");
+const { getVirtualClock } = require("./virtualClock");
 module.exports = {
   /**
    * Function that creates an application in the database.
@@ -65,7 +66,7 @@ module.exports = {
         }
 
         // Check proposal is valid
-        if (proposal.expiration <= Date.now()) {
+        if (proposal.expiration <= getVirtualClock()) {
           return reject({
             status: 400,
             error: "Proposal has already expired!",

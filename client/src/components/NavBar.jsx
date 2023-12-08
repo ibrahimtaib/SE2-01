@@ -4,6 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useNavigate } from 'react-router-dom';
+import VirtualClock from './VirtualClock';
 
 function NavBar({ user , resetProposal }) {
   const navigateTo = useNavigate();
@@ -19,6 +20,7 @@ function NavBar({ user , resetProposal }) {
               {user.role === "student" ? <Nav.Link onClick={() => navigateTo(`student/applications`)}  >Applications</Nav.Link> : <></>}
               {user.role === "student" ? <Nav.Link onClick={() => navigateTo(`student/requestForm`)}  >Request Form</Nav.Link> : <></>}
             </Nav>
+            <VirtualClock />
           </Navbar.Collapse>
           <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white", paddingInline: 10 }}>
             <NavDropdown.Item href="#action/3.1">Archived</NavDropdown.Item>
@@ -27,7 +29,6 @@ function NavBar({ user , resetProposal }) {
               Settings
             </NavDropdown.Item>
           </NavDropdown>
-
           {user.role === "teacher" ? <Button
             variant="outline-light"
             className="mr-3"
