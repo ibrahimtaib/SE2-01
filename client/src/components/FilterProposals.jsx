@@ -348,7 +348,12 @@ function RightSide(props) {
         </Alert>;
     }
     return (
-        <>
+        <>  
+           {props.showArchived ? (
+                <h1 style={{ marginLeft: '20px' }}>Archive</h1>
+            ) : (
+                <h1 style={{ marginLeft: '20px' }}>Proposals</h1>
+            )}
             {props.ProposalsList.map((proposal, index) => (
             <ProposalCard
                 showArchived={props.showArchived}
