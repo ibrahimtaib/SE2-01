@@ -447,6 +447,16 @@ async function getApplicationsByTeacherId(teacherId) {
   }
 }
 
+async function getAllPendingApplications() {
+  const response = await fetch(`${URL}clerk/applications`);
+  const res = await response.json();
+  if (response.ok) {
+    return res;
+  } else {
+    throw 0;
+  }
+}
+
 async function getProposalById(proposalId) {
   const response = await fetch(`${URL}applications/proposal/${proposalId}`);
   const data = await response.json();
@@ -637,6 +647,7 @@ const API = {
   getTeacherProposals,
   getTeachers,
   getRequestedThesisByStudentId,
-  submitNewThesisRequest  
+  submitNewThesisRequest,
+  getAllPendingApplications  
 };
 export default API;
