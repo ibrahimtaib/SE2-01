@@ -168,7 +168,7 @@ module.exports = {
       return applications;
     } catch (error) {
       console.error("Error in getApplicationsDecisionsByStudentId:", error);
-      throw { error: "An error occurred while querying the database" };
+      throw new Error("An error occurred while querying the database");
     }
   },
 
@@ -188,7 +188,7 @@ module.exports = {
       return requests;
     } catch (error) {
       console.error("Error in getApplicationsDecisionsByStudentId:", error);
-      throw { error: "An error occurred while querying the database" };
+      throw new Error("An error occurred while querying the database");
     }
   },
 

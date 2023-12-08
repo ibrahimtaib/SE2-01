@@ -3,48 +3,53 @@ const router = express.Router({ mergeParams: true });
 const proposalsController = require("../controllers/proposals");
 
 router.post("/", async (req, res) => {
-  proposalsController
-    .createProposal(req.body)
-    .then((proposal) => {
-      res.status(200).json(proposal);
-    })
-    .catch((error) => res.status(500).json(error));
+  try {
+    const proposal = await proposalsController.createProposal(req.body);
+    res.status(200).json(proposal);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
 });
 
 router.get("/cds", async (req, res) => {
-  proposalsController
-    .getAllCds()
-    .then((cdsList) => {
-      res.status(200).json(cdsList);
-    })
-    .catch((error) => res.status(500).json(error));
+  try {
+    const cdsList = await proposalsController.getAllCds();
+    res.status(200).json(cdsList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
 });
 
 router.get("/types", async (req, res) => {
-  proposalsController
-    .getAllTypes()
-    .then((typeList) => {
-      res.status(200).json(typeList);
-    })
-    .catch((error) => res.status(500).json(error));
+  try {
+    const typeList = await proposalsController.getAllTypes();
+    res.status(200).json(typeList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
 });
 
 router.get("/levels", async (req, res) => {
-  proposalsController
-    .getAllLevels()
-    .then((levelList) => {
-      res.status(200).json(levelList);
-    })
-    .catch((error) => res.status(500).json(error));
+  try {
+    const levelList = await proposalsController.getAllLevels();
+    res.status(200).json(levelList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
 });
 
 router.get("/", async (req, res) => {
-  proposalsController
-    .getProposals()
-    .then((proposals) => {
-      res.status(200).json(proposals);
-    })
-    .catch((error) => res.status(500).json(error));
+  try {
+    const proposals = await proposalsController.getProposals();
+    res.status(200).json(proposals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
 });
 
 router.get("/title/:searchString", async (req, res) => {
