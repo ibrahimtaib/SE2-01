@@ -54,7 +54,7 @@ function FilterProposals(props) {
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
-                <Col sm={4} className="bg-light custom-padding"><LeftSide showHomeButton={showHomeButton} handleArchiveClick={handleArchiveClick}  handleHomeClick={handleHomeClick} setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
+                <Col sm={4} className="bg-light custom-padding h-100"><LeftSide showHomeButton={showHomeButton} handleArchiveClick={handleArchiveClick}  handleHomeClick={handleHomeClick} setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
                 <Col sm={8} className=" p-3"><RightSide refetchDynamicContent={props.refetchDynamicContent} showArchived={showArchived} user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
@@ -344,15 +344,15 @@ function RightSide(props) {
     const navigate = useNavigate();
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return <Alert variant="info" style={{ width: "100%" }}>
-            There are no proposals available at this moment. 
+            {props.showArchived ? 'There are no archived proposals.' : 'There are no available proposals at this moment.'}
         </Alert>;
     }
     return (
         <>  
            {props.showArchived ? (
-                <h1 style={{ marginLeft: '20px' }}>Archive</h1>
+                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>Archived proposals</h2>
             ) : (
-                <h1 style={{ marginLeft: '20px' }}>Proposals</h1>
+                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>Available proposals</h2>
             )}
             {props.ProposalsList.map((proposal, index) => (
             <ProposalCard

@@ -3,8 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VirtualClock from './VirtualClock';
+import API from '../API';
 
 function NavBar({ user , resetProposal }) {
   const navigateTo = useNavigate();
@@ -14,37 +16,40 @@ function NavBar({ user , resetProposal }) {
       {user ? (
         <>
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto ml-3">
-              <Nav.Link onClick={() => navigateTo(`/`)} active>Proposals</Nav.Link>
-              {user.role === "teacher" ? <Nav.Link onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link> : <></>}
-              {user.role === "student" ? <Nav.Link onClick={() => navigateTo(`student/applications`)}  >Applications</Nav.Link> : <></>}
-              {user.role === "student" ? <Nav.Link onClick={() => navigateTo(`student/requestForm`)}  >Request Form</Nav.Link> : <></>}
+            <Nav defaultActiveKey="proposals" className="mr-auto ml-3">
+              <Nav.Link eventKey="proposals" onClick={() => navigateTo(`/`)}>Proposals</Nav.Link>
+              {user.role === "teacher" ? <Nav.Link eventKey="teacherApps" onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link> : <></>}
+              {user.role === "student" ? <Nav.Link eventKey="studentApps" onClick={() => navigateTo(`student/applications`)}  >Applications</Nav.Link> : <></>}
+              {user.role === "student" ? <Nav.Link eventKey="studentRequestForm" onClick={() => navigateTo(`student/requestForm`)}  >Request Form</Nav.Link> : <></>}
             </Nav>
-            <VirtualClock />
           </Navbar.Collapse>
-          <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white", paddingInline: 10 }}>
-            <NavDropdown.Item href="#action/3.1">Archived</NavDropdown.Item>
+          <NavDropdown title={user.name} id='dropdown-button-drop-start' style={{ color: "white", marginRight: "5%"}}>
+            {user.role === "teacher" ? <>
+              <NavDropdown.Item onClick={() => {
+                resetProposal()
+                navigateTo('/add');
+              }}>Add proposal</NavDropdown.Item>
+            </> : <></>}
+            {user.role === "student" ?
+              <><NavDropdown.Item onClick={async () => {
+                try {
+                  const studentDetails = await API.getExamAndStudentById(user.id);
+                  navigateTo(`/students/${user.id}`, {
+                    state: {
+                      student: studentDetails.student,
+                    },
+                  });
+                } catch (error) {
+                  console.error(error);
+                }
+              }}>Curriculum</NavDropdown.Item>
+              </> : <></>}
+            <VirtualClock />
             <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
-              Settings
+            <NavDropdown.Item onClick={() => window.location.href = "/logout"}>
+              Logout
             </NavDropdown.Item>
           </NavDropdown>
-          {user.role === "teacher" ? <Button
-            variant="outline-light"
-            className="mr-3"
-            style={{ marginRight: '10px' }}
-            onClick={() => {
-              resetProposal()
-              navigateTo('/add');
-            }}
-          >Add proposal</Button> : <></>}
-
-          <Button
-            variant="outline-light"
-            className="mr-3"
-            style={{ marginRight: '10px' }}
-            onClick={() => window.location.href = "/logout"}
-          >Log out</Button>
         </>
       ) : (
         <></>

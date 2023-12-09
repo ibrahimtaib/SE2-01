@@ -17,7 +17,7 @@ function VirtualClock() {
       onClick()
       setShowCalendar(!showCalendar)
       setStartDate(virtualDate)
-    }} ref={ref}><FaRegClock /> </Button>
+    }} ref={ref}><FaRegClock /></Button>
     )}
   );
 

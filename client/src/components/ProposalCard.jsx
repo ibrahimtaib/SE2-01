@@ -92,7 +92,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
                 <>
                   <Dropdown>
 
-                    <Dropdown.Toggle split variant="" id="dropdown-button-drop-start" />
+                    <Dropdown.Toggle title='Actions' variant="" id="dropdown-button-drop-start" />
                     <Dropdown.Menu>
                       <Dropdown.Item style={{
                         borderColor: "#1a365d",
