@@ -1,4 +1,4 @@
-const secretariesController = require("../controllers/secretaries");
+const secretariesController = require("../controllers/secreataries");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     secretariesController
-    .getSecretariesById(req.params.id)
+    .getSecretariesById(parseInt(req.params.id))
     .then((secretary) => {
       res.status(200).json(secretary);
     })
