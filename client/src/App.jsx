@@ -20,6 +20,7 @@ import './App.css';
 
 
 import ApplicationsPage from "./pages/applicationsPage";
+import ApplicationsPage_secretary from "./pages/applicationsPage_Secretary";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -62,6 +63,10 @@ function App() {
 
   const refetchDynamicContentTeacher = async (teacherId) => {
     API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
+  }
+
+  const refetchDynamicContentSecretary = async () => {
+    API.getAllProposals.then((proposals) => setProposalsList(proposals));
   }
 
   const refectProposalAfterArchiving = (proposal) => {
@@ -157,6 +162,13 @@ function App() {
               <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
               <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
+            </>
+          )}
+          {user?.role === "secretary" && (
+            <>
+              <Route path="secretary/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentSecretary} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
+              <Route path="secretary/applications/*" element={<ApplicationsPage_secretary user={user} />} />
+              <Route path="secretary/students/:id" element={<StudentDetailsPage />} />
             </>
           )}
         </Route>

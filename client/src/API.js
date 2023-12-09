@@ -392,7 +392,37 @@ async function getTeacherProposals(teacherId) {
     throw proposals;
   }
 }
-
+async function getAllProposals() {
+  const response = await fetch(`${URL}proposals/secretary/proposals`);
+  const proposals = await response.json();
+  if (response.ok) {
+    return proposals.map((e) => ({
+      Supervisor: e.teacher.surname,
+      Surname: e.teacher.surname,
+      Name: e.teacher.name,
+      teacherID: e.teacher.id,
+      Cds: e.cds,
+      id: e.id,
+      Title: e.title,
+      Keywords: e.keywords,
+      CoSupervisor: e.coSupervisors,
+      Expiration: dayjs(e.expiration).format("DD/MM/YYYY"),
+      date: dayjs(e.expiration).format("YYYY-MM-DD"),
+      Groups: e.groups,
+      Level: e.level,
+      Type: e.type,
+      Description: e.description,
+      Notes: e.notes,
+      RequiredKnowledge: e.requiredKnowledge,
+      Teacher: e.teacher.surname,
+      titleDegree: e.degree.TITLE_DEGREE,
+      deletable: e.deletable,
+      archived: e.archived
+    }));
+  } else {
+    throw proposals;
+  }
+}
 async function filterProposals(data) {
   console.log(data)
   try {
