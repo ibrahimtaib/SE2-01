@@ -8,7 +8,7 @@ module.exports = {
    */
   getSecretaries: async () => {
     return new Promise((resolve, reject) =>
-      prisma.Secretary
+      prisma.ThesisRequest
         .findMany()
         .then((secretaries) => {
           return resolve(secretaries);
@@ -23,7 +23,7 @@ module.exports = {
   },
   getSecretariesById: async (id) => {
     return new Promise((resolve, reject) =>
-      prisma.Secretary
+      prisma.ThesisRequest
         .findUnique({
           where: {
             id: id,
