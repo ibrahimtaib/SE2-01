@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import { sendMail } from '../api/api';
 
-const ProposalCard = ({ application, onAccept, onReject }) => {
+const ProposalCard = ({ application, onAccept, onReject, isRequest=false }) => {
   const [hoveredTitle, setHoveredTitle] = useState(false);
   const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
                 fontWeight: hoveredTitle ? 'bold' : 'normal',
                 textDecoration: hoveredTitle ? 'underline' : 'none',
               }}
-              onClick={() => handleTitleClick(application)}
+              onClick={!isRequest?() => handleTitleClick(application): null}
               onMouseEnter={() => setHoveredTitle(true)}
               onMouseLeave={() => setHoveredTitle(false)}
             >
@@ -150,11 +150,12 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   );
 };
 
-const ProposalList = ({ applications, loading, onAccept, onReject }) => {
+const ProposalList = ({ applications, loading, onAccept, onReject, isRequest=false }) => {
+  console.log("first application",applications[0]);
   return (
     <Container>
       <br />
-      <h1>Thesis Applications</h1>
+      <h1>{!isRequest?"Thesis Applications": "Thesis Requests"}</h1>
       <br />
       {loading ? (
         <Spinner animation="border" role="status">
@@ -168,13 +169,14 @@ const ProposalList = ({ applications, loading, onAccept, onReject }) => {
               application={selectedApplication}
               onAccept={onAccept}
               onReject={onReject}
+              isRequest={isRequest}
             />
           ))
         ) : (
-          <div>No applications found.</div>
+          <div>No {isRequest?"requests":"applications"} found.</div>
         )
       ) : (
-        <div>Applications not defined.</div>
+        <div>{isRequest?"Requests":"applications"} not defined.</div>
       )}
     </Container>
   );

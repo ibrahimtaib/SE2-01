@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import API from '../API';
 import ApplicationsList from '../components/BrowseApplications';
-import ProposalDetails from '../components/ProposalDetails';
 
 
-function ApplicationsPage_secretary({user}) {
+function ApplicationsPage_secretary() {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -35,7 +34,7 @@ function ApplicationsPage_secretary({user}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-              const applicationsData = await API.getApplicationsByTeacherId(user.id);  
+              const applicationsData = await API.getPendingThesisRequests();  
               setApplications(applicationsData);
               setLoading(false);
             } catch (error) {
@@ -57,10 +56,11 @@ function ApplicationsPage_secretary({user}) {
               setLoading={setLoading}
               onAccept={handleAcceptApplication}
               onReject={handleRejectApplication}
+              isRequest={true}
             />
           }
         />
-        <Route path="/proposal/:id" element={<ProposalDetails />} />
+        {/*TODO: add a Route for the ThesisDetails component*/}
       </Routes>
     </>
   );

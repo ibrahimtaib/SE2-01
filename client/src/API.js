@@ -446,16 +446,6 @@ async function getApplicationsByTeacherId(teacherId) {
   }
 }
 
-async function getAllPendingApplications() {
-  const response = await fetch(`${URL}clerk/applications`);
-  const res = await response.json();
-  if (response.ok) {
-    return res;
-  } else {
-    throw 0;
-  }
-}
-
 async function getProposalById(proposalId) {
   const response = await fetch(`${URL}applications/proposal/${proposalId}`);
   const data = await response.json();
@@ -621,6 +611,31 @@ async function submitNewThesisRequest(formData){
   }
 }
 
+async function getPendingThesisRequests(){
+  const response = await fetch(`${URL}secretaries/`);
+  const response_data = await response.json();
+  const data  = response_data.map((e) => ({
+      proposal: {
+        teacher: e.teacher,
+        title: e.title,
+        description: e.description,
+        notes: e.notes,
+        id: e.id,
+        type: e.type,
+        },
+      application: {
+        status: e.status,
+        id: e.id,
+        },
+      student: e.student,
+      }));
+  if (response.ok) {
+    return data;
+  } else {
+    throw new Error(data.error || "Failed to fetch proposal");
+  }
+}
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -647,6 +662,6 @@ const API = {
   getTeachers,
   getRequestedThesisByStudentId,
   submitNewThesisRequest,
-  getAllPendingApplications  
+  getPendingThesisRequests
 };
 export default API;

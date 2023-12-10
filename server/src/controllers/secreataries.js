@@ -9,7 +9,16 @@ module.exports = {
   getSecretaries: async () => {
     return new Promise((resolve, reject) =>
       prisma.ThesisRequest
-        .findMany()
+        .findMany({
+          include: {
+            teacher: true,
+            student: {
+              include: {
+                degree: true,
+              },
+            },
+            },
+        })
         .then((secretaries) => {
           return resolve(secretaries);
         })
@@ -28,6 +37,10 @@ module.exports = {
           where: {
             id: id,
           },
+          include: {
+            teacher: true,
+            student: true,
+            },
         })
         .then((secretary) => {
           return resolve(secretary);
