@@ -1,4 +1,5 @@
 const {
+  getAllProposals,
   getAllCds,
   getAllTypes,
   getAllLevels,
@@ -628,6 +629,89 @@ describe("getProposalsByCDS function", () => {
     } catch (error) {
       expect(error).toEqual({
         error: "An error occurred while querying the database",
+      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
+    }
+  });
+});
+describe('getAllProposals function', () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should get all proposals with deletable property based on applications and expiration', async () => {
+    // Mock data for the proposals
+    const mockProposals = [
+      {
+        id: 1,
+        title: 'Proposal 1',
+        expiration: new Date('2023-12-31'),
+        applications: [
+          { id: 101, status: 'accepted' },
+        ],
+      },
+      {
+        id: 2,
+        title: 'Proposal 2',
+        expiration: new Date('2024-01-15'),
+        applications: [],
+      },
+      // Add more mock proposals as needed
+    ];
+
+    // Mock the Prisma findMany function to return the mock proposals
+    prisma.Proposal.findMany.mockResolvedValueOnce(mockProposals);
+
+    try {
+      // Call the getAllProposals function
+      const result = await getAllProposals();
+
+      // Verify that the function returns the expected result
+      expect(result).toEqual(mockProposals.map((proposal) => ({
+        ...proposal,
+        deletable: proposal.applications.length === 0 && proposal.expiration >= new Date(),
+      })));
+
+      // Verify that the Prisma findMany function was called with the correct parameters
+      expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+              name: true,
+              id: true,
+            },
+          },
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
+          },
+          applications: {
+            where: {
+              status: 'accept',
+            },
+          },
+        },
+      });
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error("Error:", error);
+      throw error;
+    }
+  });
+
+  it('should handle errors during database query', async () => {
+    // Mock an error during the Prisma findMany function
+    const mockError = new Error('Database error');
+    prisma.Proposal.findMany.mockRejectedValueOnce(mockError);
+
+    // Call the getAllProposals function and expect it to throw an error
+    try {
+      await getAllProposals();
+    } catch (error) {
+      expect(error).toEqual({
+        error: "An error occurred while querying the database for applications",
       });
       expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
