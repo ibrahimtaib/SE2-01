@@ -25,6 +25,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-coverage-badges": "^1.0.0",
+    "jest-html-reporter": "^3.10.2",
     "supertest": "^6.3.3"
   }
 }
