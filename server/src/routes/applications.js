@@ -203,4 +203,15 @@ router.post("/newThesisRequest", async (req, res) => {
   }
 });
 
+router.get('/applicationsCount/:studentId', async (req, res) => {
+  const studentId = req.params.studentId;
+  try {
+    const applicationsCount = await applicationsController.getApplicationsCountByStudentId(studentId);
+    res.status(200).json({ applicationsCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

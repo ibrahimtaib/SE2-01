@@ -212,4 +212,21 @@ module.exports = {
       throw new Error("An error occurred while updating the application status to 'accept'");
     }
   },
+
+  getApplicationsCountByStudentId: async (studentId) => {
+    try {
+      const applicationsCount = await prisma.Application.count({
+        where: {
+          STUDENT_ID: studentId,
+        },
+      });
+  
+      return applicationsCount;
+    } catch (error) {
+      console.error('Error in getApplicationsCountByStudentId:', error);
+      throw new Error('An error occurred while querying the database');
+    }
+  }
+
+
 }
