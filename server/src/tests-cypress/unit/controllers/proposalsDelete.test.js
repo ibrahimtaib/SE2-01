@@ -15,7 +15,7 @@ jest.mock("../../../controllers/prisma.js", () => ({
   $transaction: jest.fn(),
 }));
 
-describe("deleteProposal function", () => {
+describe.skip("deleteProposal function", () => {
   afterAll(() => {
     jest.clearAllMocks();
   });

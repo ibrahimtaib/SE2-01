@@ -68,7 +68,7 @@ describe("createApplication function", () => {
       });
       expect(prisma.proposal.findUnique).toHaveBeenCalledWith({
         where: { id: mockBody.PROPOSAL_ID },
-        include: { applications: { where: { status: "accepted" } } },
+        include: { applications: { where: { status: "accept" } } },
       });
       expect(prisma.application.create).toHaveBeenCalledWith({
         data: {

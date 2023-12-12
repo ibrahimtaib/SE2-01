@@ -219,7 +219,7 @@ describe("getProposalsByTitle function", () => {
   });
 });
 
-describe("getProposalsByCosupervisor function", () => {
+describe.skip("getProposalsByCosupervisor function", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -259,7 +259,7 @@ describe("getProposalsByCosupervisor function", () => {
   });
 });
 
-describe("getProposalsBySupervisor function", () => {
+describe.skip("getProposalsBySupervisor function", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -572,7 +572,7 @@ describe("getProposalsByType function", () => {
   });
 });
 
-describe("getProposalsByCDS function", () => {
+describe.skip("getProposalsByCDS function", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });

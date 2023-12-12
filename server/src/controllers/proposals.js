@@ -3,6 +3,7 @@ const prisma = require("./prisma");
 const { resolve } = require("path");
 const { STATUS } = require("../constants/application");
 const { rejects } = require("assert");
+const { getVirtualClock } = require("./virtualClock");
 module.exports = {
   createProposal: async (body) => {
     const {
@@ -20,7 +21,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
-      archived
+      archived,
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.create({
@@ -39,7 +40,7 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
-          archived
+          archived,
         },
       })
         .then((proposal) => {
@@ -118,6 +119,7 @@ module.exports = {
       }
     });
   },
+  
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
       prisma.Degree.findMany()
@@ -199,7 +201,7 @@ module.exports = {
           proposals.forEach((proposal) => {
             if (
               proposal.applications.length > 0 ||
-              proposal.expiration < new Date()
+              proposal.expiration < getVirtualClock()
             ) {
               proposal.deletable = false;
             } else {
@@ -254,12 +256,12 @@ module.exports = {
 
 
   getProposalsByCosupervisor: async (cosupervisors) => {
-    const separatedCosupervisors = cosupervisors
-      .split(",")
-      .map((cosupervisor) => cosupervisor.trim().toLowerCase());
-  
-    return new Promise((resolve, reject) => {
-      prisma.Proposal.findMany({
+    try {
+      const separatedCosupervisors = cosupervisors
+        .split(',')
+        .map((cosupervisor) => cosupervisor.trim().toLowerCase());
+
+      const proposals = await prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
@@ -272,43 +274,40 @@ module.exports = {
             },
           },
         },
-      })
-        .then((proposals) => {
-          const filteredProposals = proposals.filter((proposal) => {
-            const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
-              cosupervisor.toLowerCase()
-            );
-  
-            return separatedCosupervisors.every((inputCosupervisor) => {
-              const [inputName, inputSurname] = inputCosupervisor.split(' ');
-  
-              return proposalCosupervisors.some((cos) => {
-                const [name, surname] = cos.split(' ');
-                if (inputSurname) {
-                  return surname === inputSurname && (inputName ? name === inputName : true);
-                } else {
-                  return name === inputName || surname === inputName;
-                }
-              });
-            });
-          });
-  
-          resolve(filteredProposals);
-        })
-        .catch(() => {
-          reject({
-            error: "An error occurred while querying the database",
+      });
+
+      const filteredProposals = proposals.filter((proposal) => {
+        const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
+          cosupervisor.toLowerCase()
+        );
+
+        return separatedCosupervisors.every((inputCosupervisor) => {
+          const [inputName, inputSurname] = inputCosupervisor.split(' ');
+
+          return proposalCosupervisors.some((cos) => {
+            const [name, surname] = cos.split(' ');
+            if (inputSurname) {
+              return surname === inputSurname && (inputName ? name === inputName : true);
+            } else {
+              return name === inputName || surname === inputName;
+            }
           });
         });
-    });
+      });
+
+      return filteredProposals;
+    } catch (error) {
+      console.error(error);
+      throw new Error('An error occurred while querying the database');
+    }
   },
   
   
   
   getProposalsBySupervisor: async (nameOrSurname) => {
     try {
-      const [name, surname] = nameOrSurname.split(' ');
-  
+      const [name, surname] = nameOrSurname.split(" ");
+
       let teachers;
       if (surname && name) {
         teachers = await prisma.Teacher.findMany({
@@ -369,11 +368,11 @@ module.exports = {
           },
         });
       }
-  
+
       if (!teachers || teachers.length === 0) {
         throw new Error("No teachers found matching the given criteria");
       }
-  
+
       const teacherIds = teachers.map((teacher) => teacher.id);
       const proposals = await prisma.Proposal.findMany({
         include: {
@@ -394,16 +393,13 @@ module.exports = {
           },
         },
       });
-  
+
       return proposals;
     } catch (error) {
       throw new Error("An error occurred while querying the database");
     }
   },
   
-  
-
-
   getProposalsByKeywords: async (keywords) => {
     const separatedKeywords = keywords
       .split(",")
@@ -582,8 +578,8 @@ module.exports = {
   },
 
   getProposalsByCDS: async (cds) => {
-    return new Promise((resolve, reject) => {
-      prisma.Proposal.findMany({
+    try {
+      const proposals = await prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
@@ -604,31 +600,27 @@ module.exports = {
           },
         },
         where: {
-          cds: cds
-        }
-      })
-        .then((proposals) => {
-          proposals.forEach((proposal) => {
-            if (
-              proposal.applications.length > 0 ||
-              proposal.expiration < new Date()
-            ) {
-              proposal.deletable = false;
-            } else {
-              proposal.deletable = true;
-            }
-            delete proposal.applications;
-          });
+          cds: cds,
+        },
+      });
 
-          resolve(proposals);
-        })
-        .catch((error) => {
-          console.error(error);
-          return reject({
-            error: "An error occurred while querying the database",
-          });
-        });
-    });
+      proposals.forEach((proposal) => {
+        if (
+          proposal.applications.length > 0 ||
+          proposal.expiration < getVirtualClock()
+        ) {
+          proposal.deletable = false;
+        } else {
+          proposal.deletable = true;
+        }
+        delete proposal.applications;
+      });
+
+      return proposals;
+    } catch (error) {
+      console.error(error);
+      throw new Error('An error occurred while querying the database');
+    }
   },
 
   filterProposals: async (filter) => {
@@ -653,7 +645,6 @@ module.exports = {
         let levelProposals = await module.exports.getProposalsByLevel(
           levelFilter
         );
-
         if (filteredProposals) {
           filteredProposals = filteredProposals.filter((proposal) =>
             levelProposals.some(
@@ -774,36 +765,35 @@ module.exports = {
 
   getTeacherProposals: async (teacherId) => {
     return new Promise((resolve, reject) =>
-      prisma.Proposal
-        .findMany({
-          include: {
-            teacher: {
-              select: {
-                surname: true,
-                name: true,
-                id: true,
-              },
-            },
-            degree: {
-              select: {
-                TITLE_DEGREE: true,
-              },
-            },
-            applications: {
-              where: {
-                status: STATUS.accepted,
-              },
+      prisma.Proposal.findMany({
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+              name: true,
+              id: true,
             },
           },
-          where: {
-            supervisor: teacherId,
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
           },
-        })
+          applications: {
+            where: {
+              status: STATUS.accepted,
+            },
+          },
+        },
+        where: {
+          supervisor: teacherId,
+        },
+      })
         .then((proposals) => {
           proposals.forEach((proposal) => {
             if (
               proposal.applications.length > 0 ||
-              proposal.expiration < new Date()
+              proposal.expiration < getVirtualClock()
             ) {
               proposal.deletable = false;
             } else {
@@ -815,7 +805,8 @@ module.exports = {
         })
         .catch(() => {
           return reject({
-            error: "An error occurred while querying the database for applications",
+            error:
+              "An error occurred while querying the database for applications",
           });
         })
     );
@@ -880,7 +871,7 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
-          archived
+          archived,
         },
       })
         .then((proposal) => {
