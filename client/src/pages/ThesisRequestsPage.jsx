@@ -30,10 +30,30 @@ function ApplicationsPage_secretary({user}) {
     }
   };
 
+  const handleAcceptThesisRequestsByTeacher = async (requestId) => {
+    try {
+      await API.AcceptThesisRequestsByTeacher(requestId);
+      const updatedApplications = await API.getThesisRequestsByTeacherId(user.id);
+      setApplications(updatedApplications);
+    } catch (error) {
+      console.error("Error accepting thesis by "+ user.role, error);
+    }
+  };
+
+  const handleRejectThesisRequestsByTeacher = async (requestId) => {
+    try {
+      await API.RejectThesisRequestsByTeacher(requestId);
+      const updatedApplications = await API.getThesisRequestsByTeacherId(user.id);
+      setApplications(updatedApplications);
+    } catch (error) {
+      console.error("Error rejecting thesis by "+ user.role, error);
+    }
+  };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-              const applicationsData = user.role=='teacher'? await API.getSerecatryAcceptedThesisRequestsByTeacherId(user.id): await API.getPendingThesisRequests();
+              const applicationsData = user.role=='teacher'? await API.getThesisRequestsByTeacherId(user.id): await API.getPendingThesisRequests();
               setApplications(applicationsData);
               setLoading(false);
             } catch (error) {
@@ -53,8 +73,8 @@ function ApplicationsPage_secretary({user}) {
               applications={applications}
               loading={loading}
               setLoading={setLoading}
-              onAccept={handleAcceptThesisRequestsBySecretary}
-              onReject={handleRejectThesisRequestsBySecretary}
+              onAccept={user.role === 'teacher'?handleAcceptThesisRequestsByTeacher:handleAcceptThesisRequestsBySecretary}
+              onReject={user.role === 'teacher'?handleRejectThesisRequestsByTeacher:handleRejectThesisRequestsBySecretary}
               user={user}
               isRequest={true}
             />

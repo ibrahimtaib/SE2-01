@@ -635,8 +635,8 @@ async function getPendingThesisRequests(){
   }
 }
 
-async function getSerecatryAcceptedThesisRequestsByTeacherId(){
-  const response = await fetch(`${URL}thesisRequests/secretary-accepted/`);
+async function getThesisRequestsByTeacherId(id){
+  const response = await fetch(`${URL}thesisRequests/teacher/${id}`);
   const response_data = await response.json();
   const data  = response_data.map((e) => ({
       proposal: {
@@ -777,7 +777,7 @@ const API = {
   getRequestedThesisByStudentId,
   submitNewThesisRequest,
   getPendingThesisRequests,
-  getSerecatryAcceptedThesisRequestsByTeacherId,
+  getThesisRequestsByTeacherId,
   AcceptThesisRequestsByTeacher,
   RejectThesisRequestsByTeacher
 };

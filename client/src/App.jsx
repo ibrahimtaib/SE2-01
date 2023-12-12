@@ -24,8 +24,8 @@ import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import StudentRequestPage from "./pages/StudentRequestPage";
+import ThesisRequestsPage from "./pages/ThesisRequestsPage";
 import ApplicationsPage from "./pages/applicationsPage";
-import ApplicationsPage_secretary from "./pages/applicationsPage_Secretary";
 
 function App() {
 
@@ -150,7 +150,7 @@ function App() {
               <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
               <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
-              <Route path="thesis-requests/*" element={<ApplicationsPage_secretary user={user} />} />
+              <Route path="thesis-requests/*" element={<ThesisRequestsPage user={user} />} />
             </>
           )}
         </Route>

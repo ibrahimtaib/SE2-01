@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import API from '../API';
 
 const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }) => {
+  const isTeacher = user.role === "teacher";
   const [hoveredTitle, setHoveredTitle] = useState(false);
   const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
@@ -124,15 +125,17 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
           </Col>
           <Col md={4} className="d-flex justify-content-end align-items-center">
             <div style={{ marginRight: '10px' }}>
-              {application.application.status === (user.role === "teacher"?'accept'||'teacher-accepted': 'secretary-accepted') && (
-                <div style={{ color: 'green' }}>Accepted</div>
-              )}
-              {application.application.status ===( user.role === "teacher"?'refuse'||'teacher-rejected': 'secretary-rejected') && (
-                <div style={{ color: 'red' }}>Refused</div>
-              )}
+
+              { (isTeacher && application.application.status === 'accept' || application.application.status === 'teacher-accepted') &&<div style={{ color: 'green' }}>Accepted</div>}
+              { (!isTeacher && (application.application.status === 'secretary-accepted' || application.application.status === 'teacher-rejected')) &&<div style={{ color: 'green' }}>Accepted</div>}
+
+              {(isTeacher && (application.application.status === 'secretary-rejected')) && <div>{application.application.status}</div>}
+
+              {(isTeacher && (application.application.status === 'teacher-rejected')) && <div style={{ color: 'red' }}>Refused</div>}
+              { (!isTeacher && application.application.status === 'secretary-rejected') &&<div style={{ color: 'red' }}>Refused</div>}
             </div>
 
-            {application.application.status === (user.role === "teacher"? 'secretary-accepted':  'pending') && (
+            { (application.application.status === 'pending' ||(isTeacher && application.application.status === "secretary-accepted")) && (
               <>
                 <Button onClick={handleAccept} variant="success" style={{ marginRight: '10px' }}>
                   Accept

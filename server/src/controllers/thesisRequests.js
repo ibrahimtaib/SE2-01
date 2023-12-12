@@ -107,12 +107,11 @@ module.exports = {
     );
   },
 
-  getSecretaryAcceptedThesisRequestsByTeacherId: async (id) => {
+  getThesisRequestsByTeacherId: async (id) => {
     return new Promise((resolve, reject) =>
       prisma.ThesisRequest
         .findMany({
           where: {
-            status: REQUESTSTATUS.acceptedBySecretary,
             teacherId: id
           },
           include: {

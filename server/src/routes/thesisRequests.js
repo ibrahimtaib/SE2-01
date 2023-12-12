@@ -30,9 +30,9 @@ router.get("/secretary-accepted", async (req, res) => {
   .catch((error) => res.status(500).json(error));
 });
 
-router.get("/secretary-accepted/teacher/:id", async (req, res) => {
+router.get("/teacher/:id", async (req, res) => {
   thesisRequestsController
-  .getSecretaryAcceptedThesisRequestsByTeacherId(parseInt(req.params.id))
+  .getThesisRequestsByTeacherId(req.params.id)
   .then((secretaries) => {
     res.status(200).json(secretaries);
   })
@@ -71,7 +71,7 @@ router.put("/secretary/:action/:id", async (req, res) => {
 router.put("/teacher/:action/:id", async (req, res) => {
   if (req.params.action !== "accept" && req.params.action !== "reject") return res.status(500).json({error: "Invalid action"});
   thesisRequestsController
-  .actionOnThesisRequestByTeacher(action, parseInt(req.params.id))
+  .actionOnThesisRequestByTeacher(req.params.action, parseInt(req.params.id))
   .then((secretary) => {
     res.status(200).json(secretary);
   })
