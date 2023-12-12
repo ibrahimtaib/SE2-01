@@ -147,6 +147,26 @@ module.exports = {
     }
   },
 
+  getThesisRequestByStudentId: async (studentId) => {
+    try {
+      const studentIdInt = studentId;
+
+      const requests = await prisma.ThesisRequest.findMany({
+        include: {
+          teacher: true,
+        },
+        where: {
+          studentId: studentIdInt,
+        },
+      });
+
+      return requests;
+    } catch (error) {
+      console.error("Error in getApplicationsDecisionsByStudentId:", error);
+      throw new Error("An error occurred while querying the database");
+    }
+  },
+
   getApplicationsDecisionsByStudentId: async (studentId) => {
     try {
       const studentIdInt = studentId;
@@ -166,26 +186,6 @@ module.exports = {
       });
 
       return applications;
-    } catch (error) {
-      console.error("Error in getApplicationsDecisionsByStudentId:", error);
-      throw new Error("An error occurred while querying the database");
-    }
-  },
-
-  getThesisRequestByStudentId: async (studentId) => {
-    try {
-      const studentIdInt = studentId;
-
-      const requests = await prisma.ThesisRequest.findMany({
-        include: {
-          teacher: true,
-        },
-        where: {
-          studentId: studentIdInt,
-        },
-      });
-
-      return requests;
     } catch (error) {
       console.error("Error in getApplicationsDecisionsByStudentId:", error);
       throw new Error("An error occurred while querying the database");
