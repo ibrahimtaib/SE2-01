@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useRef } from 'react';
+import Navbar from 'react-bootstrap/Navbar';
 import { useNavigate } from 'react-router-dom';
-import VirtualClock from './VirtualClock';
 import API from '../API';
+import VirtualClock from './VirtualClock';
 
 function NavBar({ user , resetProposal }) {
   const navigateTo = useNavigate();

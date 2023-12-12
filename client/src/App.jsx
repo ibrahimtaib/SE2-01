@@ -1,29 +1,30 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useState } from 'react';
 import "react-datetime/css/react-datetime.css";
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import API from './API';
+import CallbackLogin from "./components/CallbackLogin";
 import DefaultRoute from './components/DefaultRoute';
 import Header from './components/Header';
 import NavBar from './components/NavBar';
 import ApplyPage from './pages/ApplyPage';
 import InsertPage from './pages/InsertPage';
 import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
 import LogoutPage from "./pages/LogoutPage";
-import CallbackLogin from "./components/CallbackLogin";
+import MainPage from './pages/MainPage';
 import StudentApplicationsPage from './pages/StudentApplicationPage';
 
 
 import './App.css';
 
 
-import ApplicationsPage from "./pages/applicationsPage";
-import StudentDetailsPage from "./pages/StudentDetailsPage";
 import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
+import StudentDetailsPage from "./pages/StudentDetailsPage";
 import StudentRequestPage from "./pages/StudentRequestPage";
+import ApplicationsPage from "./pages/applicationsPage";
 
 function App() {
 
@@ -52,20 +53,9 @@ function App() {
   //FIXME: This state, we should put it in the correct component to be loaded after login
   const [ProposalsList, setProposalsList] = useState([]);
 
-  const handleErrors = (err) => {
-    let msg = '';
-    if (err.error) msg = err.error;
-    else if (String(err) === "string") msg = String(err);
-    else msg = "Unknown Error";
-    setMessage(msg);
-  }
 
   const refetchDynamicContentTeacher = async (teacherId) => {
     API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
-  }
-
-  const refectProposalAfterArchiving = (proposal) => {
-    setProposalsList((oldProposalList) => oldProposalList.filter((item) => item.id != id));
   }
 
   const resetProposal = () => {
