@@ -517,7 +517,6 @@ async function acceptApplication(applicationId) {
   }
 }
 
-
 async function refuseApplication(applicationId) {
   try {
     const response = await fetch(`${URL}applications/refuse-application/${applicationId}`, {
@@ -612,7 +611,7 @@ async function submitNewThesisRequest(formData){
 }
 
 async function getPendingThesisRequests(){
-  const response = await fetch(`${URL}secretaries/`);
+  const response = await fetch(`${URL}thesisRequests/`);
   const response_data = await response.json();
   const data  = response_data.map((e) => ({
       proposal: {
@@ -636,6 +635,119 @@ async function getPendingThesisRequests(){
   }
 }
 
+async function getSerecatryAcceptedThesisRequestsByTeacherId(){
+  const response = await fetch(`${URL}thesisRequests/secretary-accepted/`);
+  const response_data = await response.json();
+  const data  = response_data.map((e) => ({
+      proposal: {
+        teacher: e.teacher,
+        title: e.title,
+        description: e.description,
+        notes: e.notes,
+        id: e.id,
+        type: e.type,
+        },
+      application: {
+        status: e.status,
+        id: e.id,
+        },
+      student: e.student,
+      }));
+  if (response.ok) {
+    return data;
+  } else {
+    throw new Error(data.error || "Failed to fetch thesis request");
+  }
+}
+
+async function AcceptThesisRequestsBySecretary(id){
+  try {
+    const response = await fetch(`${URL}thesisRequests/secretary/accept/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to accept thesis request');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while accepting the thesis request');
+  }
+}
+
+async function RejectThesisRequestsBySecretary(id){
+  try {
+    const response = await fetch(`${URL}thesisRequests/secretary/reject/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to reject thesis request');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while rejecting the thesis request');
+  }
+}
+
+async function AcceptThesisRequestsByTeacher(id){
+  try {
+    const response = await fetch(`${URL}thesisRequests/teacher/accept/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to accept thesis request');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while accepting the thesis request');
+  }
+}
+
+async function RejectThesisRequestsByTeacher(id){
+  try {
+    const response = await fetch(`${URL}thesisRequests/teacher/reject/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to reject thesis request');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while rejecting the thesis request');
+  }
+}
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -656,12 +768,17 @@ const API = {
   filterProposals,
   acceptApplication,
   refuseApplication,
+  AcceptThesisRequestsBySecretary,
+  RejectThesisRequestsBySecretary,
   getUserInfo,
   getApplicationsByStudentId,
   getTeacherProposals,
   getTeachers,
   getRequestedThesisByStudentId,
   submitNewThesisRequest,
-  getPendingThesisRequests
+  getPendingThesisRequests,
+  getSerecatryAcceptedThesisRequestsByTeacherId,
+  AcceptThesisRequestsByTeacher,
+  RejectThesisRequestsByTeacher
 };
 export default API;

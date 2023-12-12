@@ -14,7 +14,8 @@ function NavBar({ user , resetProposal }) {
         <>
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto ml-3">
-              <Nav.Link onClick={() => navigateTo(`/`)} active>Proposals</Nav.Link>
+              {user.role === "teacher" && <Nav.Link onClick={() => navigateTo(`/`)} active>Proposals</Nav.Link>}
+              {user.role === "secretary" && <Nav.Link onClick={() => navigateTo(`/thesis-requests`)} active>Thesis Requests</Nav.Link>}
               {user.role === "teacher" && <Nav.Link onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link>}
               {user.role === "teacher" && <Nav.Link onClick={() => navigateTo(`/thesis-requests`)}  >Thesis Requests</Nav.Link>}
 

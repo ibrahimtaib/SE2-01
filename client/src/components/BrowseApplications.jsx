@@ -3,9 +3,8 @@ import { useState } from 'react';
 import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
-import { sendMail } from '../api/api';
 
-const ProposalCard = ({ application, onAccept, onReject, isRequest=false }) => {
+const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }) => {
   const [hoveredTitle, setHoveredTitle] = useState(false);
   const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
@@ -60,7 +59,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false }) => {
     if (confirmation) {
       try {
         await onAccept(application.application.id);
-        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept');
+        //await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept');
       } catch (error) {
         console.error(error);
       }
@@ -73,7 +72,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false }) => {
     if (confirmation) {
       try {
         await onReject(application.application.id);
-        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'reject');
+        //await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'reject');
       } catch (error) {
         console.error(error);
       }
@@ -125,15 +124,15 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false }) => {
           </Col>
           <Col md={4} className="d-flex justify-content-end align-items-center">
             <div style={{ marginRight: '10px' }}>
-              {application.application.status === 'accept' && (
+              {application.application.status === (user.role === "teacher"?'accept'||'teacher-accepted': 'secretary-accepted') && (
                 <div style={{ color: 'green' }}>Accepted</div>
               )}
-              {application.application.status === 'refuse' && (
+              {application.application.status ===( user.role === "teacher"?'refuse'||'teacher-rejected': 'secretary-rejected') && (
                 <div style={{ color: 'red' }}>Refused</div>
               )}
             </div>
 
-            {application.application.status === 'pending' && (
+            {application.application.status === (user.role === "teacher"? 'secretary-accepted':  'pending') && (
               <>
                 <Button onClick={handleAccept} variant="success" style={{ marginRight: '10px' }}>
                   Accept
@@ -150,7 +149,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false }) => {
   );
 };
 
-const ProposalList = ({ applications, loading, onAccept, onReject, isRequest=false }) => {
+const ProposalList = ({ applications, loading, onAccept, onReject, isRequest=false, user }) => {
   console.log("first application",applications[0]);
   return (
     <Container>
@@ -169,6 +168,7 @@ const ProposalList = ({ applications, loading, onAccept, onReject, isRequest=fal
               application={selectedApplication}
               onAccept={onAccept}
               onReject={onReject}
+              user={user}
               isRequest={isRequest}
             />
           ))

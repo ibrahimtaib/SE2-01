@@ -9,10 +9,10 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { FaArchive, FaHome } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import ProposalCard from './ProposalCard';
-import { FaArchive, FaHome } from 'react-icons/fa';
 
 
 function FilterProposals(props) {

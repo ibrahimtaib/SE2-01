@@ -5,36 +5,35 @@ import API from '../API';
 import ApplicationsList from '../components/BrowseApplications';
 
 
-function ApplicationsPage_secretary() {
+function ApplicationsPage_secretary({user}) {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
-  const handleAcceptApplication = async (applicationId) => {
+  const handleAcceptThesisRequestsBySecretary = async (requestId) => {
     try {
-      await API.acceptApplication(applicationId);
-      const updatedApplications = await API.getAllPendingApplications();
+      await API.AcceptThesisRequestsBySecretary(requestId);
+      const updatedApplications = await API.getPendingThesisRequests();
       setApplications(updatedApplications);
     } catch (error) {
-      console.error("Error accepting application", error);
+      console.error("Error accepting thesis by "+ user.role, error);
     }
   };
 
-  const handleRejectApplication = async (applicationId) => {
+
+  const handleRejectThesisRequestsBySecretary = async (requestId) => {
     try {
-      // Implementa la logica per il rifiuto dell'applicazione
-      await API.refuseApplication(applicationId);
-      // Aggiorna la lista delle applicazioni dopo il rifiuto
-      const updatedApplications = await API.getAllPendingApplications();
+      await API.RejectThesisRequestsBySecretary(requestId);
+      const updatedApplications = await API.getPendingThesisRequests();
       setApplications(updatedApplications);
     } catch (error) {
-      console.error("Error rejecting application", error);
+      console.error("Error rejecting thesis by "+ user.role, error);
     }
   };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-              const applicationsData = await API.getPendingThesisRequests();  
+              const applicationsData = user.role=='teacher'? await API.getSerecatryAcceptedThesisRequestsByTeacherId(user.id): await API.getPendingThesisRequests();
               setApplications(applicationsData);
               setLoading(false);
             } catch (error) {
@@ -54,8 +53,9 @@ function ApplicationsPage_secretary() {
               applications={applications}
               loading={loading}
               setLoading={setLoading}
-              onAccept={handleAcceptApplication}
-              onReject={handleRejectApplication}
+              onAccept={handleAcceptThesisRequestsBySecretary}
+              onReject={handleRejectThesisRequestsBySecretary}
+              user={user}
               isRequest={true}
             />
           }

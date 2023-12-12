@@ -150,7 +150,7 @@ function App() {
               <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
               <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
-              <Route path="thesis-requests/" element={<ApplicationsPage_secretary user={user} />} />
+              <Route path="thesis-requests/*" element={<ApplicationsPage_secretary user={user} />} />
             </>
           )}
         </Route>
