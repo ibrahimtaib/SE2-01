@@ -128,7 +128,7 @@ module.exports = {
   getAllPendingApplications: () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const application = await prisma.Application.findMany({
+        const application = await prisma.application.findMany({
           where: {
             status: "pending",
           },

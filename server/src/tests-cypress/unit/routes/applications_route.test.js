@@ -423,3 +423,45 @@ describe('POST /accept-application/:applicationId', () => {
     });
   });
   
+  describe('GET /clerk/applications', () => {
+    it('should get all pending applications for the clerk', async () => {
+      const mockApplications = [
+        {
+          id: 1,
+          status: 'pending',
+          comment: 'Accepted',
+        STUDENT_ID: 123,
+        PROPOSAL_ID: 456,
+        student: { id: 123, name: 'John', surname: 'Doe' },
+        proposal: { id: 456, title: 'Proposal 1' },
+          // other application properties
+        },
+        // Add more mock data as needed
+      ];
+      
+      applicationController.getAllPendingApplications = jest.fn().mockResolvedValueOnce(mockApplications);
+  
+      const response = await request(app)
+        .get('/clerk/applications')
+        .expect('Content-Type', /json/)
+        .expect(200);
+  
+      expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
+      expect(response.body).toEqual(mockApplications);
+    });
+  
+    it('should handle errors when getting all pending applications', async () => {
+      const mockError = new Error('Internal Server Error');
+
+      applicationController.getAllPendingApplications = jest.fn().mockRejectedValueOnce(mockError);
+
+  
+      const response = await request(app)
+        .get('/clerk/applications')
+        .expect('Content-Type', /json/)
+        .expect(500);
+  
+      expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
+      expect(response.body).toEqual({  });
+    });
+  });

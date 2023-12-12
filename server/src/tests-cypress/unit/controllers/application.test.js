@@ -291,7 +291,58 @@ describe("getStudentApplication", () => {
     });
   });
 });
+describe("getAllPendingApplication", () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
 
+  it("returns the application when it exists", async () => {
+    const mockApplications = [
+      {
+        id: 1,
+        status: "pending",
+        comment: "Test comment",
+        date: new Date(),
+        STUDENT_ID: 123,
+        PROPOSAL_ID: 456,
+      },
+      // Add more mock data as needed
+    ];
+  
+    prisma.application.findMany.mockResolvedValueOnce(mockApplications);
+  
+    await expect(getAllPendingApplications()).resolves.toEqual(mockApplications);
+  
+    expect(prisma.application.findMany).toHaveBeenCalledWith({
+      where: {
+        status: "pending",
+      },
+    });
+  });
+
+  it("rejects with an error when an error occurs", async () => {
+    prisma.application.findFirst.mockImplementationOnce(() => {
+      throw new Error("Test error");
+    });
+
+    const body = {
+      PROPOSAL_ID: 456,
+      STUDENT_ID: 123,
+    };
+
+    await expect(getStudentApplication(body)).rejects.toEqual({
+      status: 500,
+      error: "An error occurred",
+    });
+
+    expect(prisma.application.findFirst).toHaveBeenCalledWith({
+      where: {
+        PROPOSAL_ID: 456,
+        STUDENT_ID: 123,
+      },
+    });
+  });
+});
 /*describe("getAllPendingApplication", () => {
   afterAll(() => {
     jest.clearAllMocks();
