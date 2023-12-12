@@ -54,8 +54,6 @@ module.exports = {
     );
   },
   /**
-   * Archive a proposal and set all applications to canceled. Returns an object with status 200 if successful.
-   * 400 if proposal doesn't exist, 500 if an error occurred.
    * @date 2023-11-23
    * @param {Number} id
    * @returns {{status: Number, message: String} | {status: Number, error: String}}
@@ -76,14 +74,12 @@ module.exports = {
           },
         });
 
-        // Check if proposal exists
         if (!proposal) {
           return reject({
             status: 404,
             message: "Proposal does not exist!",
           });
         }
-        // Check if proposal can be deleted
         console.log(proposal);
         if (proposal.applications.length > 0) {
           return reject({
@@ -93,9 +89,7 @@ module.exports = {
           });
         }
 
-        //initiate a prisma transaction
         prisma.$transaction(async (prisma) => {
-          // Set all applications to canceled
           await prisma.Application.updateMany({
             where: {
               PROPOSAL_ID: id,
@@ -105,7 +99,6 @@ module.exports = {
             },
           });
 
-          // Archive the proposal
           await prisma.Proposal.delete({
             where: {
               id: id,
@@ -234,7 +227,7 @@ module.exports = {
             select: {
               surname: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          }, 
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -259,44 +252,6 @@ module.exports = {
     });
   },
 
-  /*getProposalsByCosupervisor: async (cosupervisors) => {
-    const separatedCosupervisors = cosupervisors
-      .split(",")
-      .map((cosupervisor) => cosupervisor.trim().toLowerCase());
-    return new Promise((resolve, reject) => {
-      prisma.Proposal.findMany({
-        include: {
-          teacher: {
-            select: {
-              surname: true,
-            },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
-          degree: {
-            select: {
-              TITLE_DEGREE: true,
-            },
-          },
-        },
-      })
-        .then((proposals) => {
-          const filteredProposals = proposals.filter((proposal) => {
-            const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
-            cosupervisor.toLowerCase()
-            );
-            return separatedCosupervisors.every((cosupervisor) =>
-            proposalCosupervisors.includes(cosupervisor)
-            );
-          });
-
-          resolve(filteredProposals);
-        })
-        .catch(() => {
-          reject({
-            error: "An error occurred while querying the database",
-          });
-        });
-    });
-  },*/
 
   getProposalsByCosupervisor: async (cosupervisors) => {
     const separatedCosupervisors = cosupervisors
@@ -461,7 +416,7 @@ module.exports = {
             select: {
               surname: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          }, 
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -500,7 +455,7 @@ module.exports = {
             select: {
               surname: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          }, 
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -536,7 +491,7 @@ module.exports = {
             select: {
               surname: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          }, 
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -568,7 +523,7 @@ module.exports = {
             select: {
               surname: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          }, 
           degree: {
             select: {
               TITLE_DEGREE: true,
@@ -688,7 +643,7 @@ module.exports = {
       let groupsFilter = filter.groups;
       let expirationFilter = filter.expiration;
 
-      let filteredProposals; // Dichiaro la variabile fuori dal blocco if
+      let filteredProposals; 
 
       if (cdsFilter) {
         filteredProposals = await module.exports.getProposalsByCDS(cdsFilter);
@@ -700,14 +655,12 @@ module.exports = {
         );
 
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             levelProposals.some(
               (levelProposal) => levelProposal.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = levelProposals;
         }
       }
@@ -715,14 +668,12 @@ module.exports = {
       if (typeFilter) {
         let typeProposals = await module.exports.getProposalsByType(typeFilter);
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             typeProposals.some(
               (typeProposal) => typeProposal.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = typeProposals;
         }
       }
@@ -732,14 +683,12 @@ module.exports = {
           titleFilter
         );
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             titleProposals.some(
               (titleProposal) => titleProposal.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = titleProposals;
         }
       }
@@ -749,14 +698,12 @@ module.exports = {
           supervisorFilter
         );
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             supervisorProposals.some(
               (supervisorProposal) => supervisorProposal.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = supervisorProposals;
         }
       }
@@ -765,14 +712,12 @@ module.exports = {
         let coSupervisorProposals =
           await module.exports.getProposalsByCosupervisor(coSupervisorFilter);
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             coSupervisorProposals.some(
               (coSupervisorProposal) => coSupervisorProposal.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = coSupervisorProposals;
         }
       }
@@ -782,14 +727,12 @@ module.exports = {
           keywordsFilter
         );
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             keywordsProposals.some(
               (keywordsProposals) => keywordsProposals.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = keywordsProposals;
         }
       }
@@ -799,14 +742,12 @@ module.exports = {
           groupsFilter
         );
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             groupsProposals.some(
               (groupsProposals) => groupsProposals.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = groupsProposals;
         }
       }
@@ -815,14 +756,12 @@ module.exports = {
         let expirationProposals =
           await module.exports.getProposalsByExpirationDate(expirationFilter);
         if (filteredProposals) {
-          // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
             expirationProposals.some(
               (expirationProposals) => expirationProposals.id === proposal.id
             )
           );
         } else {
-          // Se filteredProposals non esiste, assegna semplicemente levelProposals
           filteredProposals = expirationProposals;
         }
       }
@@ -906,7 +845,6 @@ module.exports = {
     );
   },
 
-  //for updating proposals
   updateProposal: async (body) => {
     const {
       id,
