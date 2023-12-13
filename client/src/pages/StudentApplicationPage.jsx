@@ -1,30 +1,21 @@
 /* eslint-disable react/prop-types */
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
-import Row from 'react-bootstrap/Row';
+import { useEffect, useState } from 'react';
+import { Alert, Container } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
-import ApplicationDecisionCard from '../components/ApplicationDecisionCard';
-import { useState, useEffect } from 'react';
+import Row from 'react-bootstrap/Row';
 import API from '../API';
-import { Alert } from 'react-bootstrap';
+import ApplicationDecisionCard from '../components/ApplicationDecisionCard';
 
 function StudentApplicationsPage({ user }) {
     const [applicationList, setApplicationList] = useState([]);
     useEffect(() => {
         const init = async () => {
             try {
-                const applications1 = await API.getApplicationsByStudentId(user.id);
-                setApplicationList([...applications1]);
-            } catch (err) {
-                console.log(err);
-            }
-            try {
-                const applications2 = await API.getRequestedThesisByStudentId(user.id);
-                // Se applications2 è definito, concatena i dati all'array esistente
-                if (applications2) {
-                    setApplicationList((prevApplications) => [...prevApplications, ...applications2]);
-                }
+                const applications = await API.getApplicationsByStudentId(user.id);
+                const thesisRequests = await API.getRequestedThesisByStudentId(user.id);
+                setApplicationList([...applications, ...thesisRequests]);
             } catch (err) {
                 console.log(err);
             }
