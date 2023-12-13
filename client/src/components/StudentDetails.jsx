@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Container, Form } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 
@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 const ProposalDetails = () => {
   const location = useLocation();
   const { student } = location.state || {};
+  const navigateTo = useNavigate();
 
   if (!student) {
     return <div>Data is missing Or not valid!</div>;
@@ -50,10 +51,9 @@ const ProposalDetails = () => {
             </div>
         </div>
         <Link 
-        style={{padding: "20px"}}
-        to="/applications">
+        style={{padding: "20px"}}>
         <Button
-        variant="dark"
+        variant="dark" onClick={() => navigateTo(-1)}
         >Go Back</Button>
       </Link>
       </div>

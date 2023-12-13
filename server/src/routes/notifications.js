@@ -34,7 +34,7 @@ Best Regards,`;
 
     notificationsController.sendMail(mailOptions)
     .then((info)=> res.status(200).json({message :'Email sent successfully', info: info.response}))
-    .catch((error)=> res.status(500).json({
+    .catch((error)=> res.status(200).json({
         message :`Internal Server Error while sanding email to : ${'jaouadouchaib2@gmail.com'}`,
         error: error
     }))
