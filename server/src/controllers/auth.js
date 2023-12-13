@@ -19,7 +19,7 @@ module.exports = {
                         const customTeacherObject = {
                             id: teacher.id,
                             name: `${teacher.name} ${teacher.surname}`,
-                            role: "teacher",
+                            role: teacher.id == "auth0|655fd0b96d87729b6b3e0795"?"teacher": "secretary",
                             email: teacher.email,
                         };
                         resolve(customTeacherObject);

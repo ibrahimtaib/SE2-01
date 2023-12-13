@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
+import { sendMail } from '../api/api';
 
 const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }) => {
   const isTeacher = user.role === "teacher";
@@ -60,7 +61,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
     if (confirmation) {
       try {
         await onAccept(application.application.id);
-        //await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept');
+        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept');
       } catch (error) {
         console.error(error);
       }
@@ -73,7 +74,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
     if (confirmation) {
       try {
         await onReject(application.application.id);
-        //await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'reject');
+        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'reject');
       } catch (error) {
         console.error(error);
       }

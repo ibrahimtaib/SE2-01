@@ -15,7 +15,7 @@ function NavBar({ user , resetProposal }) {
         <>
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav defaultActiveKey="proposals" className="mr-auto ml-3">
-              <Nav.Link eventKey="proposals" onClick={() => navigateTo(`/`)}>Proposals</Nav.Link>
+            {user.role!== "secretary" && <Nav.Link eventKey="proposals" onClick={() => navigateTo(`/`)}>Proposals</Nav.Link>}
               {user.role === "teacher" && <Nav.Link eventKey="teacherApps" onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link>}
               {user.role === "teacher" && <Nav.Link onClick={() => navigateTo(`/thesis-requests`)}  >Thesis Requests</Nav.Link>}
 
@@ -48,7 +48,7 @@ function NavBar({ user , resetProposal }) {
               </> : <></>}
             <VirtualClock />
             <NavDropdown.Divider />
-            <NavDropdown.Item onClick={() => window.location.href = "/logout"}>
+            <NavDropdown.Item onClick={() => navigateTo("/logout")}>
               Logout
             </NavDropdown.Item>
           </NavDropdown>

@@ -89,7 +89,7 @@ function App() {
     };
     init();
     console.log(proposalToInsert.degree.COD_DEGREE);
-  }, []);
+  }, [loggedIn, update, proposalToInsert.degree.COD_DEGREE]);
 
   if (!loggedIn && loading) {
     return (<LoadingSpinner />);
@@ -105,7 +105,9 @@ function App() {
           <Route
             path="/"
             element={
-              loggedIn ? (
+              loggedIn ? user?.role === "secretary" ? (
+                <ThesisRequestsPage user={user} />
+              ):(
                 <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} refetchDynamicContent={refetchDynamicContentTeacher} />
               ) : (
                 <Navigate to="/login" />
