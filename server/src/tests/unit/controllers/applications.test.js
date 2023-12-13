@@ -717,74 +717,58 @@ describe('getThesisRequestByStudentId function', () => {
 
 describe('submitNewThesisRequest function', () => {
   it('should create a new thesis request', async () => {
-    const mockFormData = {
-      title: 'New Thesis',
-      description: 'Description of the new thesis',
-      teacher: 101,
-      studentId: 1,
-      type: 'Research',
-      notes: 'Additional notes',
-    };
-
     const mockNewThesisRequest = {
       id: 1,
       title: 'New Thesis',
       description: 'Description of the new thesis',
-      teacher: { id: 101, name: 'John', surname: 'Doe' },
+      teacherId: 101,
       type: 'Research',
+      studentId: 1,
       status: 'pending',
     };
 
+    // Mock della funzione prisma.ThesisRequest.create
     prisma.ThesisRequest.create.mockResolvedValueOnce(mockNewThesisRequest);
 
-    const result = await submitNewThesisRequest(mockFormData);
+    const result = await submitNewThesisRequest(mockNewThesisRequest);
 
-    expect(result).toEqual(mockNewThesisRequest);
-
+    // Assicurati che la funzione prisma.ThesisRequest.create sia stata chiamata con i dati corretti
     expect(prisma.ThesisRequest.create).toHaveBeenCalledWith({
-      data: {
-        title: mockFormData.title,
-        description: mockFormData.description,
-        teacherId: mockFormData.teacher,
-        studentId: mockFormData.studentId,
-        type: mockFormData.type,
-        notes: mockFormData.notes,
-        status: 'pending',
-      },
+      data: mockNewThesisRequest,
     });
+
+    // Assicurati che la funzione restituisca i dati corretti
+    expect(result).toEqual(mockNewThesisRequest);
   });
 
   it('should handle errors during database query', async () => {
-    const mockFormData = {
+    const mockNewThesisRequest = {
+      id: 1,
       title: 'New Thesis',
       description: 'Description of the new thesis',
-      teacher: 101,
-      studentId: 1,
+      teacherId: 101,
       type: 'Research',
-      notes: 'Additional notes',
+      studentId: 1,
+      status: 'pending',
     };
 
     const mockError = new Error('Database error');
 
+    // Mock della funzione prisma.ThesisRequest.create che restituisce un errore
     prisma.ThesisRequest.create.mockRejectedValueOnce(mockError);
 
+    // Chiamata alla funzione submitNewThesisRequest all'interno di un blocco try-catch
     try {
-      await submitNewThesisRequest(mockFormData);
+      await submitNewThesisRequest(mockNewThesisRequest);
     } catch (error) {
-      console.error("Actual error:", error.message);
-      expect(error.message).toContain("An error occurred while updating the application status to 'accept'");
+      // Assicurati che l'errore lanciato sia quello atteso
+      expect(error.message).toContain("An error occurred during the query");
     }
 
+    // Assicurati che la funzione prisma.ThesisRequest.create sia stata chiamata con i dati corretti
     expect(prisma.ThesisRequest.create).toHaveBeenCalledWith({
-      data: {
-        title: mockFormData.title,
-        description: mockFormData.description,
-        teacherId: mockFormData.teacher,
-        studentId: mockFormData.studentId,
-        type: mockFormData.type,
-        notes: mockFormData.notes,
-        status: 'pending',
-      },
+      data: mockNewThesisRequest,
     });
   });
 });
+

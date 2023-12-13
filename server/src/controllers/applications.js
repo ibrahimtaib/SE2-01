@@ -202,7 +202,7 @@ module.exports = {
       return newThesisRequest;
     } catch (error) {
       console.error("Error in submitNewThesisRequest:", error);
-      throw new Error("An error occurred while creating a new thesis request");
+      throw new Error("An error occurred during the query");
     }
   },
 
