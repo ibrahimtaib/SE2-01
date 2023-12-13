@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import API from '../API';
 
-const InsertStudentRequestForm = (props) => {
+const InsertStudentRequestForm = ( user) => {
     const [formData, setFormData] = useState({
-        studentId: props.user.id,
+        studentId: user.id,
         title: '',
         description: '',
         teacher: '',
@@ -12,7 +12,8 @@ const InsertStudentRequestForm = (props) => {
         notes: '',
     });
     const [teachers, setTeachers] = useState([]);
-    const [types, setTypes] = useState([{ title: "sperimentale" }, { title: "compilativa" }]);
+    // eslint-disable-next-line no-unused-vars
+    const [types, setTypes] = useState([{ title: "experimental" }, { title: "compilation" }]);
     const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const InsertStudentRequestForm = (props) => {
             }).catch((err) => console.log(err));
         };
         init();
-    }, [props.user]);
+    }, [user]);
 
     const [errorMessage, setErrorMessage] = useState('');
     const [submitted, setSubmitted] = useState(false);
