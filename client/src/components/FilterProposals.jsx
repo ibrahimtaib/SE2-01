@@ -350,9 +350,9 @@ function RightSide(props) {
     return (
         <>  
            {props.showArchived ? (
-                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>Archived proposals</h2>
+                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>{props.user.role === "teacher" ? "My archived proposals" : "Archived proposals"}</h2>
             ) : (
-                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>Available proposals</h2>
+                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>{props.user.role === "teacher" ? "My proposals" : "Available proposals"}</h2>
             )}
             {props.ProposalsList.map((proposal, index) => (
             <ProposalCard
