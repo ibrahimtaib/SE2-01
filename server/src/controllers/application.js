@@ -126,4 +126,22 @@ module.exports = {
       }
     });
   },
+  getAllPendingApplications: () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const application = await prisma.application.findMany({
+          where: {
+            status: "pending",
+          },
+        });
+
+        resolve(application);
+      } catch (error) {
+        reject({
+          status: 500,
+          error: "An error occurred",
+        });
+      }
+    });
+  },
 };

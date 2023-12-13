@@ -1,8 +1,6 @@
 // ErrorPage.js
-import React from 'react';
+import { Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import { Card } from 'react-bootstrap';
 
 // eslint-disable-next-line react/prop-types
 const ErrorPage = ({ errorTitle, errorMessage }) => {

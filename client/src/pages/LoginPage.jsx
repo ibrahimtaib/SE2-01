@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-const LoginPage = ({ loggedIn, setUser, setLoading }) => {
+/* eslint-disable react/prop-types */
+import { useEffect } from 'react';
+const LoginPage = ({ setLoading }) => {
   setLoading(true);
 
   useEffect(() => {

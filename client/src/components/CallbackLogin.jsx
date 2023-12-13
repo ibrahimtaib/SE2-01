@@ -1,15 +1,11 @@
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/prop-types */
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { checkUser } from "../api/api";
 
 
 function CallbackLogin({ setUser }) {
     const navigate = useNavigate();
-    const mockUser = {
-        id: 1,
-        name: 'Non cambia!',
-        role: 'teacher',
-    };
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const userIDString = params.get('userID');
@@ -22,6 +18,7 @@ function CallbackLogin({ setUser }) {
 
                 })
                 .catch((err) => {
+                    console.error(err);
                     navigate('/')
                 })
         }

@@ -4,18 +4,21 @@ const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
 const {
+  getAllPendingApplications,
   createApplication,
   getStudentApplication,
 } = require("../../../controllers/application.js");
 
 jest.mock("../../../controllers/prisma.js", () => ({
   student: {
+    findMany: jest.fn(() => {}),
     findUnique: jest.fn(() => {}),
   },
   proposal: {
     findUnique: jest.fn(() => {}),
   },
   application: {
+    findMany: jest.fn(() => {}),
     create: jest.fn(() => {}),
     findFirst: jest.fn(() => {}),
   },
@@ -288,3 +291,108 @@ describe("getStudentApplication", () => {
     });
   });
 });
+describe("getAllPendingApplication", () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns the application when it exists", async () => {
+    const mockApplications = [
+      {
+        id: 1,
+        status: "pending",
+        comment: "Test comment",
+        date: new Date(),
+        STUDENT_ID: 123,
+        PROPOSAL_ID: 456,
+      },
+      // Add more mock data as needed
+    ];
+  
+    prisma.application.findMany.mockResolvedValueOnce(mockApplications);
+  
+    await expect(getAllPendingApplications()).resolves.toEqual(mockApplications);
+  
+    expect(prisma.application.findMany).toHaveBeenCalledWith({
+      where: {
+        status: "pending",
+      },
+    });
+  });
+
+  it("rejects with an error when an error occurs", async () => {
+    prisma.application.findFirst.mockImplementationOnce(() => {
+      throw new Error("Test error");
+    });
+
+    const body = {
+      PROPOSAL_ID: 456,
+      STUDENT_ID: 123,
+    };
+
+    await expect(getStudentApplication(body)).rejects.toEqual({
+      status: 500,
+      error: "An error occurred",
+    });
+
+    expect(prisma.application.findFirst).toHaveBeenCalledWith({
+      where: {
+        PROPOSAL_ID: 456,
+        STUDENT_ID: 123,
+      },
+    });
+  });
+});
+/*describe("getAllPendingApplication", () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns the application when it exists", async () => {
+    prisma.application.findMany.mockResolvedValueOnce({
+      id: 1,
+      status: "pending",
+      comment: "Test comment",
+      date: new Date(),
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+    });
+
+
+    await expect(getAllPendingApplications()).resolves.toEqual({
+      id: 1,
+      status: "pending",
+      comment: "Test comment",
+      date: expect.any(Date),
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+    });
+
+    expect(prisma.application.findMany).toHaveBeenCalledWith({
+      where: {
+        PROPOSAL_ID: 456,
+        STUDENT_ID: 123,
+      },
+    });
+  });
+
+  it("rejects with an error when an error occurs", async () => {
+    prisma.application.findFirst.mockImplementationOnce(() => {
+      throw new Error("Test error");
+    });
+
+
+    await expect(getAllPendingApplications()).rejects.toEqual({
+      status: 500,
+      error: "An error occurred",
+    });
+
+    expect(prisma.application.findFirst).toHaveBeenCalledWith({
+      where: {
+        PROPOSAL_ID: 456,
+        STUDENT_ID: 123,
+      },
+    });
+  });
+});
+*/

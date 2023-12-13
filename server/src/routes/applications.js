@@ -39,6 +39,21 @@ router.get("/:teacherId/", async (req, res) => {
   }
 });
 
+//for the clerk gettin all pending applications
+router.get("/clerk/applications", async (req, res) => {
+  const PROPOSAL_ID = req.params.proposalId;
+  const STUDENT_ID = req.params.studentId;
+  applicationController
+    .getAllPendingApplications({
+    })
+    .then((applications) => {
+      res.status(200).json(applications);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error?.status !== undefined ? error.status : 500).json(error);
+    });
+});
 router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
   const PROPOSAL_ID = req.params.proposalId;
   const STUDENT_ID = req.params.studentId;
@@ -192,10 +207,11 @@ router.get("/requestedThesis/:studentId", async (req, res) => {
 });
 
 router.post("/newThesisRequest", async (req, res) => {
-  const formData = req.body;
+  const teacherId = req.body.teacher;
+  const {teacher,...data} = req.body;
 
   try {
-    const result = await applicationsController.submitNewThesisRequest(formData);
+    const result = await applicationsController.submitNewThesisRequest({...data, teacherId, status: "pending"});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);

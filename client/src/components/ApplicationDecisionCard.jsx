@@ -1,14 +1,12 @@
 /* eslint-disable react/prop-types */
+import dayjs from 'dayjs';
 import { useState } from 'react';
+import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { useNavigate } from 'react-router-dom';
-import Badge from 'react-bootstrap/Badge';
-import dayjs from 'dayjs';
 
 function ApplicationDecisionCard(props) {
 
-    const navigateTo = useNavigate();
 
     return (
         <>
