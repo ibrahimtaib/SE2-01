@@ -1,3 +1,4 @@
+require('setimmediate');
 const request = require('supertest');
 const express = require('express');
 const notificationsRouter = require('../../../routes/notifications.js');
