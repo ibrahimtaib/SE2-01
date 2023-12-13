@@ -1,6 +1,7 @@
 ![Coverage](https://img.shields.io/badge/Coverage-70.95%25-yellow)
 ![Total tests](https://img.shields.io/badge/Total%20tests-186-green)
 
+
 # SE2-01
 
 Main project for Software Engineering 2 at PoliTo
