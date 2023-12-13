@@ -1,4 +1,4 @@
-const { sendMail } = require('../src/controllers/notifications'); // Update the path to match your file structure
+const { sendMail } = require('../../../controllers/notifications'); // Update the path to match your file structure
 
 // Mock the nodemailer library
 jest.mock('nodemailer', () => ({
@@ -6,7 +6,6 @@ jest.mock('nodemailer', () => ({
     sendMail: jest.fn().mockResolvedValue({ response: 'Mocked response' }),
   })),
 }))
-const nodemailer = require('nodemailer');
 
 describe('sendMail function', () => {
 

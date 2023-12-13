@@ -131,7 +131,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
 
               {(isTeacher && (application.application.status === 'secretary-rejected')) && <div>{application.application.status}</div>}
 
-              {(isTeacher && (application.application.status === 'teacher-rejected')) && <div style={{ color: 'red' }}>Refused</div>}
+              {(isTeacher && (application.application.status === 'teacher-rejected')|| application.application.status === 'refuse') && <div style={{ color: 'red' }}>Refused</div>}
               { (!isTeacher && application.application.status === 'secretary-rejected') &&<div style={{ color: 'red' }}>Refused</div>}
             </div>
 

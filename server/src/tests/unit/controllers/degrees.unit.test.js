@@ -1,9 +1,9 @@
-const { getDegrees } = require("../src/controllers/degrees.js");
+const { getDegrees } = require("../../../controllers/degrees.js");
 
-const prisma = require("../src/controllers/prisma.js");
+const prisma = require("../../../controllers/prisma.js");
 
 // Mocking PrismaClient
-jest.mock("../src/controllers/prisma.js", (()=>({
+jest.mock("../../../controllers/prisma.js", (()=>({
   degree: {
     findMany: jest.fn(() => {}),
   }

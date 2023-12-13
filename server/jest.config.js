@@ -9,7 +9,4 @@ module.exports = {
   ],
   coverageDirectory: "coverage",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  moduleNameMapper: {
-    "@prisma/client": "<rootDir>/tests/__mocks__/@prisma/client.js",
-  },
 };
