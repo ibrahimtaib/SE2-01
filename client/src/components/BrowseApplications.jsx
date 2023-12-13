@@ -121,7 +121,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
               <br />
               Degree: {application.student.degree.TITLE_DEGREE}
               <br />
-              Date: {formatDate(application.application.date)}
+              {!isRequest && `Date: ${formatDate(application.application.date)}`}
             </Card.Subtitle>
           </Col>
           <Col md={4} className="d-flex justify-content-end align-items-center">
