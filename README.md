@@ -1,5 +1,5 @@
-![Coverage](https://img.shields.io/badge/Coverage-83.62%25-green)
-![Total tests](https://img.shields.io/badge/Total%20tests-189-green)
+![Coverage](https://img.shields.io/badge/Coverage-68.33%25-yellow)
+![Total tests](https://img.shields.io/badge/Total%20tests-162-green)
 
 # SE2-01
 
