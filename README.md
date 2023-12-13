@@ -1,8 +1,8 @@
 <<<<<<< HEAD
-![Coverage](https://img.shields.io/badge/Coverage-83.62%25-green)
+![Coverage](https://img.shields.io/badge/Coverage-83.44%25-green)
 ![Total tests](https://img.shields.io/badge/Total%20tests-189-green)
 =======
-![Coverage](https://img.shields.io/badge/Coverage-83.62%25-green)
+![Coverage](https://img.shields.io/badge/Coverage-83.44%25-green)
 ![Total tests](https://img.shields.io/badge/Total%20tests-189-green)
 >>>>>>> 666f76965b0d12f3bfe26aa33805c23a80c8c9e0
 
