@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
+import { Alert, Modal, Spinner, } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { useNavigate } from 'react-router-dom';
-import DeleteProposalButton from './DeleteProposalButton';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useNavigate } from 'react-router-dom';
 import { addPageUpdate } from '../api/api';
-import { Modal, Alert, Spinner, CloseButton, ModalFooter } from 'react-bootstrap';
+import DeleteProposalButton from './DeleteProposalButton';
 
 function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToInsert, refetchDynamicContent }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,7 +25,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
     addPageUpdate({
       ...proposal,
       archived: true
-    }).then((proposal) => {
+    }).then(() => {
       setArchived(true);
       setTimeout(() => {
         setArchived(false);
@@ -45,7 +44,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
     addPageUpdate({
       ...proposal,
       archived: false
-    }).then((proposal) => {
+    }).then(() => {
       setArchived(true);
       setTimeout(() => {
         setArchived(false);

@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import InsertStudentRequestForm from "../components/InsertStudentRequestForm"
 
-function StudentRequestPage(props){
+function StudentRequestPage({user}){
     return(
-        <InsertStudentRequestForm user={props.user}></InsertStudentRequestForm>
+        <InsertStudentRequestForm user={user}></InsertStudentRequestForm>
     )
 }
 

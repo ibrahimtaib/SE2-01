@@ -16,8 +16,6 @@ function MainPage({ProposalsList, setProposalsList, user, setUpdate, setProposal
           </Container>
         </>
         ):(
-          
-          //redirect to login page
           <></>
         )
       }

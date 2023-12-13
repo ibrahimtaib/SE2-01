@@ -27,7 +27,7 @@ function ApplyForm({proposal, user}) {
       if (res.status === 200 || res.status === 201)
       {
         const student = {name: user.name.split(' ')[0], surname: user.name.split(' ')[1], email: user.email}
-        /* await sendMail(proposal.title, student, proposal.teacher, 'apply') */ //TODO: Fix e-mail sending
+        await sendMail(proposal.title, student, proposal.teacher, 'apply') //TODO: Fix e-mail sending
         setSubmitted(true);
       }
       setMessageAlert('');

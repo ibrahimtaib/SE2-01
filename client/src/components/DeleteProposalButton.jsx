@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';  
-import {Modal, Button, Dropdown} from 'react-bootstrap'; 
-import {deleteProposal} from '../api/api';
-import { useState } from 'react';  
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from 'react';
+import { Button, Dropdown, Modal } from 'react-bootstrap';
+import { deleteProposal } from '../api/api';
 
 function DeleteProposalButton({proposal}) {
 	const [showAlert, setShowAlert] = useState(false);

@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
-import { Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Alert } from 'react-bootstrap';
 
 function DismissableAlert({showAlert, setShowAlert, heading, message}) {
 
