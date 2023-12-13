@@ -192,24 +192,17 @@ module.exports = {
     }
   },
 
-  submitNewThesisRequest: async (formData) => {
-    console.log(formData)
+  submitNewThesisRequest: async (NewRequestData) => {
+    console.log('NewRequestData', NewRequestData)
     try {
       const newThesisRequest = await prisma.ThesisRequest.create({
-        data: {
-          title: formData.title,
-          description: formData.description,
-          teacherId: formData.teacher,
-          studentId: formData.studentId,
-          type: formData.type,
-          notes: formData.notes,
-          status: "pending"
-        },
+        data: NewRequestData,
       });
 
       return newThesisRequest;
     } catch (error) {
-      throw new Error("An error occurred while updating the application status to 'accept'");
+      console.error("Error in submitNewThesisRequest:", error);
+      throw new Error("An error occurred while creating a new thesis request");
     }
   },
 }
