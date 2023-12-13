@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import API from '../API';
 
-const InsertStudentRequestForm = ( user) => {
+const InsertStudentRequestForm = ( {user}) => {
     const [formData, setFormData] = useState({
         studentId: user.id,
         title: '',

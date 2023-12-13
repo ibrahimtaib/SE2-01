@@ -16,9 +16,13 @@ function NavBar({ user , resetProposal }) {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav defaultActiveKey="proposals" className="mr-auto ml-3">
               <Nav.Link eventKey="proposals" onClick={() => navigateTo(`/`)}>Proposals</Nav.Link>
-              {user.role === "teacher" ? <Nav.Link eventKey="teacherApps" onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link> : <></>}
-              {user.role === "student" ? <Nav.Link eventKey="studentApps" onClick={() => navigateTo(`student/applications`)}  >Applications</Nav.Link> : <></>}
-              {user.role === "student" ? <Nav.Link eventKey="studentRequestForm" onClick={() => navigateTo(`student/requestForm`)}  >Request Form</Nav.Link> : <></>}
+              {user.role === "teacher" && <Nav.Link eventKey="teacherApps" onClick={() => navigateTo(`/applications`)}  >Applications</Nav.Link>}
+              {user.role === "teacher" && <Nav.Link onClick={() => navigateTo(`/thesis-requests`)}  >Thesis Requests</Nav.Link>}
+
+              {user.role === "student" && <Nav.Link eventKey="studentApps" onClick={() => navigateTo(`student/applications`)}  >Applications</Nav.Link>}
+              {user.role === "student" && <Nav.Link eventKey="studentRequestForm" onClick={() => navigateTo(`student/requestForm`)}  >Request Form</Nav.Link>}
+
+              {user.role === "secretary" && <Nav.Link onClick={() => navigateTo(`/thesis-requests`)} active>Thesis Requests</Nav.Link>}
             </Nav>
           </Navbar.Collapse>
           <NavDropdown title={user.name} id='dropdown-button-drop-start' style={{ color: "white", marginRight: "5%"}}>

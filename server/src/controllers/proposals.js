@@ -873,6 +873,52 @@ module.exports = {
     );
   },
 
+  getAllProposals: async () => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany({
+          include: {
+            teacher: {
+              select: {
+                surname: true,
+                name: true,
+                id: true,
+              },
+            },
+            degree: {
+              select: {
+                TITLE_DEGREE: true,
+              },
+            },
+            applications: {
+              where: {
+                status: STATUS.accepted,
+              },
+            },
+          },
+        })
+        .then((proposals) => {
+          proposals.forEach((proposal) => {
+            if (
+              proposal.applications.length > 0 ||
+              proposal.expiration < new Date()
+            ) {
+              proposal.deletable = false;
+            } else {
+              proposal.deletable = true;
+            }
+          });
+          console.log(proposals);
+          resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database for applications",
+          });
+        })
+    );
+  },
+
   getApplicationsBySupervisorId: async (teacherId) => {
     return new Promise((resolve, reject) =>
       prisma.Application.findMany({
