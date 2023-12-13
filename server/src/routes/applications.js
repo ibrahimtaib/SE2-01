@@ -39,6 +39,21 @@ router.get("/:teacherId/", async (req, res) => {
   }
 });
 
+//for the clerk gettin all pending applications
+router.get("/clerk/applications", async (req, res) => {
+  const PROPOSAL_ID = req.params.proposalId;
+  const STUDENT_ID = req.params.studentId;
+  applicationController
+    .getAllPendingApplications({
+    })
+    .then((applications) => {
+      res.status(200).json(applications);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error?.status !== undefined ? error.status : 500).json(error);
+    });
+});
 router.get("/proposal/:proposalId/student/:studentId", async (req, res) => {
   const PROPOSAL_ID = req.params.proposalId;
   const STUDENT_ID = req.params.studentId;

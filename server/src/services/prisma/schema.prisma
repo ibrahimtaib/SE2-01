@@ -24,6 +24,13 @@ model Teacher {
   thesisRequests ThesisRequest[]
 }
 
+model SecreatryClerk{
+  id             String     @id @unique
+  surname        String
+  name           String
+  email          String
+}
+
 model Degree {
   COD_DEGREE   String     @id
   TITLE_DEGREE String
@@ -108,3 +115,4 @@ model ThesisRequest {
   teacher     Teacher  @relation(fields: [teacherId], references: [id])
   student     Student  @relation(fields: [studentId], references: [id])
 }
+

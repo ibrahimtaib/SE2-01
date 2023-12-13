@@ -24,6 +24,7 @@ import { getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import StudentRequestPage from "./pages/StudentRequestPage";
+import ThesisRequestsPage from "./pages/ThesisRequestsPage";
 import ApplicationsPage from "./pages/applicationsPage";
 
 function App() {
@@ -46,13 +47,11 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
-  const [dirty, setDirty] = useState(false);
   //This is the proposal to send to InsertForm
   const [proposalToInsert, setProposalToInsert] = useState(proposalStateMock);
 
   //FIXME: This state, we should put it in the correct component to be loaded after login
   const [ProposalsList, setProposalsList] = useState([]);
-
 
   const refetchDynamicContentTeacher = async (teacherId) => {
     API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
@@ -123,7 +122,7 @@ function App() {
               )
             }
           />
-          {user?.role === "student" && (
+          {user?.role === "student" ? (
             <>
               <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
               <Route path="/student/requestForm" element={loggedIn ? (<StudentRequestPage user={user} />) : (<Navigate to="/login" />)}></Route>
@@ -141,12 +140,12 @@ function App() {
                 }
               />
             </>
-          )}
-          {user?.role === "teacher" && (
+          ):(
             <>
               <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
               <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
+              <Route path="thesis-requests/*" element={<ThesisRequestsPage user={user} />} />
             </>
           )}
         </Route>
