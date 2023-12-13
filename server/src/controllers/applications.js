@@ -208,8 +208,10 @@ module.exports = {
       });
 
       return newThesisRequest;
-    } catch (error) {
-      throw new Error("An error occurred while updating the application status to 'accept'");
+    } catch(error){
+      return reject({
+        error: "An error occurred during the query",
+      });
     }
   },
 }

@@ -2,15 +2,8 @@ import { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import API from '../API';
 
-const InsertStudentRequestForm = ( user) => {
-    const [formData, setFormData] = useState({
-        studentId: user.id,
-        title: '',
-        description: '',
-        teacher: '',
-        type: '',
-        notes: '',
-    });
+const InsertStudentRequestForm = ({user}) => {
+
     const [teachers, setTeachers] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [types, setTypes] = useState([{ title: "experimental" }, { title: "compilation" }]);
@@ -25,11 +18,27 @@ const InsertStudentRequestForm = ( user) => {
         init();
     }, [user]);
 
+    const mockdata={
+        title:'Domain expert-inspired segmentation deep learning algorithms on medical images',
+        description: 'The thesis aims to develop a novel framework for image segmentation of cysts on kidney tubules images that can incorporate domain-knowledge insights and mimic human annotator behavior to make more valuable predictions. This algorithm will then be evaluated on a real medical dataset confidentially shared by Istituto Mario Negri of Bergamo and compared with state-of-the-art solutions. Further developments will cover the generalizability of the developed approaches on related tasks, following the context of theory-guided data science.',
+        notes: 'I believe it is a thesis in line with my university studies and I would like to delve deeper into the topic.',
+    }
+    const [formData, setFormData] = useState({
+        studentId: user.id,
+        title: mockdata.title,
+        description: mockdata.description,
+        teacher: '',
+        type: '',
+        notes: mockdata.notes,
+    });
+
     const [errorMessage, setErrorMessage] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        setErrorMessage("");
+        setShowAlert(false);
         setFormData({
             ...formData,
             [name]: value,
@@ -38,6 +47,7 @@ const InsertStudentRequestForm = ( user) => {
 
     const handleReset = () => {
         setFormData({
+            studentId: user.id,
             title: '',
             description: '',
             teacher: '',
@@ -56,6 +66,7 @@ const InsertStudentRequestForm = ( user) => {
 
         if (missingFields.length > 0) {
             setErrorMessage(`Please fill in the following fields: ${missingFields.join(', ')}.`);
+            setShowAlert(false);
             setSubmitted(true);
             return;
         }
@@ -68,13 +79,15 @@ const InsertStudentRequestForm = ( user) => {
             if (data) {
                 // Show success alert
                 setShowAlert(true);
+                setErrorMessage("");
             }
-
             setSubmitted(true);
             handleReset();
         } catch (error) {
             console.error(error);
+            setShowAlert(false);
             setSubmitted(true);
+            setErrorMessage("error while sending the request");
         }
 
     };

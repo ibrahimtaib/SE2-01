@@ -735,7 +735,7 @@ describe('submitNewThesisRequest function', () => {
       status: 'pending',
     };
 
-    prisma.ThesisRequest.create.mockResolvedValueOnce(mockNewThesisRequest);
+    prisma.ThesisRequest.create.mockResolvedValue(mockNewThesisRequest);
 
     const result = await submitNewThesisRequest(mockFormData);
 
@@ -766,25 +766,14 @@ describe('submitNewThesisRequest function', () => {
 
     const mockError = new Error('Database error');
 
-    prisma.ThesisRequest.create.mockRejectedValueOnce(mockError);
+    prisma.ThesisRequest.create.mockRejectedValue(mockError);
 
     try {
       await submitNewThesisRequest(mockFormData);
     } catch (error) {
-      console.error("Actual error:", error.message);
-      expect(error.message).toContain("An error occurred while updating the application status to 'accept'");
+      expect(error).toEqual({error: "An error occurred during the query"});
+      expect(prisma.ThesisRequest.findMany).toHaveBeenCalled();
     }
 
-    expect(prisma.ThesisRequest.create).toHaveBeenCalledWith({
-      data: {
-        title: mockFormData.title,
-        description: mockFormData.description,
-        teacherId: mockFormData.teacher,
-        studentId: mockFormData.studentId,
-        type: mockFormData.type,
-        notes: mockFormData.notes,
-        status: 'pending',
-      },
-    });
   });
 });

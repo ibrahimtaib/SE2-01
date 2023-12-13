@@ -758,8 +758,9 @@ module.exports = {
       }
       return filteredProposals;
     } catch (error) {
-      console.error(error);
-      throw new Error("An error occurred while filtering proposals");
+      return reject({
+        error: "An error occurred while filtering proposals"
+      })
     }
   },
 
@@ -800,7 +801,6 @@ module.exports = {
               proposal.deletable = true;
             }
           });
-          console.log(proposals);
           resolve(proposals);
         })
         .catch(() => {

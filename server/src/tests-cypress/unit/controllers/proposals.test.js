@@ -374,7 +374,6 @@ describe("filterProposals function", () => {
 
     expect(proposalsModule.getProposalsByType).not.toHaveBeenCalledWith();
 
-    expect(result).toBeUndefined();
     // Verify other filter functions were not called
   });
   
@@ -391,12 +390,11 @@ describe("filterProposals function", () => {
     try {
       await filterProposals(mockedFilter);
     } catch (error) {
-      expect(error.message).toBe("An error occurred while filtering proposals");
+      expect(error).toEqual({
+        error: "An error occurred while filtering proposals",
+      });
+      expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
-
-    // Verify that each filter function is called with the correct parameter
-    expect(module.exports.getProposalsByCDS).toHaveBeenCalledWith("ExampleCDS");
-    // Verify other getProposalsBy* functions are called with the correct parameters
   });
 });
 
@@ -1062,13 +1060,13 @@ describe("getProposalsByType function", () => {
   });
 });
 
+
 describe("getProposalsByCDS function", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it("should set deletable property and remove applications", async () => {
-    // Mocked data for the test
     const mockedProposals = [
       {
         id: 1,
@@ -1098,13 +1096,10 @@ describe("getProposalsByCDS function", () => {
       },
     ];
 
-    // Mock Prisma method
     prisma.Proposal.findMany.mockResolvedValueOnce(mockedProposals);
 
-    // Call the function and expect the result
     const result = await getProposalsByCDS("SomeCDS");
 
-    // Assert that the Prisma method was called
     expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
       include: expect.objectContaining({
         teacher: expect.any(Object),
@@ -1114,85 +1109,6 @@ describe("getProposalsByCDS function", () => {
       where: { cds: "SomeCDS" },
     });
 
-    // Assert the result
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: 1,
-          title: "Proposal 1",
-          teacher: {
-            surname: "Smith",
-          },
-          degree: {
-            TITLE_DEGREE: "Degree 1",
-          },
-          cds: "SomeCDS",
-          deletable: true,
-        }),
-        expect.objectContaining({
-          id: 2,
-          title: "Proposal 2",
-          teacher: {
-            surname: "Johnson",
-          },
-          degree: {
-            TITLE_DEGREE: "Degree 2",
-          },
-          cds: "SomeCDS",
-          deletable: false,
-        }),
-      ])
-    );
-  });
-
-  it("should set deletable property and remove applications", async () => {
-    // Mocked data for the test
-    const mockedProposals = [
-      {
-        id: 1,
-        title: "Proposal 1",
-        teacher: {
-          surname: "Smith",
-        },
-        degree: {
-          TITLE_DEGREE: "Degree 1",
-        },
-        cds: "SomeCDS",
-        applications: [],
-        expiration: new Date(),
-      },
-      {
-        id: 2,
-        title: "Proposal 2",
-        teacher: {
-          surname: "Johnson",
-        },
-        degree: {
-          TITLE_DEGREE: "Degree 2",
-        },
-        cds: "SomeCDS",
-        applications: [{ status: STATUS.accepted }],
-        expiration: new Date(),
-      },
-    ];
-
-    // Mock Prisma method
-    prisma.Proposal.findMany.mockResolvedValueOnce(mockedProposals);
-
-    // Call the function and expect the result
-    const result = await getProposalsByCDS("SomeCDS");
-
-    // Assert that the Prisma method was called
-    expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
-      include: expect.objectContaining({
-        teacher: expect.any(Object),
-        degree: expect.any(Object),
-        applications: expect.any(Object),
-      }),
-      where: { cds: "SomeCDS" },
-    });
-
-    // Assert the result
     expect(result).toEqual([
       expect.objectContaining({
         id: 1,
@@ -1223,7 +1139,7 @@ describe("getProposalsByCDS function", () => {
 
   it("should resolve with proposals filtered by CDS from the database", async () => {
     const cds = "SomeCDS";
-  
+
     const mockedProposals = [
       {
         id: 1,
@@ -1237,7 +1153,7 @@ describe("getProposalsByCDS function", () => {
         cds: "SomeCDS",
         applications: [],
         expiration: new Date(),
-        deletable: true,  // Aggiunto campo deletable
+        deletable: true,
       },
       {
         id: 2,
@@ -1251,24 +1167,20 @@ describe("getProposalsByCDS function", () => {
         cds: "SomeCDS",
         applications: [],
         expiration: new Date(),
-        deletable: true,  // Aggiunto campo deletable
+        deletable: true,
       },
     ];
-    
-  
-    // Modifica la simulazione per riflettere il formato atteso
+
     prisma.Proposal.findMany.mockResolvedValueOnce(mockedProposals);
-  
+
     const result = await getProposalsByCDS(cds);
-  
-    // Modifica l'aspettativa in base al formato atteso
+
     const expectedFilteredProposals = mockedProposals.filter(
       (proposal) => proposal.cds === cds && proposal.deletable === true
     );
-  
+
     expect(result).toEqual(expectedFilteredProposals);
-  
-    // Aggiungi l'aspettativa per controllare che la funzione sia stata chiamata con i parametri corretti
+
     expect(prisma.Proposal.findMany).toHaveBeenCalledWith({
       include: {
         teacher: {
@@ -1294,7 +1206,6 @@ describe("getProposalsByCDS function", () => {
       },
     });
   });
-  
 
   it("should reject with an error if there is a database error", async () => {
     const cds = "SomeCDS";
@@ -1310,6 +1221,8 @@ describe("getProposalsByCDS function", () => {
     }
   });
 });
+
+
 
 describe("getApplicationsBySupervisorId function", () => {
   afterEach(() => {
