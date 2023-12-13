@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import LoadingSpinner from '../components/LoadingSpinner';
-import InsertForm from '../components/InsertForm';
 import { useEffect } from 'react';
+import InsertForm from '../components/InsertForm';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function InsertPage({user, loading, update, setLoading, proposalToInsert, refetchDynamicContent}) {
 

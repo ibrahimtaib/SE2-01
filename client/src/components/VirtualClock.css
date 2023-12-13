@@ -1,0 +1,18 @@
+.clock-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.clock-actions > * {
+  width: 50%;
+}
+@keyframes tremble {
+  0%, 66% {
+    transform: translate(0, 0) rotate(1);
+  }
+  33%, 100% {
+    transform: translate(-1px, 0) rotate(-1deg);
+  }
+}

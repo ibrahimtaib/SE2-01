@@ -717,3 +717,4 @@ describe('getAllProposals function', () => {
     }
   });
 });
+

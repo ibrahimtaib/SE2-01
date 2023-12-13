@@ -57,11 +57,6 @@ function App() {
     API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
   }
 
-  const refetchDynamicContentSecretary = async () => {
-    API.getAllProposals.then((proposals) => setProposalsList(proposals));
-  }
-
-
   const resetProposal = () => {
     setProposalToInsert(proposalStateMock);
     setUpdate(false);
@@ -103,8 +98,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
         <Route path="/" element={<HeaderPage user={user} resetProposal={resetProposal} />}>
-          <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
           <Route path="/*" element={<DefaultRoute />} />
           <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
           <Route
@@ -130,7 +125,7 @@ function App() {
           {user?.role === "student" ? (
             <>
               <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
-              <Route path="/student/requestForm" element={loggedIn ?(<StudentRequestPage user={user}/>):(<Navigate to="/login" />)}></Route>
+              <Route path="/student/requestForm" element={loggedIn ? (<StudentRequestPage user={user} />) : (<Navigate to="/login" />)}></Route>
               <Route path="/students/:id" element={loggedIn ? (<StudentDetailsPage />) : (
                 <Navigate to="/login" />
               )} />

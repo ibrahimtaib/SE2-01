@@ -1,4 +1,4 @@
-const { getApplicationsStudentsProposalsDegreesByTeacherId, getProposalById, getStudentById, acceptApplication, refuseApplication, rejectWaitingApplicationsByProposalId, getProposalIdByApplicationId } = require("../../../controllers/applications.js");
+const { submitNewThesisRequest, getThesisRequestByStudentId ,getApplicationsDecisionsByStudentId, getApplicationsStudentsProposalsDegreesByTeacherId, getProposalById, getStudentById, acceptApplication, refuseApplication, rejectWaitingApplicationsByProposalId, getProposalIdByApplicationId } = require("../../../controllers/applications.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
@@ -15,6 +15,10 @@ jest.mock('../../../controllers/prisma.js', () => ({
     findMany: jest.fn(() => {}),
     update: jest.fn(() => {}),
     updateMany: jest.fn(() => {}),
+  },
+  ThesisRequest: {
+    findMany: jest.fn(() => {}),
+    create: jest.fn(() => {}),
   },
 }));
 
@@ -380,7 +384,7 @@ describe('getApplicationsStudentsProposalsDegreesByTeacherId function', () => {
       where: {
         proposal: {
           teacher: {
-            id: NaN,
+            id: "invalid",
           },
         },
       },
@@ -513,7 +517,7 @@ describe('getStudentById function', () => {
     );
 
     expect(prisma.student.findUnique).toHaveBeenCalledWith({
-      where: { id: NaN },
+      where: { id: "invalid" },
       include: {
         applications: true,
         degree: true,
@@ -599,6 +603,187 @@ describe('getProposalById function', () => {
       include: {
         teacher: true,
         degree: true,
+      },
+    });
+  });
+});
+
+describe('getApplicationsDecisionsByStudentId function', () => {
+  it('should return applications for a valid studentId', async () => {
+    const mockStudentId = 1;
+    const mockApplications = [
+      {
+        id: 1,
+        status: 'accept',
+        proposal: {
+          id: 101,
+          title: 'Proposal 1',
+          teacher: { id: 201, name: 'John', surname: 'Doe' },
+          degree: { id: 301, name: 'Computer Science' },
+        },
+      },
+    ];
+
+    prisma.Application.findMany.mockResolvedValueOnce(mockApplications);
+
+    const result = await getApplicationsDecisionsByStudentId(mockStudentId);
+
+    expect(result).toEqual(mockApplications);
+
+    expect(prisma.Application.findMany).toHaveBeenCalledWith({
+      where: {
+        STUDENT_ID: mockStudentId,
+      },
+      include: {
+        proposal: {
+          include: {
+            teacher: true,
+            degree: true,
+          },
+        },
+      },
+    });
+  });
+
+  it('should handle errors during database query', async () => {
+    const mockStudentId = 1;
+    const mockError = new Error('Database error');
+  
+    prisma.Application.findMany.mockRejectedValueOnce(mockError);
+  
+    try {
+      await getApplicationsDecisionsByStudentId(mockStudentId);
+    } catch (error) {
+      console.error("Actual error:", error.message);
+      expect(error.message).toContain('An error occurred while querying the database');
+    }
+  });
+  
+  });
+
+describe('getThesisRequestByStudentId function', () => {
+  it('should return thesis requests for a valid studentId', async () => {
+    const mockStudentId = 1;
+    const mockThesisRequests = [
+      {
+        id: 1,
+        title: 'Thesis Request 1',
+        teacher: { id: 101, name: 'John', surname: 'Doe' },
+        type: 'Research',
+        status: 'pending',
+      },
+    ];
+
+    prisma.ThesisRequest.findMany.mockResolvedValueOnce(mockThesisRequests);
+
+    const result = await getThesisRequestByStudentId(mockStudentId);
+
+    expect(result).toEqual(mockThesisRequests);
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledWith({
+      where: {
+        studentId: mockStudentId,
+      },
+      include: {
+        teacher: true,
+      },
+    });
+  });
+
+  it('should handle errors during database query', async () => {
+    const mockStudentId = 1;
+    const mockError = new Error('Database error');
+
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(mockError);
+
+
+    try {
+      await getThesisRequestByStudentId(mockStudentId);
+    } catch (error) {
+      console.error("Actual error:", error.message);
+      expect(error.message).toContain('An error occurred while querying the database');
+    }
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledWith({
+      where: {
+        studentId: mockStudentId,
+      },
+      include: {
+        teacher: true,
+      },
+    });
+  });
+});
+
+describe('submitNewThesisRequest function', () => {
+  it('should create a new thesis request', async () => {
+    const mockFormData = {
+      title: 'New Thesis',
+      description: 'Description of the new thesis',
+      teacher: 101,
+      studentId: 1,
+      type: 'Research',
+      notes: 'Additional notes',
+    };
+
+    const mockNewThesisRequest = {
+      id: 1,
+      title: 'New Thesis',
+      description: 'Description of the new thesis',
+      teacher: { id: 101, name: 'John', surname: 'Doe' },
+      type: 'Research',
+      status: 'pending',
+    };
+
+    prisma.ThesisRequest.create.mockResolvedValueOnce(mockNewThesisRequest);
+
+    const result = await submitNewThesisRequest(mockFormData);
+
+    expect(result).toEqual(mockNewThesisRequest);
+
+    expect(prisma.ThesisRequest.create).toHaveBeenCalledWith({
+      data: {
+        title: mockFormData.title,
+        description: mockFormData.description,
+        teacherId: mockFormData.teacher,
+        studentId: mockFormData.studentId,
+        type: mockFormData.type,
+        notes: mockFormData.notes,
+        status: 'pending',
+      },
+    });
+  });
+
+  it('should handle errors during database query', async () => {
+    const mockFormData = {
+      title: 'New Thesis',
+      description: 'Description of the new thesis',
+      teacher: 101,
+      studentId: 1,
+      type: 'Research',
+      notes: 'Additional notes',
+    };
+
+    const mockError = new Error('Database error');
+
+    prisma.ThesisRequest.create.mockRejectedValueOnce(mockError);
+
+    try {
+      await submitNewThesisRequest(mockFormData);
+    } catch (error) {
+      console.error("Actual error:", error.message);
+      expect(error.message).toContain("An error occurred while updating the application status to 'accept'");
+    }
+
+    expect(prisma.ThesisRequest.create).toHaveBeenCalledWith({
+      data: {
+        title: mockFormData.title,
+        description: mockFormData.description,
+        teacherId: mockFormData.teacher,
+        studentId: mockFormData.studentId,
+        type: mockFormData.type,
+        notes: mockFormData.notes,
+        status: 'pending',
       },
     });
   });

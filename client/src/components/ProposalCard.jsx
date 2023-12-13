@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
+import { Alert, Modal, Spinner, } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { useNavigate } from 'react-router-dom';
-import DeleteProposalButton from './DeleteProposalButton';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useNavigate } from 'react-router-dom';
 import { addPageUpdate } from '../api/api';
-import { Modal, Alert, Spinner, CloseButton, ModalFooter } from 'react-bootstrap';
+import DeleteProposalButton from './DeleteProposalButton';
 
 function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToInsert, refetchDynamicContent }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,15 +25,15 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
     addPageUpdate({
       ...proposal,
       archived: true
-    }).then((proposal) => {
+    }).then(() => {
       setArchived(true);
       setTimeout(() => {
         setArchived(false);
-      }, 500);
+      }, 2000);
     }).finally(() => {
       setTimeout(() => {
         refetchDynamicContent(user.id);
-      }, 500);
+      }, 2000);
       setLoadingArchived(false);
     });
   }
@@ -45,15 +44,15 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
     addPageUpdate({
       ...proposal,
       archived: false
-    }).then((proposal) => {
+    }).then(() => {
       setArchived(true);
       setTimeout(() => {
         setArchived(false);
-      }, 500);
+      }, 2000);
     }).finally(() => {
       setTimeout(() => {
         refetchDynamicContent(user.id);
-      }, 500);
+      }, 2000);
       setLoadingArchived(false);
     });
   }
@@ -92,7 +91,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
                 <>
                   <Dropdown>
 
-                    <Dropdown.Toggle split variant="" id="dropdown-button-drop-start" />
+                    <Dropdown.Toggle title='Actions' variant="" id="dropdown-button-drop-start" />
                     <Dropdown.Menu>
                       <Dropdown.Item style={{
                         borderColor: "#1a365d",
@@ -150,10 +149,10 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
       <Modal show={archived}>
         <Modal.Body>
           {!loadingArchived ? <>
-            {showArchived ? <Alert className='w-100' variant='success'> Etracted successfully</Alert> : <Alert className='w-100' variant='success'> Archived successfully</Alert>}
+            {showArchived ? <Alert className='w-100' variant='success'> Extracted successfully</Alert> : <Alert className='w-100' variant='success'> Archived successfully</Alert>}
           </>
             : <div className="d-flex justify-content-center align-items-center">
-              {showArchived ? <p className='text-primary px-2 m-0' >Etracting your application...</p> : <p className='text-primary px-2 m-0' >Archiving your application...</p>}
+              {showArchived ? <p className='text-primary px-2 m-0' >Extracting your application...</p> : <p className='text-primary px-2 m-0' >Archiving your application...</p>}
 
               <Spinner animation="border" variant="primary" size="sm" />
             </div>}

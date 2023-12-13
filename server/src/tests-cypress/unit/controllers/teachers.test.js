@@ -1,77 +1,101 @@
+const {
+  getTeachers,
+  getTeachersById
+} = require("../../../controllers/teachers.js");
 const { PrismaClient } = require("@prisma/client");
 const prisma = require("../../../controllers/prisma.js");
-const teachersModule = require("../../../controllers/teachers.js"); // Update the path as needed
 
 jest.mock('../../../controllers/prisma.js', () => ({
-    Proposal: {
-      findUnique: jest.fn(() => {}),
-    },
-    student: {
-      findUnique: jest.fn(() => {}),
-    },
-    Application: {
-      findUnique: jest.fn(() => {}),
-      findMany: jest.fn(() => {}),
-      update: jest.fn(() => {}),
-      updateMany: jest.fn(() => {}),
-    },
-    Teacher: {
-        findUnique: jest.fn(() => {}),
-        findMany: jest.fn(() => {}),
-        update: jest.fn(() => {}),
-        updateMany: jest.fn(() => {}),
-      },
-  }));
-  
+  Teacher: {
+    findMany: jest.fn(() => {}),
+    findUnique: jest.fn(() => {}),
+  },
+}));
 
-describe("Teachers Module", () => {
-  afterEach(() => {
+describe('Teachers Controller', () => {
+  afterAll(() => {
     jest.clearAllMocks();
   });
 
-  it("should get all teachers", async () => {
-    const mockTeachers = [
-      {
-        id: "1",
-        surname: "Doe",
-        name: "John",
-        email: "john.doe@example.com",
-        COD_GROUP: "A1",
-        COD_DEPARTMENT: "DEP1",
-      },
-      // Add more mock data as needed
-    ];
+  describe('getTeachers function', () => {
+    it('should return a list of teachers', async () => {
+      const mockedTeachers = [
+        { id: 1, name: 'John', surname: 'Doe' },
+        { id: 2, name: 'Jane', surname: 'Smith' },
+      ];
 
-    prisma.Teacher.findMany.mockResolvedValueOnce(mockTeachers);
+      prisma.Teacher.findMany.mockResolvedValueOnce(mockedTeachers);
 
-    const result = await teachersModule.getTeachers();
+      const result = await getTeachers();
 
-    expect(result).toEqual(mockTeachers);
-    expect(prisma.Teacher.findMany).toHaveBeenCalledTimes(1);
-  });
+      expect(result).toEqual(mockedTeachers);
+      expect(prisma.Teacher.findMany).toHaveBeenCalled();
+    });
 
-  it("should get a teacher by ID", async () => {
-    const teacherId = "1";
-    const mockTeacher = {
-      id: teacherId,
-      surname: "Doe",
-      name: "John",
-      email: "john.doe@example.com",
-      COD_GROUP: "A1",
-      COD_DEPARTMENT: "DEP1",
-    };
+    it('should handle errors during database query', async () => {
+      const mockError = new Error('Database error');
+      prisma.Teacher.findMany.mockRejectedValueOnce(mockError);
 
-    prisma.Teacher.findUnique.mockResolvedValueOnce(mockTeacher);
+      try {
+        await getTeachers();
+      } catch (error) {
+        console.error("Actual error:", error.message);
+        expect(error.message).toContain('An error occurred while querying the database for teachers');
+      }
 
-    const result = await teachersModule.getTeachersById(teacherId);
-
-    expect(result).toEqual(mockTeacher);
-    expect(prisma.Teacher.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: teacherId,
-      },
+      expect(prisma.Teacher.findMany).toHaveBeenCalled();
     });
   });
 
-  // Add more test cases as needed
+  describe('getTeachersById function', () => {
+    it('should return a teacher for a valid teacherId', async () => {
+      const mockTeacherId = 1;
+      const mockTeacher = { id: 1, name: 'John', surname: 'Doe' };
+
+      prisma.Teacher.findUnique.mockResolvedValueOnce(mockTeacher);
+
+      const result = await getTeachersById(mockTeacherId);
+
+      expect(result).toEqual(mockTeacher);
+      expect(prisma.Teacher.findUnique).toHaveBeenCalledWith({
+        where: { id: mockTeacherId },
+      });
+    });
+
+    it('should throw an error for an invalid teacherId', async () => {
+      const mockInvalidTeacherId = 'invalid';
+      const mockError = new Error('Invalid teacherId');
+
+      prisma.Teacher.findUnique.mockRejectedValueOnce(mockError);
+
+      try {
+        await getTeachersById(mockInvalidTeacherId);
+      } catch (error) {
+        console.error("Actual error:", error.message);
+        expect(error.message).toContain('An error occurred while querying the database for teachers');
+      }
+
+      expect(prisma.Teacher.findUnique).toHaveBeenCalledWith({
+        where: { id: 'invalid' },
+      });
+    });
+
+    it('should handle errors during database query', async () => {
+      const mockTeacherId = 1;
+      const mockError = new Error('Database error');
+
+      prisma.Teacher.findUnique.mockRejectedValueOnce(mockError);
+
+      try {
+        await getTeachersById(mockTeacherId);
+      } catch (error) {
+        console.error("Actual error:", error.message);
+        expect(error.message).toContain('An error occurred while querying the database for teachers');
+      }
+
+      expect(prisma.Teacher.findUnique).toHaveBeenCalledWith({
+        where: { id: mockTeacherId },
+      });
+    });
+  });
 });

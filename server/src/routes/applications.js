@@ -207,10 +207,11 @@ router.get("/requestedThesis/:studentId", async (req, res) => {
 });
 
 router.post("/newThesisRequest", async (req, res) => {
-  const formData = req.body;
+  const teacherId = req.body.teacher;
+  const {teacher,...data} = req.body;
 
   try {
-    const result = await applicationsController.submitNewThesisRequest(formData);
+    const result = await applicationsController.submitNewThesisRequest({...data, teacherId, status: "pending"});
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
