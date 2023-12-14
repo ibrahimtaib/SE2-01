@@ -14,15 +14,12 @@ const transporter = nodemailer.createTransport({
 module.exports = {
     sendMail :async (mailOptions) => { 
     
-        console.log("transporter", transporter);
         return new Promise((resolve, reject) =>{
             transporter.sendMail(mailOptions)
             .then((info) => {
                 resolve(info)
-                console.log('Email sent: ' + info.response);
             })
             .catch((error)=>{
-                console.error(error);
                 return reject({error});
             });
         })

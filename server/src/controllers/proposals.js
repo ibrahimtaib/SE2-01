@@ -47,7 +47,6 @@ module.exports = {
           return resolve(proposal);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while creating propsal",
           });
@@ -85,7 +84,6 @@ module.exports = {
           });
         }
         // Check if proposal can be deleted
-        console.log(proposal);
         if (proposal.applications.length > 0) {
           return reject({
             status: 400,
@@ -118,7 +116,6 @@ module.exports = {
           message: "Operation successful!",
         });
       } catch (error) {
-        console.error(error);
         return reject({
           status: 500,
           error: "An error occurred while deleting the proposal",
@@ -220,7 +217,6 @@ module.exports = {
           resolve(proposals);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -342,7 +338,7 @@ module.exports = {
 
       return filteredProposals;
     } catch (error) {
-      console.error(error);
+      console.log(error)
       throw new Error('An error occurred while querying the database');
     }
   },
@@ -663,7 +659,6 @@ module.exports = {
 
       return proposals;
     } catch (error) {
-      console.error(error);
       throw new Error('An error occurred while querying the database');
     }
   },
@@ -819,7 +814,6 @@ module.exports = {
       }
       return filteredProposals;
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while filtering proposals");
     }
   },
@@ -861,7 +855,6 @@ module.exports = {
               proposal.deletable = true;
             }
           });
-          console.log(proposals);
           resolve(proposals);
         })
         .catch(() => {
@@ -908,7 +901,6 @@ module.exports = {
               proposal.deletable = true;
             }
           });
-          console.log(proposals);
           resolve(proposals);
         })
         .catch(() => {
@@ -934,7 +926,6 @@ module.exports = {
           return resolve(applications);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error:
               "An error occurred while querying the database for applications",
@@ -986,7 +977,6 @@ module.exports = {
           return resolve(proposal);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while updating proposal",
           });

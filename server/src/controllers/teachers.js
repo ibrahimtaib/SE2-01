@@ -11,7 +11,6 @@ module.exports = {
       const teachers = await prisma.Teacher.findMany();
       return teachers;
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while querying the database for teachers");
     }
   },
@@ -24,7 +23,6 @@ module.exports = {
       });
       return teacher;
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while querying the database for teachers");
     }
   }

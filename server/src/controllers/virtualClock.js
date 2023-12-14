@@ -11,7 +11,6 @@ module.exports = {
    * @returns {Date}
    */
   getVirtualClock: () => {
-    console.log("GETTING VIRTUAL CLOCK");
     return getDate();
   },
 
