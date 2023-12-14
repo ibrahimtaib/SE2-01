@@ -85,12 +85,12 @@ function LeftSide(props) {
                         API.getProposalsByCds(props.user.cds).then((a) => {
                             props.setProposalsList(a)
                             setClickReset(false);
-                        }).catch((err) => console.log(err));
-                    }else if(props.user.role=="teacher"){
+                        })
+		    }else if(props.user.role=="teacher"){
                         API.getTeacherProposals(props.user.id).then((a) => {
                             props.setProposalsList(a)
                             setClickReset(false);
-                        }).catch((err) => console.log(err));
+                        })
                     }
                 } catch (err) {
                     setClickReset(false);
@@ -200,10 +200,6 @@ function LeftSide(props) {
                         props.setProposalsList(a)
                         setClick(false)
                     })
-                        .catch((err) => {
-                            console.log(err)
-                            setClick(false)
-                        });
                 } catch (err) {
                     setClick(false)
                 }
