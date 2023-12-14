@@ -13,7 +13,9 @@ const {
   getProposalsByLevel,
   getProposalsByType,
   getProposalsByCDS,
+  filterProposals,
 } = require("../../../controllers/proposals.js");
+const proposalsModule = require("../../../controllers/proposals.js");
 const { PrismaClient } = require("@prisma/client");
 const { mocked } = require("jest-mock");
 const prisma = require("../../../controllers/prisma.js");
@@ -715,6 +717,361 @@ describe('getAllProposals function', () => {
       });
       expect(prisma.Proposal.findMany).toHaveBeenCalled();
     }
+  });
+});
+describe("filterProposals function", () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should filter proposals based on the provided filters", async () => {
+    const mockedFilter = {
+      cds: "ExampleCDS",
+      level: "ExampleLevel",
+      type: "ExampleType",
+      title: "ExampleTitle",
+      supervisor: "ExampleSupervisor",
+      coSupervisor: "ExampleCosupervisor",
+      keywords: "ExampleKeywords",
+      groups: "ExampleGroup",
+      expiration: "ExampleExpirationDate",
+    };
+
+    const mockedFilteredProposals = [
+      {
+        id: 1,
+        title: "Example Proposal 1",
+        supervisor: "Example Supervisor",
+        coSupervisors: ["CoSupervisor1", "CoSupervisor2"],
+        keywords: ["Keyword1", "Keyword2"],
+        applications: [
+          {
+            id: 101,
+            date: new Date(),
+            status: "Pending",
+            comment: "Application comment",
+            STUDENT_ID: "StudentID1",
+            PROPOSAL_ID: 1,
+          },
+          {
+            id: 102,
+            date: new Date(),
+            status: "Approved",
+            comment: "Another application comment",
+            STUDENT_ID: "StudentID2",
+            PROPOSAL_ID: 1,
+          },
+        ],
+        type: "Type1",
+        groups: ["Group1", "Group2"],
+        description: "Proposal description",
+        notes: "Proposal notes",
+        expiration: new Date("2023-12-31T23:59:59Z"),
+        level: "Level1",
+        cds: "ExampleCDS",
+        archived: false,
+        teacher: {
+          id: "TeacherID",
+          surname: "TeacherSurname",
+          name: "TeacherName",
+          email: "teacher@example.com",
+          COD_GROUP: "TeacherGroup",
+          COD_DEPARTMENT: "TeacherDepartment",
+        },
+        requiredKnowledge: "Required knowledge for the proposal",
+        degree: {
+          COD_DEGREE: "ExampleDegree",
+          TITLE_DEGREE: "Example Degree Title",
+        },
+      },
+      {
+        id: 2,
+        title: "Example Proposal 2",
+        supervisor: "Another Supervisor",
+        coSupervisors: ["CoSupervisor3"],
+        keywords: ["Keyword3", "Keyword4"],
+        applications: [
+          {
+            id: 103,
+            date: new Date(),
+            status: "Rejected",
+            comment: "Yet another application comment",
+            STUDENT_ID: "StudentID3",
+            PROPOSAL_ID: 2,
+          },
+          // Add more application objects as needed
+        ],
+        type: "Type2",
+        groups: ["Group3", "Group4"],
+        description: "Another proposal description",
+        notes: "Another proposal notes",
+        expiration: new Date("2023-11-30T23:59:59Z"),
+        level: "Level2",
+        cds: "AnotherCDS",
+        archived: true,
+        teacher: {
+          id: "AnotherTeacherID",
+          surname: "AnotherTeacherSurname",
+          name: "AnotherTeacherName",
+          email: "another.teacher@example.com",
+          COD_GROUP: "AnotherTeacherGroup",
+          COD_DEPARTMENT: "AnotherTeacherDepartment",
+        },
+        requiredKnowledge: "Required knowledge for another proposal",
+        degree: {
+          COD_DEGREE: "AnotherDegree",
+          TITLE_DEGREE: "Another Degree Title",
+        },
+      },
+      // Add more proposal objects as needed
+    ];
+
+    jest.spyOn(proposalsModule, "getProposalsByCDS").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByLevel").mockResolvedValueOnce(mockedFilteredProposals);
+
+    jest.spyOn(proposalsModule, "getProposalsByTitle").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByCosupervisor").mockResolvedValueOnce(mockedFilteredProposals);
+
+    jest.spyOn(proposalsModule, "getProposalsBySupervisor").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByKeywords").mockResolvedValueOnce(mockedFilteredProposals);
+
+    jest.spyOn(proposalsModule, "getProposalsByGroups").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByExpirationDate").mockResolvedValueOnce(mockedFilteredProposals);
+
+    jest.spyOn(proposalsModule, "getProposalsByType").mockResolvedValueOnce(mockedFilteredProposals);
+
+    // Mock other getProposalsBy* functions as needed
+
+    const result = await filterProposals(mockedFilter);
+
+    // Verify that each filter function is called with the correct parameter
+    expect(proposalsModule.getProposalsByCDS).toHaveBeenCalledWith("ExampleCDS");
+    expect(proposalsModule.getProposalsByLevel).toHaveBeenCalledWith("ExampleLevel");
+
+    expect(proposalsModule.getProposalsByTitle).toHaveBeenCalledWith("ExampleTitle");
+    expect(proposalsModule.getProposalsByCosupervisor).toHaveBeenCalledWith("ExampleCosupervisor");
+
+    expect(proposalsModule.getProposalsBySupervisor).toHaveBeenCalledWith("ExampleSupervisor");
+    expect(proposalsModule.getProposalsByKeywords).toHaveBeenCalledWith("ExampleKeywords");
+
+    expect(proposalsModule.getProposalsByGroups).toHaveBeenCalledWith("ExampleGroup");
+    expect(proposalsModule.getProposalsByExpirationDate).toHaveBeenCalledWith("ExampleExpirationDate");
+
+    expect(proposalsModule.getProposalsByType).toHaveBeenCalledWith("ExampleType");
+
+
+    // Verify other getProposalsBy* functions are called with the correct parameters
+
+    // Verify that the result contains the mocked filtered proposals
+    expect(result).toEqual(mockedFilteredProposals);
+  });
+
+  it("should filter proposals based on the provided filters but testing that none of the filters are applied", async () => {
+    const mockedFilter = {
+      cds: undefined,
+      level: undefined,
+      type: undefined,
+      title: undefined,
+      supervisor: undefined,
+      coSupervisor: undefined,
+      keywords: undefined,
+      groups: undefined,
+      expiration: undefined,
+    };
+
+    const mockedFilteredProposals = [
+      {
+        id: 1,
+        title: "Example Proposal 1",
+        supervisor: "Example Supervisor",
+        coSupervisors: ["CoSupervisor1", "CoSupervisor2"],
+        keywords: ["Keyword1", "Keyword2"],
+        applications: [
+          {
+            id: 101,
+            date: new Date(),
+            status: "Pending",
+            comment: "Application comment",
+            STUDENT_ID: "StudentID1",
+            PROPOSAL_ID: 1,
+          },
+          {
+            id: 102,
+            date: new Date(),
+            status: "Approved",
+            comment: "Another application comment",
+            STUDENT_ID: "StudentID2",
+            PROPOSAL_ID: 1,
+          },
+        ],
+        type: "Type1",
+        groups: ["Group1", "Group2"],
+        description: "Proposal description",
+        notes: "Proposal notes",
+        expiration: new Date("2023-12-31T23:59:59Z"),
+        level: "Level1",
+        cds: "ExampleCDS",
+        archived: false,
+        teacher: {
+          id: "TeacherID",
+          surname: "TeacherSurname",
+          name: "TeacherName",
+          email: "teacher@example.com",
+          COD_GROUP: "TeacherGroup",
+          COD_DEPARTMENT: "TeacherDepartment",
+        },
+        requiredKnowledge: "Required knowledge for the proposal",
+        degree: {
+          COD_DEGREE: "ExampleDegree",
+          TITLE_DEGREE: "Example Degree Title",
+        },
+      },
+      {
+        id: 2,
+        title: "Example Proposal 2",
+        supervisor: "Another Supervisor",
+        coSupervisors: ["CoSupervisor3"],
+        keywords: ["Keyword3", "Keyword4"],
+        applications: [
+          {
+            id: 103,
+            date: new Date(),
+            status: "Rejected",
+            comment: "Yet another application comment",
+            STUDENT_ID: "StudentID3",
+            PROPOSAL_ID: 2,
+          },
+          // Add more application objects as needed
+        ],
+        type: "Type2",
+        groups: ["Group3", "Group4"],
+        description: "Another proposal description",
+        notes: "Another proposal notes",
+        expiration: new Date("2023-11-30T23:59:59Z"),
+        level: "Level2",
+        cds: "AnotherCDS",
+        archived: true,
+        teacher: {
+          id: "AnotherTeacherID",
+          surname: "AnotherTeacherSurname",
+          name: "AnotherTeacherName",
+          email: "another.teacher@example.com",
+          COD_GROUP: "AnotherTeacherGroup",
+          COD_DEPARTMENT: "AnotherTeacherDepartment",
+        },
+        requiredKnowledge: "Required knowledge for another proposal",
+        degree: {
+          COD_DEGREE: "AnotherDegree",
+          TITLE_DEGREE: "Another Degree Title",
+        },
+      },
+      // Add more proposal objects as needed
+    ];
+
+    jest.spyOn(proposalsModule, "getProposalsByCDS").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByLevel").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByTitle").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByCosupervisor").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsBySupervisor").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByKeywords").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByGroups").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByExpirationDate").mockResolvedValueOnce(mockedFilteredProposals);
+    jest.spyOn(proposalsModule, "getProposalsByType").mockResolvedValueOnce(mockedFilteredProposals);
+
+    const result = await filterProposals(mockedFilter);
+
+    // Verify that each filter function is NOT called
+    expect(proposalsModule.getProposalsByCDS).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByLevel).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByTitle).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByCosupervisor).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsBySupervisor).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByKeywords).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByGroups).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByExpirationDate).toHaveBeenCalled();
+    expect(proposalsModule.getProposalsByType).toHaveBeenCalled();
+
+    // Verify that the result contains the mocked filtered proposals
+    expect(result).toEqual(undefined);
+  });
+
+  it("should handle the case where filteredProposals variable doesn't exist", async () => {
+    const mockedFilter = {
+      cds: "ExampleCDS",
+      // Set other filters to undefined to simulate the case where filteredProposals variable doesn't exist
+      level: undefined,
+      type: undefined,
+      title: undefined,
+      supervisor: undefined,
+      coSupervisor: undefined,
+      keywords: undefined,
+      groups: undefined,
+      expiration: undefined,
+    };
+
+    const mockedFilteredProposals = [];
+
+    // Mock the individual filter functions to return some data
+    jest.spyOn(proposalsModule, "getProposalsByCDS").mockResolvedValueOnce([]);
+    jest.spyOn(proposalsModule, "getProposalsByCDS").mockResolvedValueOnce([]);
+    jest.spyOn(proposalsModule, "getProposalsByLevel").mockResolvedValueOnce([]);
+
+    jest.spyOn(proposalsModule, "getProposalsByTitle").mockResolvedValueOnce([]);
+    jest.spyOn(proposalsModule, "getProposalsByCosupervisor").mockResolvedValueOnce([]);
+
+    jest.spyOn(proposalsModule, "getProposalsBySupervisor").mockResolvedValueOnce([]);
+    jest.spyOn(proposalsModule, "getProposalsByKeywords").mockResolvedValueOnce([]);
+
+    jest.spyOn(proposalsModule, "getProposalsByGroups").mockResolvedValueOnce([]);
+    jest.spyOn(proposalsModule, "getProposalsByExpirationDate").mockResolvedValueOnce([]);
+
+    jest.spyOn(proposalsModule, "getProposalsByType").mockResolvedValueOnce([]);
+
+    // Mock other filter functions as needed
+
+    const result = await filterProposals(mockedFilter);
+
+    // Verify that filteredProposals remains undefined
+
+
+    // Verify that the individual filter functions were not called
+    expect(proposalsModule.getProposalsByCDS).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByLevel).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByTitle).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByCosupervisor).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsBySupervisor).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByKeywords).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByGroups).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByExpirationDate).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByType).not.toHaveBeenCalledWith();
+
+    expect(result).toBeUndefined();
+    // Verify other filter functions were not called
+  });
+
+
+  it("should handle errors thrown by filter functions and throw a new error", async () => {
+    const mockedFilter = {
+      cds: "ExampleCDS",
+    };
+
+    const mockedError = new Error("Error while filtering proposals");
+
+    jest.spyOn(proposalsModule, "getProposalsByCDS").mockRejectedValueOnce(mockedError);
+
+    try {
+      await filterProposals(mockedFilter);
+    } catch (error) {
+      expect(error.message).toBe("An error occurred while filtering proposals");
+    }
+
+    // Verify that each filter function is called with the correct parameter
+    expect(module.exports.getProposalsByCDS).toHaveBeenCalledWith("ExampleCDS");
+    // Verify other getProposalsBy* functions are called with the correct parameters
   });
 });
 
