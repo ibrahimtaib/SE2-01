@@ -344,5 +344,165 @@ describe("Thesis Request Module", () => {
     });
   });
 
+  it('should handle errors when getting all thesis requests', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = 'An error occurred while querying the database for secretaries';
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.getThesisRequests()).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when getting pending thesis requests', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = 'An error occurred while querying the database for secretaries';
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.getPendingThesisRequests()).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when getting thesis request by ID', async () => {
+    const thesisRequestId = 1;
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = 'An error occurred while querying the database for secretary';
+    prisma.ThesisRequest.findUnique.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.getThesisRequestsById(thesisRequestId)).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: thesisRequestId,
+      },
+      include: {
+        teacher: true,
+        student: true,
+      },
+    });
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when getting secretary accepted thesis requests', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = 'An error occurred while querying the database for secretary accepted ThesisRequests';
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.getSecretaryAcceptedThesisRequests()).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledWith({
+      where: {
+        status: REQUESTSTATUS.acceptedBySecretary,
+      },
+      include: {
+        teacher: true,
+        student: {
+          include: {
+            degree: true,
+          },
+        },
+      },
+    });
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when getting thesis requests by teacher ID', async () => {
+    const teacherId = 'teacher123';
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = 'An error occurred while querying the database for secretary accepted ThesisRequests';
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.getThesisRequestsByTeacherId(teacherId)).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledWith({
+      where: {
+        teacherId: teacherId,
+      },
+      include: {
+        teacher: true,
+        student: {
+          include: {
+            degree: true,
+          },
+        },
+      },
+    });
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when getting secretary rejected thesis requests', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = 'An error occurred while querying the database for secretary rejected ThesisRequests';
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.getSecretaryRejectedThesisRequests()).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.findMany).toHaveBeenCalledWith({
+      where: {
+        status: REQUESTSTATUS.rejectedBySecretary,
+      },
+      include: {
+        teacher: true,
+        student: {
+          include: {
+            degree: true,
+          },
+        },
+      },
+    });
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when performing action on thesis request by secretary', async () => {
+    const thesisRequestId = 1;
+    const action = 'accept';
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = `An error occurred while trying to ${action} ThesisRequest by secretary Clerk`;
+    prisma.ThesisRequest.update.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.actionOnThesisRequestBySecretary(action, thesisRequestId)).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.update).toHaveBeenCalledWith({
+      where: {
+        id: thesisRequestId,
+      },
+      data: {
+        status: REQUESTSTATUS.acceptedBySecretary,
+      },
+    });
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
+  it('should handle errors when performing action on thesis request by teacher', async () => {
+    const thesisRequestId = 1;
+    const action = 'accept';
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Mock console.error
+
+    const errorMessage = `An error occurred while trying to ${action} ThesisRequest by teacher`;
+    prisma.ThesisRequest.update.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(thesisRequestModule.actionOnThesisRequestByTeacher(action, thesisRequestId)).rejects.toEqual({ error: errorMessage });
+
+    expect(prisma.ThesisRequest.update).toHaveBeenCalledWith({
+      where: {
+        id: thesisRequestId,
+      },
+      data: {
+        status: REQUESTSTATUS.acceptedByTeacher,
+      },
+    });
+    expect(console.error).toHaveBeenCalledWith(new Error(errorMessage));
+  });
+
   // Add more test cases as needed
 });
