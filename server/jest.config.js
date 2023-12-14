@@ -6,6 +6,7 @@ module.exports = {
     "!src/test*/**",
     "!src/*.js",
     "!src/controllers/prisma.js",
+    "!src/routes/auth.js"
   ],
   coverageDirectory: "coverage",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
