@@ -1053,7 +1053,6 @@ describe("filterProposals function", () => {
     // Verify other filter functions were not called
   });
 
-
   it("should handle errors thrown by filter functions and throw a new error", async () => {
     const mockedFilter = {
       cds: "ExampleCDS",
@@ -1073,5 +1072,124 @@ describe("filterProposals function", () => {
     expect(module.exports.getProposalsByCDS).toHaveBeenCalledWith("ExampleCDS");
     // Verify other getProposalsBy* functions are called with the correct parameters
   });
+
+  ////not provided
+  it("should handle the case where cds filter is not provided", async () => {
+    const mockedFilter = {
+      cds: undefined,
+      level: "ExampleLevel",
+      type: "ExampleType",
+      title: "ExampleTitle",
+      supervisor: "ExampleSupervisor",
+      coSupervisor: "ExampleCosupervisor",
+      keywords: "ExampleKeywords",
+      groups: "ExampleGroup",
+      expiration: "ExampleExpirationDate",
+    }; // Empty filter object
+  
+    const result = await filterProposals(mockedFilter);
+  
+    // Verify that none of the filter functions are called
+  
+
+    expect(proposalsModule.getProposalsByCDS).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByLevel).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByTitle).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByCosupervisor).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsBySupervisor).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByKeywords).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByGroups).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByExpirationDate).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByType).not.toHaveBeenCalledWith();
+  
+    // Verify that the result is undefined or an empty array, depending on your implementation
+expect(proposalsModule.getProposalsByCDS).toHaveBeenCalledWith("ExampleCDS");  });
+
+  it("should handle the case where level filter is provided but goes to else", async () => {
+    const mockedFilter = {
+      cds: undefined,
+      level: undefined,
+      type: "ExampleType",
+      title: "ExampleTitle",
+      supervisor: "ExampleSupervisor",
+      coSupervisor: "ExampleCosupervisor",
+      keywords: "ExampleKeywords",
+      groups: "ExampleGroup",
+      expiration: "ExampleExpirationDate",
+    };
+// Empty filter object
+  
+    const result = await filterProposals(mockedFilter);
+  
+    // Verify that none of the filter functions are called
+  
+
+    expect(proposalsModule.getProposalsByCDS).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByLevel).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByTitle).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByCosupervisor).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsBySupervisor).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByKeywords).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByGroups).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByExpirationDate).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByType).not.toHaveBeenCalledWith();
+  
+    // Verify that the result is undefined or an empty array, depending on your implementation
+    expect(result).toEqual([]);
+  });
+
+  it("should handle the case where type filter is provided but goes to else", async () => {
+    const mockedFilter = {
+      cds: undefined,
+      level: undefined,
+      type: undefined,
+      title: "ExampleTitle",
+      supervisor: "ExampleSupervisor",
+      coSupervisor: "ExampleCosupervisor",
+      keywords: "ExampleKeywords",
+      groups: "ExampleGroup",
+      expiration: "ExampleExpirationDate",
+    };
+// Empty filter object
+  
+    const result = await filterProposals(mockedFilter);
+  
+    // Verify that none of the filter functions are called
+  
+
+    expect(proposalsModule.getProposalsByCDS).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByLevel).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByTitle).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByCosupervisor).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsBySupervisor).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByKeywords).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByGroups).not.toHaveBeenCalledWith();
+    expect(proposalsModule.getProposalsByExpirationDate).not.toHaveBeenCalledWith();
+
+    expect(proposalsModule.getProposalsByType).not.toHaveBeenCalledWith();
+  
+    // Verify that the result is undefined or an empty array, depending on your implementation
+    expect(result).toEqual([]);
+  });
+
+ 
+
+
+
+  
+
+
+  
 });
 
