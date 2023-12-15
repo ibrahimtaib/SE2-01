@@ -65,7 +65,6 @@ module.exports = {
         degree: proposal.degree,
       };
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while querying the database for the proposal and related information");
     }
   },
@@ -86,7 +85,6 @@ module.exports = {
         student
       };
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while querying the database for student information");
     }
   },
@@ -167,7 +165,6 @@ module.exports = {
 
       return applications;
     } catch (error) {
-      console.error("Error in getApplicationsDecisionsByStudentId:", error);
       throw new Error("An error occurred while querying the database");
     }
   },
@@ -187,13 +184,11 @@ module.exports = {
 
       return requests;
     } catch (error) {
-      console.error("Error in getApplicationsDecisionsByStudentId:", error);
       throw new Error("An error occurred while querying the database");
     }
   },
 
   submitNewThesisRequest: async (NewRequestData) => {
-    console.log('NewRequestData', NewRequestData)
     try {
       const newThesisRequest = await prisma.ThesisRequest.create({
         data: NewRequestData,
@@ -201,7 +196,6 @@ module.exports = {
 
       return newThesisRequest;
     } catch (error) {
-      console.error("Error in submitNewThesisRequest:", error);
       throw new Error("An error occurred during the query");
     }
   },
@@ -216,7 +210,6 @@ module.exports = {
   
       return applicationsCount;
     } catch (error) {
-      console.error('Error in getApplicationsCountByStudentId:', error);
       throw new Error('An error occurred while querying the database');
     }
   }

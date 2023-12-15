@@ -19,7 +19,6 @@ module.exports = {
           return resolve(secretaries);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for secretaries",
           });
@@ -47,7 +46,6 @@ module.exports = {
           return resolve(secretaries);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for secretaries",
           });
@@ -71,7 +69,6 @@ module.exports = {
           return resolve(secretary);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for secretary",
           });
@@ -99,7 +96,6 @@ module.exports = {
           return resolve(ThesisRequests);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for secretary accepted ThesisRequests",
           });
@@ -127,7 +123,6 @@ module.exports = {
           return resolve(ThesisRequests);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for secretary accepted ThesisRequests",
           });
@@ -155,7 +150,6 @@ module.exports = {
           return resolve(ThesisRequests);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database for secretary rejected ThesisRequests",
           });
@@ -178,7 +172,6 @@ module.exports = {
           return resolve(ThesisRequest);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: `An error occurred while trying to ${action} ThesisRequest by secretary Clerk`,
           });
@@ -201,7 +194,6 @@ module.exports = {
           return resolve(ThesisRequest);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: `An error occurred while trying to ${action} ThesisRequest by teacher`,
           });

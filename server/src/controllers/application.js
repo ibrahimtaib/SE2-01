@@ -12,7 +12,6 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const { comment, STUDENT_ID, PROPOSAL_ID } = body;
-        console.log(body);
         // Fetch student
         const student = await prisma.student.findUnique({
           where: {
@@ -57,7 +56,6 @@ module.exports = {
         }
 
         // Check student is suitable
-        console.log(student.COD_DEGREE, proposal.cds);
         if (student.COD_DEGREE !== proposal.cds) {
           return reject({
             status: 400,

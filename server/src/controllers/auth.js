@@ -30,10 +30,8 @@ module.exports = {
                             },
                         });
                     }
-                    console.log(teacher)
                 })
                 .then((student) => {
-                    console.log(student);
                     if (student) {
                         const customStudentObject = {
                             id: student.id,
@@ -48,7 +46,6 @@ module.exports = {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
                     reject(error);
                 });
         });

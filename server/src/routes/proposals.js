@@ -7,7 +7,6 @@ router.post("/", async (req, res) => {
     const proposal = await proposalsController.createProposal(req.body);
     res.status(200).json(proposal);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 });
@@ -17,7 +16,6 @@ router.get("/cds", async (req, res) => {
     const cdsList = await proposalsController.getAllCds();
     res.status(200).json(cdsList);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 });
@@ -27,7 +25,6 @@ router.get("/types", async (req, res) => {
     const typeList = await proposalsController.getAllTypes();
     res.status(200).json(typeList);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 });
@@ -37,7 +34,6 @@ router.get("/levels", async (req, res) => {
     const levelList = await proposalsController.getAllLevels();
     res.status(200).json(levelList);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 });
@@ -47,7 +43,6 @@ router.get("/", async (req, res) => {
     const proposals = await proposalsController.getProposals();
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 });
@@ -61,7 +56,6 @@ router.get("/title/:searchString", async (req, res) => {
     );
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -75,7 +69,6 @@ router.get("/cosupervisor/:cosupervisors", async (req, res) => {
     );
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -89,7 +82,6 @@ router.get("/supervisor/:nameOrSurname", async (req, res) => {
     );
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -102,7 +94,6 @@ router.get("/keywords/:keywords", async (req, res) => {
     );
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -113,7 +104,6 @@ router.get("/groups/:groups", async (req, res) => {
     const proposals = await proposalsController.getProposalsByGroups(groups);
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -125,7 +115,6 @@ router.get("/type/:type", async (req, res) => {
     const proposals = await proposalsController.getProposalsByType(type);
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -139,7 +128,6 @@ router.get("/expiration/:date", async (req, res) => {
     );
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -151,7 +139,6 @@ router.get("/level/:level", async (req, res) => {
     const proposals = await proposalsController.getProposalsByLevel(level);
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -162,7 +149,6 @@ router.get("/cds/:cds", async (req, res) => {
     const proposals = await proposalsController.getProposalsByCDS(cds);
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -174,7 +160,6 @@ router.get("/teacher/:teacherId", async (req, res) => {
     const proposals = await proposalsController.getTeacherProposals(teacherId);
     res.status(200).json(proposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -188,7 +173,6 @@ router.post("/filter", async (req, res) => {
     );
     res.status(200).json(filteredProposals);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

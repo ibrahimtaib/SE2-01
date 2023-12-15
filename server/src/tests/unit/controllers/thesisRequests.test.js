@@ -344,5 +344,78 @@ describe("Thesis Request Module", () => {
     });
   });
 
-  // Add more test cases as needed
+ 
+  it('should handle Prisma error', async () => {
+    // Configura il mock di Prisma per restituire un errore
+    const mockedError = new Error('Prisma error');
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(mockedError);
+
+    // Esegui la funzione e attendi il risultato
+    try {
+      await thesisRequestModule.getThesisRequests();
+    } catch (error) {
+      // Verifica che la funzione abbia gestito correttamente l'errore
+      expect(error).toEqual({ error: 'An error occurred while querying the database for secretaries' });
+      expect(prisma.ThesisRequest.findMany).toHaveBeenCalled();
+    }
+  });
+  it('should handle Prisma error', async () => {
+    // Configura il mock di Prisma per restituire un errore
+    const mockedError = new Error('Prisma error');
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(mockedError);
+
+    // Esegui la funzione e attendi il risultato
+    try {
+      await thesisRequestModule.getPendingThesisRequests();
+    } catch (error) {
+      // Verifica che la funzione abbia gestito correttamente l'errore
+      expect(error).toEqual({ error: 'An error occurred while querying the database for secretaries' });
+      expect(prisma.ThesisRequest.findMany).toHaveBeenCalled();
+    }
+  });
+  it('should handle Prisma error', async () => {
+    // Configura il mock di Prisma per restituire un errore
+    const mockedError = new Error('Prisma error');
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(mockedError);
+
+    // Esegui la funzione e attendi il risultato
+    try {
+      await await thesisRequestModule.getSecretaryAcceptedThesisRequests();
+    } catch (error) {
+      // Verifica che la funzione abbia gestito correttamente l'errore
+      expect(error).toEqual({ error: "An error occurred while querying the database for secretary accepted ThesisRequests" });
+      expect(prisma.ThesisRequest.findMany).toHaveBeenCalled();
+    }
+  });
+  it('should handle Prisma error', async () => {
+    // Configura il mock di Prisma per restituire un errore
+    const teacherId = "teacher123"; // Replace with a valid teacher ID
+
+    const mockedError = new Error('Prisma error');
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(mockedError);
+
+    // Esegui la funzione e attendi il risultato
+    try {
+      await thesisRequestModule.getThesisRequestsByTeacherId(teacherId);
+    } catch (error) {
+      // Verifica che la funzione abbia gestito correttamente l'errore
+      expect(error).toEqual({ error: "An error occurred while querying the database for secretary accepted ThesisRequests" });
+      expect(prisma.ThesisRequest.findMany).toHaveBeenCalled();
+    }
+  });
+  it('should handle Prisma error', async () => {
+    // Configura il mock di Prisma per restituire un errore
+    const mockedError = new Error('Prisma error');
+    prisma.ThesisRequest.findMany.mockRejectedValueOnce(mockedError);
+
+    // Esegui la funzione e attendi il risultato
+    try {
+      await thesisRequestModule.getSecretaryRejectedThesisRequests();
+    } catch (error) {
+      // Verifica che la funzione abbia gestito correttamente l'errore
+      expect(error).toEqual({ error:"An error occurred while querying the database for secretary rejected ThesisRequests" });
+      expect(prisma.ThesisRequest.findMany).toHaveBeenCalled();
+    }
+  });
+
 });

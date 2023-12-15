@@ -282,217 +282,214 @@ describe('POST /accept-application/:applicationId', () => {
       // Verifica la risposta del server
       expect(response.body).toEqual({ error: "Internal Server Error" });
     });
-  });
+});
   
-  describe('POST /refuse-application/:applicationId', () => {
-    it('should refuse application by ID', async () => {
-      // Dati di esempio per il test
-      const applicationId = '123'; // Sostituisci con un ID valido per il test
-      const mockResult = {
-        // ... Inserisci qui i dati che si aspetta il controller per restituire il risultato
-      };
-  
-      // Mock del controller per simulare il rifiuto dell'applicazione
-      applicationsController.refuseApplication = jest.fn().mockResolvedValue(mockResult);
-  
-      // Effettua una richiesta POST all'endpoint
-      const response = await request(app)
-        .post(`/refuse-application/${applicationId}`)
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
-      expect(applicationsController.refuseApplication).toHaveBeenCalledWith(applicationId);
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual(mockResult);
-    });
-  
-    it('should handle errors when refusing application by ID', async () => {
-      // Dati di esempio per il test
-      const applicationId = '123'; // Sostituisci con un ID valido per il test
-      const mockError = new Error('Failed to refuse application');
-  
-      // Mock del controller per simulare un errore nel rifiuto dell'applicazione
-      applicationsController.refuseApplication = jest.fn().mockRejectedValue(mockError);
-  
-      // Effettua una richiesta POST all'endpoint
-      const response = await request(app)
-        .post(`/refuse-application/${applicationId}`)
-        .expect('Content-Type', /json/)
-        .expect(500);
-  
-      // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
-      // (anche se la chiamata ha generato un errore)
-      expect(applicationsController.refuseApplication).toHaveBeenCalledWith(applicationId);
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual({ error: "Internal Server Error"  });
-    });
-  });
-  
-  describe('GET /get-proposal-id/:applicationId', () => {
-    it('should get proposal ID by application ID', async () => {
-      // Dati di esempio per il test
-      const applicationId = '123'; // Sostituisci con un ID valido per il test
-      const mockProposalId = '456'; // Sostituisci con un ID valido per il test
-  
-      // Mock del controller per simulare il recupero dell'ID della proposta
-      applicationsController.getProposalIdByApplicationId = jest.fn().mockResolvedValue(mockProposalId);
-  
-      // Effettua una richiesta GET all'endpoint
-      const response = await request(app)
-        .get(`/get-proposal-id/${applicationId}`)
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
-      expect(applicationsController.getProposalIdByApplicationId).toHaveBeenCalledWith(applicationId);
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual({ proposalId: mockProposalId });
-    });
-  
-    it('should handle errors when getting proposal ID by application ID', async () => {
-      // Dati di esempio per il test
-      const applicationId = '123'; // Sostituisci con un ID valido per il test
-      const mockError = new Error('Failed to get proposal ID');
-  
-      // Mock del controller per simulare un errore nel recupero dell'ID della proposta
-      applicationsController.getProposalIdByApplicationId = jest.fn().mockRejectedValue(mockError);
-  
-      // Effettua una richiesta GET all'endpoint
-      const response = await request(app)
-        .get(`/get-proposal-id/${applicationId}`)
-        .expect('Content-Type', /json/)
-        .expect(500);
-  
-      // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
-      // (anche se la chiamata ha generato un errore)
-      expect(applicationsController.getProposalIdByApplicationId).toHaveBeenCalledWith(applicationId);
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual({ error: "Internal Server Error" });
-    });
-  });
-  
-  describe('POST /reject-waiting-applications/:proposalId', () => {
-    it('should reject waiting applications by proposal ID', async () => {
-      // Dati di esempio per il test
-      const proposalId = '123'; // Sostituisci con un ID valido per il test
-      const mockResult = {
-        // ... Inserisci qui i dati che si aspetta il controller per restituire il risultato
-      };
-  
-      // Mock del controller per simulare il rifiuto delle applicazioni in attesa
-      applicationsController.rejectWaitingApplicationsByProposalId = jest.fn().mockResolvedValue(mockResult);
-  
-      // Effettua una richiesta POST all'endpoint
-      const response = await request(app)
-        .post(`/reject-waiting-applications/${proposalId}`)
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
-      expect(applicationsController.rejectWaitingApplicationsByProposalId).toHaveBeenCalledWith(proposalId);
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual(mockResult);
-    });
-  
-    it('should handle errors when rejecting waiting applications by proposal ID', async () => {
-      // Dati di esempio per il test
-      const proposalId = '123'; // Sostituisci con un ID valido per il test
-      const mockError = new Error('Failed to reject waiting applications');
-  
-      // Mock del controller per simulare un errore nel rifiuto delle applicazioni in attesa
-      applicationsController.rejectWaitingApplicationsByProposalId = jest.fn().mockRejectedValue(mockError);
-  
-      // Effettua una richiesta POST all'endpoint
-      const response = await request(app)
-        .post(`/reject-waiting-applications/${proposalId}`)
-        .expect('Content-Type', /json/)
-        .expect(500);
-  
-      // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
-      // (anche se la chiamata ha generato un errore)
-      expect(applicationsController.rejectWaitingApplicationsByProposalId).toHaveBeenCalledWith(proposalId);
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual({ error: "Internal Server Error" });
-    });
+describe('POST /refuse-application/:applicationId', () => {
+  it('should refuse application by ID', async () => {
+    // Dati di esempio per il test
+    const applicationId = '123'; // Sostituisci con un ID valido per il test
+    const mockResult = {
+      // ... Inserisci qui i dati che si aspetta il controller per restituire il risultato
+    };
+
+    // Mock del controller per simulare il rifiuto dell'applicazione
+    applicationsController.refuseApplication = jest.fn().mockResolvedValue(mockResult);
+
+    // Effettua una richiesta POST all'endpoint
+    const response = await request(app)
+      .post(`/refuse-application/${applicationId}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
+    expect(applicationsController.refuseApplication).toHaveBeenCalledWith(applicationId);
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual(mockResult);
   });
 
-  describe('GET /requestedThesis/:studentId', () => {
-    it('should get thesis requests for a student', async () => {
-      const studentId = '123';
-      const mockThesisRequests = [
-        // ... insert mock data here
-      ];
-  
-      applicationsController.getThesisRequestByStudentId = jest.fn().mockResolvedValue(mockThesisRequests);
-  
-      const response = await request(app)
-        .get(`/requestedThesis/${studentId}`)
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      expect(applicationsController.getThesisRequestByStudentId).toHaveBeenCalledWith(studentId);
-      expect(response.body).toEqual(mockThesisRequests);
-    });
-  
-    it('should handle errors when getting thesis requests for a student', async () => {
-      const studentId = '123';
-      const mockError = new Error("Internal Server Error");
-  
-      applicationsController.getThesisRequestByStudentId = jest.fn().mockRejectedValue(mockError);
-  
-      const response = await request(app)
-        .get(`/requestedThesis/${studentId}`)
-        .expect('Content-Type', /json/)
-        .expect(500);
-  
-      expect(applicationsController.getThesisRequestByStudentId).toHaveBeenCalledWith(studentId);
-      expect(response.body).toEqual({ error: "Internal Server Error" });
-    });
+  it('should handle errors when refusing application by ID', async () => {
+    // Dati di esempio per il test
+    const applicationId = '123'; // Sostituisci con un ID valido per il test
+    const mockError = new Error('Failed to refuse application');
+
+    // Mock del controller per simulare un errore nel rifiuto dell'applicazione
+    applicationsController.refuseApplication = jest.fn().mockRejectedValue(mockError);
+
+    // Effettua una richiesta POST all'endpoint
+    const response = await request(app)
+      .post(`/refuse-application/${applicationId}`)
+      .expect('Content-Type', /json/)
+      .expect(500);
+
+    // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
+    // (anche se la chiamata ha generato un errore)
+    expect(applicationsController.refuseApplication).toHaveBeenCalledWith(applicationId);
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual({ error: "Internal Server Error"  });
   });
-  
-  describe('POST /newThesisRequest', () => {
-    it('should submit a new thesis request', async () => {
-      const mockThesisRequestData = {
-        // ... insert mock data here
-      };
-  
-      applicationsController.submitNewThesisRequest = jest.fn().mockResolvedValue(mockThesisRequestData);
-  
-      const response = await request(app)
-        .post('/newThesisRequest')
-        .send(mockThesisRequestData)
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      expect(applicationsController.submitNewThesisRequest).toHaveBeenCalledWith(mockThesisRequestData);
-      expect(response.body).toEqual(mockThesisRequestData);
-    });
-  
-    it('should handle errors when submitting a new thesis request', async () => {
-      const mockThesisRequestData = {
-        // ... insert mock data here
-      };
-      const mockError = new Error("Internal Server Error");
-  
-      applicationsController.submitNewThesisRequest = jest.fn().mockRejectedValue(mockError);
-  
-      const response = await request(app)
-        .post('/newThesisRequest')
-        .send(mockThesisRequestData)
-        .expect('Content-Type', /json/)
-        .expect(500);
-  
-      expect(applicationsController.submitNewThesisRequest).toHaveBeenCalledWith(mockThesisRequestData);
-      expect(response.body).toEqual({ error: "Internal Server Error" });
-    });
+});
+
+describe('GET /get-proposal-id/:applicationId', () => {
+  it('should get proposal ID by application ID', async () => {
+    // Dati di esempio per il test
+    const applicationId = '123'; // Sostituisci con un ID valido per il test
+    const mockProposalId = '456'; // Sostituisci con un ID valido per il test
+
+    // Mock del controller per simulare il recupero dell'ID della proposta
+    applicationsController.getProposalIdByApplicationId = jest.fn().mockResolvedValue(mockProposalId);
+
+    // Effettua una richiesta GET all'endpoint
+    const response = await request(app)
+      .get(`/get-proposal-id/${applicationId}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
+    expect(applicationsController.getProposalIdByApplicationId).toHaveBeenCalledWith(applicationId);
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual({ proposalId: mockProposalId });
   });
+
+  it('should handle errors when getting proposal ID by application ID', async () => {
+    // Dati di esempio per il test
+    const applicationId = '123'; // Sostituisci con un ID valido per il test
+    const mockError = new Error('Failed to get proposal ID');
+
+    // Mock del controller per simulare un errore nel recupero dell'ID della proposta
+    applicationsController.getProposalIdByApplicationId = jest.fn().mockRejectedValue(mockError);
+
+    // Effettua una richiesta GET all'endpoint
+    const response = await request(app)
+      .get(`/get-proposal-id/${applicationId}`)
+      .expect('Content-Type', /json/)
+      .expect(500);
+
+    // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
+    // (anche se la chiamata ha generato un errore)
+    expect(applicationsController.getProposalIdByApplicationId).toHaveBeenCalledWith(applicationId);
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual({ error: "Internal Server Error" });
+  });
+});
+
+describe('POST /reject-waiting-applications/:proposalId', () => {
+  it('should reject waiting applications by proposal ID', async () => {
+    // Dati di esempio per il test
+    const proposalId = '123'; // Sostituisci con un ID valido per il test
+    const mockResult = {
+      // ... Inserisci qui i dati che si aspetta il controller per restituire il risultato
+    };
+
+    // Mock del controller per simulare il rifiuto delle applicazioni in attesa
+    applicationsController.rejectWaitingApplicationsByProposalId = jest.fn().mockResolvedValue(mockResult);
+
+    // Effettua una richiesta POST all'endpoint
+    const response = await request(app)
+      .post(`/reject-waiting-applications/${proposalId}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
+    expect(applicationsController.rejectWaitingApplicationsByProposalId).toHaveBeenCalledWith(proposalId);
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual(mockResult);
+  });
+
+  it('should handle errors when rejecting waiting applications by proposal ID', async () => {
+    // Dati di esempio per il test
+    const proposalId = '123'; // Sostituisci con un ID valido per il test
+    const mockError = new Error('Failed to reject waiting applications');
+
+    // Mock del controller per simulare un errore nel rifiuto delle applicazioni in attesa
+    applicationsController.rejectWaitingApplicationsByProposalId = jest.fn().mockRejectedValue(mockError);
+
+    // Effettua una richiesta POST all'endpoint
+    const response = await request(app)
+      .post(`/reject-waiting-applications/${proposalId}`)
+      .expect('Content-Type', /json/)
+      .expect(500);
+
+    // Verifica che la chiamata al controller sia stata eseguita con l'ID corretto
+    // (anche se la chiamata ha generato un errore)
+    expect(applicationsController.rejectWaitingApplicationsByProposalId).toHaveBeenCalledWith(proposalId);
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual({ error: "Internal Server Error" });
+  });
+});
+
+describe('GET /requestedThesis/:studentId', () => {
+  it('should get thesis requests for a student', async () => {
+    const studentId = '123';
+    const mockThesisRequests = [
+      // ... insert mock data here
+    ];
+
+    applicationsController.getThesisRequestByStudentId = jest.fn().mockResolvedValue(mockThesisRequests);
+
+    const response = await request(app)
+      .get(`/requestedThesis/${studentId}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(applicationsController.getThesisRequestByStudentId).toHaveBeenCalledWith(studentId);
+    expect(response.body).toEqual(mockThesisRequests);
+  });
+
+  it('should handle errors when getting thesis requests for a student', async () => {
+    const studentId = '123';
+    const mockError = new Error("Internal Server Error");
+
+    applicationsController.getThesisRequestByStudentId = jest.fn().mockRejectedValue(mockError);
+
+    const response = await request(app)
+      .get(`/requestedThesis/${studentId}`)
+      .expect('Content-Type', /json/)
+      .expect(500);
+
+    expect(applicationsController.getThesisRequestByStudentId).toHaveBeenCalledWith(studentId);
+    expect(response.body).toEqual({ error: "Internal Server Error" });
+  });
+});
+  
+describe('POST /newThesisRequest', () => {
+  it('should submit a new thesis request', async () => {
+    const mockThesisRequestData = {
+      // ... insert mock data here
+    };
+
+    applicationsController.submitNewThesisRequest = jest.fn().mockResolvedValue(mockThesisRequestData);
+
+    const response = await request(app)
+      .post('/newThesisRequest')
+      .send(mockThesisRequestData)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(response.body).toEqual(mockThesisRequestData);
+  });
+
+  it('should handle errors when submitting a new thesis request', async () => {
+    const mockThesisRequestData = {
+      // ... insert mock data here
+    };
+    const mockError = new Error("Internal Server Error");
+
+    applicationsController.submitNewThesisRequest = jest.fn().mockRejectedValue(mockError);
+
+    const response = await request(app)
+      .post('/newThesisRequest')
+      .send(mockThesisRequestData)
+      .expect(500);
+
+    expect(response.body).toEqual({ error: "Internal Server Error" });
+  });
+});
 
   
 describe('GET /decisions/:studentId', () => {
@@ -544,47 +541,47 @@ describe('GET /decisions/:studentId', () => {
     expect(response.body).toEqual({ error: 'Internal Server Error' });
   });
 });
-  describe('GET /proposal/:proposalId/student/:studentId', () => {
-    it('should get student application for a valid proposal and student id', async () => {
-      const proposalId = '123';
-      const studentId = '456';
-      const mockApplicationsData = [
-        // ... inserisci qui i dati mockati che ti aspetti dalla tua implementazione
-      ];
-  
-      // Mock della funzione nel controller per simulare il recupero dell'applicazione dello studente
-      applicationController.getStudentApplication.mockResolvedValue(mockApplicationsData);
-  
-      // Effettua una richiesta GET all'endpoint
-      const response = await request(app)
-        .get(`/proposal/${proposalId}/student/${studentId}`)
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      // Verifica che la chiamata alla funzione nel controller sia stata eseguita con gli ID corretti
-      expect(applicationController.getStudentApplication).toHaveBeenCalledWith({
-        PROPOSAL_ID: +proposalId,
-        STUDENT_ID: studentId,
-      });
-  
-      // Verifica la risposta del server
-      expect(response.body).toEqual(mockApplicationsData);
+
+describe('GET /proposal/:proposalId/student/:studentId', () => {
+  it('should get student application for a valid proposal and student id', async () => {
+    const proposalId = '123';
+    const studentId = '456';
+    const mockApplicationsData = [
+      // ... inserisci qui i dati mockati che ti aspetti dalla tua implementazione
+    ];
+
+    // Mock della funzione nel controller per simulare il recupero dell'applicazione dello studente
+    applicationController.getStudentApplication.mockResolvedValue(mockApplicationsData);
+
+    // Effettua una richiesta GET all'endpoint
+    const response = await request(app)
+      .get(`/proposal/${proposalId}/student/${studentId}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    // Verifica che la chiamata alla funzione nel controller sia stata eseguita con gli ID corretti
+    expect(applicationController.getStudentApplication).toHaveBeenCalledWith({
+      PROPOSAL_ID: +proposalId,
+      STUDENT_ID: studentId,
     });
-  
-   
-  
-    it('should handle invalid proposal or student id', async () => {
-      const response = await request(app)
-        .get('/proposal/invalid/student/invalid')
-        .expect('Content-Type', /json/)
-        .expect(400);
-  
-      // Verifica che la risposta del server indichi un ID di proposta non valido
-      expect(response.body).toEqual({ error: 'Invalid proposal id' });
-    });
+
+    // Verifica la risposta del server
+    expect(response.body).toEqual(mockApplicationsData);
   });
 
   
+
+  it('should handle invalid proposal or student id', async () => {
+    const response = await request(app)
+      .get('/proposal/invalid/student/invalid')
+      .expect('Content-Type', /json/)
+      .expect(400);
+
+    // Verifica che la risposta del server indichi un ID di proposta non valido
+    expect(response.body).toEqual({ error: 'Invalid proposal id' });
+  });
+});
+
 describe('POST /', () => {
   it('should create an application', async () => {
     // Mock dei dati della richiesta
@@ -654,45 +651,47 @@ describe('POST /', () => {
   });
 });
   
-  describe('GET /clerk/applications', () => {
-    it('should get all pending applications for the clerk', async () => {
-      const mockApplications = [
-        {
-          id: 1,
-          status: 'pending',
-          comment: 'Accepted',
-        STUDENT_ID: 123,
-        PROPOSAL_ID: 456,
-        student: { id: 123, name: 'John', surname: 'Doe' },
-        proposal: { id: 456, title: 'Proposal 1' },
-          // other application properties
-        },
-        // Add more mock data as needed
-      ];
-      
-      applicationController.getAllPendingApplications = jest.fn().mockResolvedValueOnce(mockApplications);
-  
-      const response = await request(app)
-        .get('/clerk/applications')
-        .expect('Content-Type', /json/)
-        .expect(200);
-  
-      expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
-      expect(response.body).toEqual(mockApplications);
-    });
-  
-    it('should handle errors when getting all pending applications', async () => {
-      const mockError = new Error('Internal Server Error');
+describe('GET /clerk/applications', () => {
+  it('should get all pending applications for the clerk', async () => {
+    const mockApplications = [
+      {
+        id: 1,
+        status: 'pending',
+        comment: 'Accepted',
+      STUDENT_ID: 123,
+      PROPOSAL_ID: 456,
+      student: { id: 123, name: 'John', surname: 'Doe' },
+      proposal: { id: 456, title: 'Proposal 1' },
+        // other application properties
+      },
+      // Add more mock data as needed
+    ];
+    
+    applicationController.getAllPendingApplications = jest.fn().mockResolvedValueOnce(mockApplications);
 
-      applicationController.getAllPendingApplications = jest.fn().mockRejectedValueOnce(mockError);
+    const response = await request(app)
+      .get('/clerk/applications')
+      .expect('Content-Type', /json/)
+      .expect(200);
 
-  
-      const response = await request(app)
-        .get('/clerk/applications')
-        .expect('Content-Type', /json/)
-        .expect(500);
-  
-      expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
-      expect(response.body).toEqual({  });
-    });
+    expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
+    expect(response.body).toEqual(mockApplications);
   });
+
+  it('should handle errors when getting all pending applications', async () => {
+    const mockError = new Error('Internal Server Error');
+
+    applicationController.getAllPendingApplications = jest.fn().mockRejectedValueOnce(mockError);
+
+
+    const response = await request(app)
+      .get('/clerk/applications')
+      .expect('Content-Type', /json/)
+      .expect(500);
+
+    expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
+    expect(response.body).toEqual({  });
+  });
+});
+
+  

@@ -4,7 +4,6 @@ const router = express.Router({ mergeParams: true });
 
 router.get("/", async (req, res) => {
   let virtualClock = virtualClockController.getVirtualClock();
-  console.log(virtualClock);
   res.status(200).json(virtualClock);
 });
 

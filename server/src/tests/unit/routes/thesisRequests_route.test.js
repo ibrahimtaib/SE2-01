@@ -101,10 +101,6 @@ describe('Thesis Requests Router', () => {
       expect(thesisRequestsController.getThesisRequestsByTeacherId).toHaveBeenCalledWith(teacherId);
       expect(response.body).toEqual(mockThesisRequestsByTeacherId);
     });
-    
-    
-  
-    // Add more tests for other endpoints...
   
     it('should update thesis request by secretary', async () => {
       const mockResponse = {/* Mock response data here */};
@@ -164,6 +160,85 @@ describe('Thesis Requests Router', () => {
       expect(response.body).toEqual(mockResponseData);
     });
     
-    
-    
+    it('should return 500 if getThesisRequests throws an error', async () => {
+      // Sovrascrivi la funzione getThesisRequests per farla lanciare un errore
+      jest.spyOn(thesisRequestsController, 'getThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/');
+      expect(response.status).toBe(500);
+    });
+    it('should return 500 if getPendingThesisRequests throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getPendingThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/pending');
+      expect(response.status).toBe(500);
+    });
+
+    it('should return 500 if getSecretaryAcceptedThesisRequests throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getSecretaryAcceptedThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/secretary-accepted');
+      expect(response.status).toBe(500);
+    });
+
+    it('should return 500 if getThesisRequestsByTeacherId throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getThesisRequestsByTeacherId').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/teacher/123'); // Replace 123 with an actual teacher ID
+      expect(response.status).toBe(500);
+    });
+
+    it('should return 500 if getThesisRequests throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/');
+      expect(response.status).toBe(500);
+    });
+
+    it('should return 500 if getPendingThesisRequests throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getPendingThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/pending');
+      expect(response.status).toBe(500);
+    });
+    it('should return 500 if getSecretaryAcceptedThesisRequests throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getSecretaryAcceptedThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/secretary-accepted');
+      expect(response.status).toBe(500);
+    });
+    it('should return 500 if getThesisRequestsByTeacherId throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getThesisRequestsByTeacherId').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/teacher/123'); // Replace 123 with an actual teacher ID
+      expect(response.status).toBe(500);
+    });
+
+    it('should return 500 if getSecretaryRejectedThesisRequests throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getSecretaryRejectedThesisRequests').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/secretary-rejected');
+      expect(response.status).toBe(500);
+    });
+    it('should return 500 if getThesisRequestsById throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'getThesisRequestsById').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).get('/123');
+      expect(response.status).toBe(500);
+    });
+
+    it('should return 500 if actionOnThesisRequestBySecretary throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'actionOnThesisRequestBySecretary').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).put('/secretary/accept/1');
+      expect(response.status).toBe(500);
+    });
+    it('should return 500 if actionOnThesisRequestByTeacher throws an error', async () => {
+      jest.spyOn(thesisRequestsController, 'actionOnThesisRequestByTeacher').mockRejectedValue(new Error('Mocked error'));
+  
+      const response = await request(app).put('/teacher/accept/1');
+      expect(response.status).toBe(500);
+    });
   });
+
+  
