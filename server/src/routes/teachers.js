@@ -12,4 +12,13 @@ router.get("/", async (req, res) => {
     .catch((error) => res.status(500).json(error));
 });
 
+router.get("/:id", async (req, res) => {
+  teachersController
+    .getTeachersById(req.params.id)
+    .then((teacher) => {
+      res.status(200).json(teacher);
+    })
+    .catch((error) => res.status(500).json(error));
+});
+
 module.exports = router;

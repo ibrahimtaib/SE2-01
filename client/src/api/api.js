@@ -74,11 +74,12 @@ export const addPageUpdate = async (proposal) => {
   }
 };
 
-export const sendMail = async (applicationId, studentDetails, action) => {
+export const sendMail = async (proposalTitle, student, teacher, action) => {
   try {
     const response = await api.post("/notifications/send-email", {
-      applicationId,
-      student: studentDetails,
+      proposalTitle,
+      student,
+      teacher,
       action,
     });
     return response.data;

@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-const LoginPage = ({ loggedIn, setUser }) => {
+/* eslint-disable react/prop-types */
+import { useEffect } from 'react';
+const LoginPage = ({ setLoading }) => {
+  setLoading(true);
 
   useEffect(() => {
     window.location.href = 'http://localhost:3001/login';

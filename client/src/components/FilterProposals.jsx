@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -8,18 +9,53 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { FaArchive, FaHome } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import ProposalCard from './ProposalCard';
-import { Alert } from 'react-bootstrap';
-import { Navigate, useNavigate } from 'react-router-dom';
+
 
 function FilterProposals(props) {
-    //console.log("FilterProposals", props.ProposalsList)
+    const allFilters = { title: true, supervisor: true, cosupervisor: true, cds: true, keywords: true, groups: true, level: true, type: true, date: true, };
+
+    
+    const [showArchived, setShowArchived] = useState(false);
+    const [showHomeButton, setShowHomeButton] = useState(false);
+
+    const handleArchiveClick = () => {
+        setShowArchived(true);
+        setShowHomeButton(true);
+    };
+    const handleHomeClick = () => {
+        setShowArchived(false);
+        setShowHomeButton(false);
+    };
+
+    let disabledFilters = {};
+    
+    let visibleFilters = {};
+
+    if (props.user.role === "teacher") {
+        disabledFilters = { ...disabledFilters, supervisor: false }
+    }
+    if (props.user.role === "student") {
+        disabledFilters = { ...disabledFilters, cds: false }
+    }
+
+    visibleFilters = { ...allFilters, ...disabledFilters };
+
+    const filteredProposal = 
+         (showArchived
+            ? props.ProposalsList.filter(pro => pro.archived)
+            : props.ProposalsList.filter(pro => !pro.archived)
+            )
+
+    
     return (
         <Container fluid className="m-0">
             <Row className="h-100">
-                <Col sm={4} className="bg-light custom-padding"><LeftSide setProposalsList={props.setProposalsList}></LeftSide></Col>
-                <Col sm={8} className=" p-3"><RightSide user={props.user} ProposalsList={props.ProposalsList} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
+                <Col sm={4} className="bg-light custom-padding h-100"><LeftSide showHomeButton={showHomeButton} handleArchiveClick={handleArchiveClick}  handleHomeClick={handleHomeClick} setProposalsList={props.setProposalsList} visibleFilters={visibleFilters} user={props.user}></LeftSide></Col>
+                <Col sm={8} className=" p-3"><RightSide refetchDynamicContent={props.refetchDynamicContent} showArchived={showArchived} user={props.user} ProposalsList={filteredProposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert}></RightSide></Col>
             </Row>
         </Container>
     );
@@ -27,46 +63,35 @@ function FilterProposals(props) {
 
 function LeftSide(props) {
     const [title, setTitle] = useState("");
-
     const [cosupervisor, setCosupervisor] = useState("");
-
     const [supervisor, setSupervisor] = useState("");
-
     const [keywords, setKeywords] = useState("");
-
     const [groups, setGroups] = useState("");
-
     const [click, setClick] = useState(false);
-
     const [clickReset, setClickReset] = useState(false);
-
-    const [cdsList, setCdsList] = useState([]);
-
     const [typeList, setTypeList] = useState([]);
-
     const [levelList, setLevelList] = useState([]);
-
     const [level, setLevel] = useState("");
-
-    const [cds, setCds] = useState("");
-
     const [type, setType] = useState("");
-
     const [date, setDate] = useState("");
-
     const [selectedDate, setSelectedDate] = useState("");
-
     const [filter, setFilter] = useState([]);
 
     useEffect(() => {
         if (clickReset) {
             const init = async () => {
                 try {
-                    API.getAllProposals().then((a) => {
-                        props.setProposalsList(a)
-                        setClickReset(false);
-                    })
-                        .catch((err) => console.log(err));
+                    if(props.user.role=="student"){
+                        API.getProposalsByCds(props.user.cds).then((a) => {
+                            props.setProposalsList(a)
+                            setClickReset(false);
+                        })
+		    }else if(props.user.role=="teacher"){
+                        API.getTeacherProposals(props.user.id).then((a) => {
+                            props.setProposalsList(a)
+                            setClickReset(false);
+                        })
+                    }
                 } catch (err) {
                     setClickReset(false);
                 }
@@ -77,16 +102,6 @@ function LeftSide(props) {
 
     useEffect(() => {
         const init = async () => {
-            API.getAllCds().then((a) => {
-                setCdsList(a)
-            }).catch((err) => console.log(err));
-
-            API.getAllProposals().then((a) => {
-                props.setProposalsList(a)
-                setClickReset(false);
-            })
-                .catch((err) => console.log(err));
-
             API.getAllTypes().then((a) => {
                 setTypeList(a)
             }).catch((err) => console.log(err));
@@ -97,7 +112,8 @@ function LeftSide(props) {
 
         };
         init();
-    }, []);
+      }, [props.user]);  
+      
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -127,26 +143,39 @@ function LeftSide(props) {
         setType(event.target.value);
     };
 
-    const handleCdsSelectedChange = (event) => {
-        setCds(event.target.value);
-    };
-
     const handleFilter = () => {
         event.preventDefault();
-        const flt = {
+      
+        if (props.user && props.user.cds && props.user.role==="student") {
+          const flt = {
             title: title,
             coSupervisor: cosupervisor,
             level: level,
             type: type,
-            cds: cds,
+            cds: props.user.cds,
             expiration: date,
             keywords: keywords,
             groups: groups,
             supervisor: supervisor
+          }
+      
+          setFilter(flt);
+          setClick(true);
+        } else if(props.user && props.user.role==="teacher"){
+            const flt = {
+                title: title,
+                coSupervisor: cosupervisor,
+                level: level,
+                type: type,
+                expiration: date,
+                keywords: keywords,
+                groups: groups,
+                supervisor: props.user.name 
+              }
+              setFilter(flt);
+              setClick(true);
         }
-        setFilter(flt);
-        setClick(true);
-    };
+      };
 
     const handleReset = () => {
         event.preventDefault();
@@ -156,7 +185,6 @@ function LeftSide(props) {
         setKeywords("");
         setGroups("");
         setLevel("");
-        setCds("");
         setType("");
         setDate("");
         setSelectedDate(null); // Imposta il DatePicker a vuoto
@@ -172,10 +200,6 @@ function LeftSide(props) {
                         props.setProposalsList(a)
                         setClick(false)
                     })
-                        .catch((err) => {
-                            console.log(err)
-                            setClick(false)
-                        });
                 } catch (err) {
                     setClick(false)
                 }
@@ -186,78 +210,127 @@ function LeftSide(props) {
 
     return (
         <>
-            <Form>
+        <Form>
+            {props.visibleFilters.title && (
                 <Form.Group className="mb-3">
                     <Form.Label>Filter by Title</Form.Label>
                     <Form.Control name="title" placeholder="Title" value={title} onChange={handleTitleChange} />
                 </Form.Group>
-                {/*
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Teacher</Form.Label>
-                    <Form.Control placeholder="Teacher" />
-                </Form.Group>
-                */}
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Supervisor</Form.Label>
-                    <Form.Control name="supervisor" placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Co-Supervisor</Form.Label>
-                    <Form.Control name="cosupervisor" placeholder="Co-Supervisor" value={cosupervisor} onChange={handleCosupervisorChange} />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Keywords</Form.Label>
-                    <Form.Control name="keywords" placeholder="Keywords separeted by ," value={keywords} onChange={handleKeywordsChange} />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Groups</Form.Label>
-                    <Form.Control name="groups" placeholder="groups separeted by ," value={groups} onChange={handleGroupsChange} />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Level</Form.Label>
-                    <Form.Select name="level" value={level} onChange={handleLevelSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
-                        {levelList.map((proposal, index) => (
-                            <option key={index} value={proposal.title}>
-                                {proposal.title}
-                            </option>
-                        ))}
-                    </Form.Select>
+            )}
 
+            <Row>
+                <Col md={6}>
+                    {props.visibleFilters.supervisor && (
+                        <Form.Group className="mb-3">
+                            <Form.Label>Filter by Supervisor</Form.Label>
+                            <Form.Control name="supervisor" placeholder="Supervisor" value={supervisor} onChange={handleSupervisorChange} />
+                        </Form.Group>
+                    )}
+                </Col>
+                <Col md={props.user.role === 'teacher' ? 12 : 6}>
+                        {props.visibleFilters.cosupervisor && (
+                            <Form.Group className="mb-3">
+                                <Form.Label>Filter by Co-Supervisor</Form.Label>
+                                <Form.Control
+                                    name="cosupervisor"
+                                    placeholder="Name1 Surname1, ... "
+                                    value={cosupervisor}
+                                    onChange={handleCosupervisorChange}
+                                    className={props.user.role === 'teacher' ? 'w-100' : 'form-control-md'}
+                                />
+                            </Form.Group>
+                        )}
+                    </Col>
+            </Row>
 
-                </Form.Group>
+            <Row>
+                <Col md={6}>
+                    {props.visibleFilters.keywords && (
+                        <Form.Group className="mb-3">
+                            <Form.Label>Filter by Keywords</Form.Label>
+                            <Form.Control name="keywords" placeholder="Keyword1,Keyword2,..." value={keywords} onChange={handleKeywordsChange} />
+                        </Form.Group>
+                    )}
+                </Col>
+                <Col md={6}>
+                    {props.visibleFilters.groups && (
+                        <Form.Group className="mb-3">
+                            <Form.Label>Filter by Groups</Form.Label>
+                            <Form.Control name="groups" placeholder="Group1,Group2,..." value={groups} onChange={handleGroupsChange} />
+                        </Form.Group>
+                    )}
+                </Col>
+            </Row>
+
+            <Row>
+                <Col md={6}>
+                    {/* Filter by Level */}
+                    {props.visibleFilters.level && (
+                        <Form.Group className="mb-3">
+                            <Form.Label>Filter by Level</Form.Label>
+                            <Form.Select name="level" value={level} onChange={handleLevelSelectedChange}>
+                                <option value="" disabled>Select</option>
+                                {levelList.map((proposal, index) => (
+                                    <option key={index} value={proposal.title}>
+                                        {proposal.title}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                    )}
+                </Col>
+                <Col md={6}>
+                    {/* Filter by Type */}
+                    {props.visibleFilters.type && (
+                        <Form.Group className="mb-3">
+                            <Form.Label>Filter by Type</Form.Label>
+                            <Form.Select name="type" value={type} onChange={handleTypeSelectedChange}>
+                                <option value="" disabled>Select</option>
+                                {typeList.map((proposal, index) => (
+                                    <option key={index} value={proposal.title}>
+                                        {proposal.title}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                    )}
+                </Col>
+            </Row>
+
+            {props.visibleFilters.date && (
                 <Form.Group className="mb-3">
-                    <Form.Label>Filter by CDS</Form.Label>
-                    <Form.Select name="cds" value={cds} onChange={handleCdsSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
-                        {cdsList.map((proposal, index) => (
-                            <option key={index} value={proposal.cod}>
-                                {proposal.title}
-                            </option>
-                        ))}
-                    </Form.Select>
+                    <Form.Label>Select an Expiration Date</Form.Label>
+                    <MyDatePicker date={date} setDate={setDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                 </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Filter by Type</Form.Label>
-                    <Form.Select name="type" value={type} onChange={handleTypeSelectedChange}>
-                        <option value="" disabled>Seleziona</option>
-                        {typeList.map((proposal, index) => (
-                            <option key={index} value={proposal.title}>
-                                {proposal.title}
-                            </option>
-                        ))}
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Select a Expiration Date</Form.Label>
-                    <MyDatePicker date={date} setDate={setDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate}></MyDatePicker>
-                </Form.Group>
-                <Form.Group className="mb-3 d-flex justify-content-start ">
-                    <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
-                    <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
-                </Form.Group>
-            </Form>
-        </>
+            )}
+            
+            <Form.Group className="mb-3 d-flex justify-content-start">
+                <Button type="submit" variant="success" onClick={handleFilter} style={{ borderRadius: '0.25rem 0 0 0.25rem' }}>Filter</Button>
+                <Button type="reset" variant="danger" onClick={handleReset} style={{ borderRadius: '0 0.25rem 0.25rem 0' }}>Reset</Button>
+                {props.user.role == "teacher" ?
+                    props.showHomeButton ? (
+                    <Button
+                        variant="primary"
+                        style={{ marginLeft: 'auto' }}
+                        onClick={props.handleHomeClick}
+                    >
+                        <FaHome /> Home
+                    </Button>
+                    ) : (
+                    <Button
+                        variant="primary"
+                        style={{ marginLeft: 'auto' }}
+                        onClick={props.handleArchiveClick}
+                    >
+                        <FaArchive /> Archive
+                    </Button>
+                    )
+                : " " }
+            </Form.Group> 
+            
+        </Form>
+
+    </>
     );
 }
 
@@ -267,13 +340,26 @@ function RightSide(props) {
     const navigate = useNavigate();
     if (!props.ProposalsList || props.ProposalsList.length === 0) {
         return <Alert variant="info" style={{ width: "100%" }}>
-            There are no proposals available at this moment. 
+            {props.showArchived ? 'There are no archived proposals.' : 'There are no available proposals at this moment.'}
         </Alert>;
     }
     return (
-        <>
+        <>  
+           {props.showArchived ? (
+                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>{props.user.role === "teacher" ? "My archived proposals" : "Archived proposals"}</h2>
+            ) : (
+                <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>{props.user.role === "teacher" ? "My proposals" : "Available proposals"}</h2>
+            )}
             {props.ProposalsList.map((proposal, index) => (
-                <ProposalCard user={props.user} key={index} proposal={proposal} setUpdate={props.setUpdate} setProposalToInsert={props.setProposalToInsert} />
+            <ProposalCard
+                showArchived={props.showArchived}
+                user={props.user}
+                key={index}
+                proposal={proposal}
+                setUpdate={props.setUpdate}
+                setProposalToInsert={props.setProposalToInsert}
+                refetchDynamicContent={props.refetchDynamicContent}
+            />
             ))}
         </>
     );

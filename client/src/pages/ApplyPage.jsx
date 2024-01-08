@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import { set } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import API from '../API';
-import api from '../utils/pi'
 import ApplyForm from '../components/ApplyForm';
+import api from '../utils/pi';
 import ErrorPage from './ErrorPage';
 import LoadingPage from './LoadingPage';
 
@@ -21,12 +20,10 @@ function ApplyPage({user}) {
 
   useEffect(() => {
     const fetchProposal = async ()=> {
-      console.log(user);
       const response = await API.getProposalById(proposalId)
       const application = await api.getApplication(user?.id, proposalId)
       setApplication(application)
       const fetchedProposal = {...response.proposal, supervisor: response.proposal.teacher}
-      console.log(application)
       setProposal(fetchedProposal)
     }
     fetchProposal();

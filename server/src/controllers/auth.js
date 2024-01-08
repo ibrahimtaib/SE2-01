@@ -19,7 +19,7 @@ module.exports = {
                         const customTeacherObject = {
                             id: teacher.id,
                             name: `${teacher.name} ${teacher.surname}`,
-                            role: "teacher",
+                            role: teacher.id == "auth0|655fd0b96d87729b6b3e0795"?"teacher": "secretary",
                             email: teacher.email,
                         };
                         resolve(customTeacherObject);
@@ -32,13 +32,13 @@ module.exports = {
                     }
                 })
                 .then((student) => {
-                    console.log(student);
                     if (student) {
                         const customStudentObject = {
                             id: student.id,
                             name: `${student.name} ${student.surname}`,
                             role: "student",
                             email: student.email,
+                            cds: student.COD_DEGREE
                         };
                         resolve(customStudentObject);
                     } else {
@@ -46,7 +46,6 @@ module.exports = {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
                     reject(error);
                 });
         });

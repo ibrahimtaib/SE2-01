@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma.js");
 const { STATUS } = require("../constants/application.js");
+const { getVirtualClock } = require("./virtualClock");
 module.exports = {
   /**
    * Function that creates an application in the database.
@@ -11,7 +12,6 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const { comment, STUDENT_ID, PROPOSAL_ID } = body;
-
         // Fetch student
         const student = await prisma.student.findUnique({
           where: {
@@ -56,7 +56,6 @@ module.exports = {
         }
 
         // Check student is suitable
-        console.log(student.COD_DEGREE, proposal.cds);
         if (student.COD_DEGREE !== proposal.cds) {
           return reject({
             status: 400,
@@ -65,7 +64,7 @@ module.exports = {
         }
 
         // Check proposal is valid
-        if (proposal.expiration <= Date.now()) {
+        if (proposal.expiration <= getVirtualClock()) {
           return reject({
             status: 400,
             error: "Proposal has already expired!",
@@ -113,6 +112,24 @@ module.exports = {
           where: {
             PROPOSAL_ID,
             STUDENT_ID,
+          },
+        });
+
+        resolve(application);
+      } catch (error) {
+        reject({
+          status: 500,
+          error: "An error occurred",
+        });
+      }
+    });
+  },
+  getAllPendingApplications: () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const application = await prisma.application.findMany({
+          where: {
+            status: "pending",
           },
         });
 

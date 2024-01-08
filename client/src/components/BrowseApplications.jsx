@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import { sendMail } from '../api/api';
 
-const ProposalCard = ({ application, onAccept, onReject }) => {
+const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }) => {
+  const isTeacher = user.role === "teacher";
   const [hoveredTitle, setHoveredTitle] = useState(false);
   const [hoveredStudent, setHoveredStudent] = useState(false);
   const navigate = useNavigate();
@@ -55,21 +56,34 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   };
 
   const handleAccept = async () => {
-    try {
-      await onAccept(application.application.id);
-      await sendMail(application.application.id, application.student, 'accept')
-    } catch (error) {
-      console.error(error);
+    const confirmation = window.confirm("Are you sure you want to accept this proposal?");
+    
+    if (confirmation) {
+      try {
+        await onAccept(application.application.id);
+        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
+  const handleReject = async () => {
+    const confirmation = window.confirm("Are you sure you want to reject this proposal?");
+    
+    if (confirmation) {
+      try {
+        await onReject(application.application.id);
+        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'reject');
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
-  const handleReject = async () => {
-    try {
-      await onReject(application.application.id);
-      await sendMail(application.application.id, application.student, 'accept')
-    } catch (error) {
-      console.error(error);
-    }
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
   };
 
   return (
@@ -83,7 +97,7 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
                 fontWeight: hoveredTitle ? 'bold' : 'normal',
                 textDecoration: hoveredTitle ? 'underline' : 'none',
               }}
-              onClick={handleTitleClick}
+              onClick={!isRequest?() => handleTitleClick(application): null}
               onMouseEnter={() => setHoveredTitle(true)}
               onMouseLeave={() => setHoveredTitle(false)}
             >
@@ -106,19 +120,23 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
               {`${application.student.name} ${application.student.surname}`}
               <br />
               Degree: {application.student.degree.TITLE_DEGREE}
+              <br />
+              {!isRequest && `Date: ${formatDate(application.application.date)}`}
             </Card.Subtitle>
           </Col>
           <Col md={4} className="d-flex justify-content-end align-items-center">
             <div style={{ marginRight: '10px' }}>
-              {application.application.status === 'accept' && (
-                <div style={{ color: 'green' }}>Accepted</div>
-              )}
-              {application.application.status === 'refuse' && (
-                <div style={{ color: 'red' }}>Refused</div>
-              )}
+
+              { (isTeacher && application.application.status === 'accept' || application.application.status === 'teacher-accepted') &&<div style={{ color: 'green' }}>Accepted</div>}
+              { (!isTeacher && (application.application.status === 'secretary-accepted' || application.application.status === 'teacher-rejected')) &&<div style={{ color: 'green' }}>Accepted</div>}
+
+              {(isTeacher && (application.application.status === 'secretary-rejected')) && <div>{application.application.status}</div>}
+
+              {(isTeacher && (application.application.status === 'teacher-rejected')|| application.application.status === 'refuse') && <div style={{ color: 'red' }}>Refused</div>}
+              { (!isTeacher && application.application.status === 'secretary-rejected') &&<div style={{ color: 'red' }}>Refused</div>}
             </div>
 
-            {application.application.status === 'pending' && (
+            { (application.application.status === 'pending' ||(isTeacher && application.application.status === "secretary-accepted")) && (
               <>
                 <Button onClick={handleAccept} variant="success" style={{ marginRight: '10px' }}>
                   Accept
@@ -135,12 +153,12 @@ const ProposalCard = ({ application, onAccept, onReject }) => {
   );
 };
 
-const ProposalList = ({ applications, loading, onAccept, onReject }) => {
-  console.log(applications)
+const ProposalList = ({ applications, loading, onAccept, onReject, isRequest=false, user }) => {
+  console.log("first application",applications[0]);
   return (
     <Container>
       <br />
-      <h1>Thesis Applications</h1>
+      <h1>{!isRequest?"Thesis Applications": "Thesis Requests"}</h1>
       <br />
       {loading ? (
         <Spinner animation="border" role="status">
@@ -154,13 +172,15 @@ const ProposalList = ({ applications, loading, onAccept, onReject }) => {
               application={selectedApplication}
               onAccept={onAccept}
               onReject={onReject}
+              user={user}
+              isRequest={isRequest}
             />
           ))
         ) : (
-          <div>No applications found.</div>
+          <div>No {isRequest?"requests":"applications"} found.</div>
         )
       ) : (
-        <div>Applications not defined.</div>
+        <div>{isRequest?"Requests":"applications"} not defined.</div>
       )}
     </Container>
   );

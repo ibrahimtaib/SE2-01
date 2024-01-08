@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import Tagify from '@yaireo/tagify';
 import { useEffect, useRef, useState } from "react";
-import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import api, { addPage, addPageUpdate } from "../api/api";
@@ -128,11 +129,11 @@ const styles = {
 
 
 
-export default function InsertForm({ user, update, proposalToInsert }) {
+export default function InsertForm({ user, update, proposalToInsert, refetchDynamicContent }) {
 
 
+    // eslint-disable-next-line no-unused-vars
     const [levels, setLevels] = useState(["Bachelor", "Master"]);
-    const [supervisors, setSupervisors] = useState([]);
     const [degrees, setDegrees] = useState([]);
     const [keywords, setKeywords] = useState(proposalToInsert?.keywords);
     const [cosupervisors, setCosupervisors] = useState([]);
@@ -144,14 +145,11 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
-            cds: proposalToInsert.degree.COD_DEGREE
+            cds: proposalToInsert.degree.COD_DEGREE,
         }
     })
-    const inputRef = useRef(null);
-    console.log("proposal to insert ")
-    console.log(proposalToInsert)
+    console.log("proposal to insert ", proposalToInsert)
     const onSubmit = (data) => {
-
         if (update) {
             addPageUpdate({
                 ...data,
@@ -161,7 +159,9 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
                 keywords: keywords.map((keyword) => keyword.trim()),
                 groups: [], //TODO: Issue with groups
+                archived: false
             }).then(() => {
+                refetchDynamicContent(user.id);
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {
@@ -171,6 +171,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
             })
                 .catch((error) => {
+                    console.log(error)
                     setServerError(true);
                 });
         }
@@ -182,7 +183,9 @@ export default function InsertForm({ user, update, proposalToInsert }) {
                 coSupervisors: cosupervisors.map((cosupervisor) => cosupervisor.trim()),
                 keywords: keywords.map((keyword) => keyword.trim()),
                 groups: [],
+                archived: false
             }).then(() => {
+                refetchDynamicContent(user.id);
                 setServerError(false);
                 setSuccesfullySent(true);
                 setTimeout(() => {
@@ -192,6 +195,7 @@ export default function InsertForm({ user, update, proposalToInsert }) {
 
             })
                 .catch((error) => {
+                    console.log(error)
                     setServerError(true);
                 });
         }
@@ -199,15 +203,6 @@ export default function InsertForm({ user, update, proposalToInsert }) {
     }
 
     useEffect(() => {
-
-        const getSupervisors = () => {
-            api.get('/teachers')
-                .then((response) => {
-                    setSupervisors(response.data);
-                }
-                )
-        }
-        getSupervisors();
 
         const getDegrees = () => {
             api.get('/degrees')

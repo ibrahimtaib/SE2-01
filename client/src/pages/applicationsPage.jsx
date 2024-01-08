@@ -57,6 +57,7 @@ function ApplicationsPage({user}) {
               setLoading={setLoading}
               onAccept={handleAcceptApplication}
               onReject={handleRejectApplication}
+              user={user}
             />
           }
         />
