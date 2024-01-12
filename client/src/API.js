@@ -523,6 +523,30 @@ async function RejectThesisRequestsByTeacher(id){
   }
 }
 
+// async function updateThesisRequest(id, newData) {
+//   try {
+//     const response = await fetch(`${URL}thesisRequests/thesis_update/${id}`, {
+//       method: 'PUT',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(newData),
+//     });
+
+//     const data = await response.json();
+
+//     if (response.ok) {
+//       return data;
+//     } else {
+//       throw new Error(data.error || 'Failed to update thesis request');
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error('An error occurred while updating the thesis request');
+//   }
+// }
+
+
 const API = {
   getAllProposals,
   getProposalsByTitle,
@@ -554,6 +578,6 @@ const API = {
   getPendingThesisRequests,
   getThesisRequestsByTeacherId,
   AcceptThesisRequestsByTeacher,
-  RejectThesisRequestsByTeacher
+  RejectThesisRequestsByTeacher,
 };
 export default API;
