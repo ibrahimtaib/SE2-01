@@ -2,6 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma");
 const { resolve } = require("path");
 const { STATUS } = require("../constants/application");
+const { rejects } = require("assert");
+const { getVirtualClock } = require("./virtualClock");
 module.exports = {
   createProposal: async (body) => {
     const {
@@ -19,6 +21,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
+      archived,
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.create({
@@ -37,13 +40,13 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
+          archived,
         },
       })
         .then((proposal) => {
           return resolve(proposal);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while creating propsal",
           });
@@ -81,7 +84,6 @@ module.exports = {
           });
         }
         // Check if proposal can be deleted
-        console.log(proposal);
         if (proposal.applications.length > 0) {
           return reject({
             status: 400,
@@ -114,7 +116,6 @@ module.exports = {
           message: "Operation successful!",
         });
       } catch (error) {
-        console.error(error);
         return reject({
           status: 500,
           error: "An error occurred while deleting the proposal",
@@ -122,6 +123,7 @@ module.exports = {
       }
     });
   },
+  
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
       prisma.Degree.findMany()
@@ -203,7 +205,7 @@ module.exports = {
           proposals.forEach((proposal) => {
             if (
               proposal.applications.length > 0 ||
-              proposal.expiration < new Date()
+              proposal.expiration < getVirtualClock()
             ) {
               proposal.deletable = false;
             } else {
@@ -215,7 +217,6 @@ module.exports = {
           resolve(proposals);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while querying the database",
           });
@@ -256,8 +257,11 @@ module.exports = {
     });
   },
 
-  getProposalsByCosupervisor: async (surname) => {
-    return new Promise((resolve, reject) =>
+  /*getProposalsByCosupervisor: async (cosupervisors) => {
+    const separatedCosupervisors = cosupervisors
+      .split(",")
+      .map((cosupervisor) => cosupervisor.trim().toLowerCase());
+    return new Promise((resolve, reject) => {
       prisma.Proposal.findMany({
         include: {
           teacher: {
@@ -271,37 +275,143 @@ module.exports = {
             },
           },
         },
-        where: {
-          coSupervisors: {
-            contains: surname,
-            mode: "insensitive",
-          },
-        },
       })
         .then((proposals) => {
-          return resolve(proposals);
+          const filteredProposals = proposals.filter((proposal) => {
+            const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
+            cosupervisor.toLowerCase()
+            );
+            return separatedCosupervisors.every((cosupervisor) =>
+            proposalCosupervisors.includes(cosupervisor)
+            );
+          });
+
+          resolve(filteredProposals);
         })
         .catch(() => {
-          return reject({
+          reject({
             error: "An error occurred while querying the database",
           });
-        })
-    );
-  },
+        });
+    });
+  },*/
 
-  getProposalsBySupervisor: async (surname) => {
+  getProposalsByCosupervisor: async (cosupervisors) => {
     try {
-      const teachers = await prisma.Teacher.findMany({
-        where: {
-          surname: {
-            contains: surname,
-            mode: "insensitive",
+      const separatedCosupervisors = cosupervisors
+        .split(',')
+        .map((cosupervisor) => cosupervisor.trim().toLowerCase());
+
+      const proposals = await prisma.Proposal.findMany({
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+            },
+          },
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
           },
         },
       });
 
-      if (!teachers) {
-        throw new Error("An error occurred while querying the database");
+      const filteredProposals = proposals.filter((proposal) => {
+        const proposalCosupervisors = proposal.coSupervisors.map((cosupervisor) =>
+          cosupervisor.toLowerCase()
+        );
+
+        return separatedCosupervisors.every((inputCosupervisor) => {
+          const [inputName, inputSurname] = inputCosupervisor.split(' ');
+
+          return proposalCosupervisors.some((cos) => {
+            const [name, surname] = cos.split(' ');
+            if (inputSurname) {
+              return surname === inputSurname && (inputName ? name === inputName : true);
+            } else {
+              return name === inputName || surname === inputName;
+            }
+          });
+        });
+      });
+
+      return filteredProposals;
+    } catch (error) {
+      console.log(error)
+      throw new Error('An error occurred while querying the database');
+    }
+  },
+  
+  
+  
+  getProposalsBySupervisor: async (nameOrSurname) => {
+    try {
+      const [name, surname] = nameOrSurname.split(" ");
+
+      let teachers;
+      if (surname && name) {
+        teachers = await prisma.Teacher.findMany({
+          where: {
+            OR: [
+              {
+                AND: [
+                  {
+                    name: {
+                      contains: name,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    surname: {
+                      contains: surname,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              },
+              {
+                AND: [
+                  {
+                    name: {
+                      contains: surname,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    surname: {
+                      contains: name,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        });
+      } else {
+        teachers = await prisma.Teacher.findMany({
+          where: {
+            OR: [
+              {
+                surname: {
+                  contains: nameOrSurname,
+                  mode: "insensitive",
+                },
+              },
+              {
+                name: {
+                  contains: nameOrSurname,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        });
+      }
+
+      if (!teachers || teachers.length === 0) {
+        throw new Error("No teachers found matching the given criteria");
       }
 
       const teacherIds = teachers.map((teacher) => teacher.id);
@@ -330,7 +440,7 @@ module.exports = {
       throw new Error("An error occurred while querying the database");
     }
   },
-
+  
   getProposalsByKeywords: async (keywords) => {
     const separatedKeywords = keywords
       .split(",")
@@ -509,33 +619,48 @@ module.exports = {
   },
 
   getProposalsByCDS: async (cds) => {
-    return new Promise((resolve, reject) =>
-      prisma.Proposal.findMany({
+    try {
+      const proposals = await prisma.Proposal.findMany({
         include: {
           teacher: {
             select: {
               surname: true,
+              name: true,
+              id: true,
             },
-          }, // Utilizzo del nome minuscolo 'teacher' per rispettare la convenzione del modello
+          },
           degree: {
             select: {
               TITLE_DEGREE: true,
+            },
+          },
+          applications: {
+            where: {
+              status: STATUS.accepted,
             },
           },
         },
         where: {
           cds: cds,
         },
-      })
-        .then((proposals) => {
-          return resolve(proposals);
-        })
-        .catch(() => {
-          return reject({
-            error: "An error occurred while querying the database",
-          });
-        })
-    );
+      });
+
+      proposals.forEach((proposal) => {
+        if (
+          proposal.applications.length > 0 ||
+          proposal.expiration < getVirtualClock()
+        ) {
+          proposal.deletable = false;
+        } else {
+          proposal.deletable = true;
+        }
+        delete proposal.applications;
+      });
+
+      return proposals;
+    } catch (error) {
+      throw new Error('An error occurred while querying the database');
+    }
   },
 
   filterProposals: async (filter) => {
@@ -560,7 +685,6 @@ module.exports = {
         let levelProposals = await module.exports.getProposalsByLevel(
           levelFilter
         );
-
         if (filteredProposals) {
           // Filtra gli oggetti che hanno lo stesso id
           filteredProposals = filteredProposals.filter((proposal) =>
@@ -690,9 +814,101 @@ module.exports = {
       }
       return filteredProposals;
     } catch (error) {
-      console.error(error);
       throw new Error("An error occurred while filtering proposals");
     }
+  },
+
+  getTeacherProposals: async (teacherId) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal.findMany({
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+              name: true,
+              id: true,
+            },
+          },
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
+          },
+          applications: {
+            where: {
+              status: STATUS.accepted,
+            },
+          },
+        },
+        where: {
+          supervisor: teacherId,
+        },
+      })
+        .then((proposals) => {
+          proposals.forEach((proposal) => {
+            if (
+              proposal.applications.length > 0 ||
+              proposal.expiration < getVirtualClock()
+            ) {
+              proposal.deletable = false;
+            } else {
+              proposal.deletable = true;
+            }
+          });
+          resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error:
+              "An error occurred while querying the database for applications",
+          });
+        })
+    );
+  },
+
+  getAllProposals: async () => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal
+        .findMany({
+          include: {
+            teacher: {
+              select: {
+                surname: true,
+                name: true,
+                id: true,
+              },
+            },
+            degree: {
+              select: {
+                TITLE_DEGREE: true,
+              },
+            },
+            applications: {
+              where: {
+                status: STATUS.accepted,
+              },
+            },
+          },
+        })
+        .then((proposals) => {
+          proposals.forEach((proposal) => {
+            if (
+              proposal.applications.length > 0 ||
+              proposal.expiration < new Date()
+            ) {
+              proposal.deletable = false;
+            } else {
+              proposal.deletable = true;
+            }
+          });
+          resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database for applications",
+          });
+        })
+    );
   },
 
   getApplicationsBySupervisorId: async (teacherId) => {
@@ -710,7 +926,6 @@ module.exports = {
           return resolve(applications);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error:
               "An error occurred while querying the database for applications",
@@ -736,6 +951,7 @@ module.exports = {
       teacher,
       requiredKnowledge,
       degree,
+      archived,
     } = body;
     return new Promise((resolve, reject) =>
       prisma.Proposal.update({
@@ -754,13 +970,13 @@ module.exports = {
           teacher,
           requiredKnowledge,
           degree,
+          archived,
         },
       })
         .then((proposal) => {
           return resolve(proposal);
         })
         .catch((error) => {
-          console.error(error);
           return reject({
             error: "An error occurred while updating proposal",
           });

@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.7.0",
     "docker-compose": "^0.24.3"
   },
   "devDependencies": {

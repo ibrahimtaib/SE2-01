@@ -1,26 +1,15 @@
 /* eslint-disable react/prop-types */
-import ListGroup from 'react-bootstrap/ListGroup';
-import { Container } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
-import { Form } from 'react-bootstrap';
+import { Container, Form } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 
-const Item = ({ label, value }) => ( 
-  <div
-  style={{
-    display: "flex",
-    flexDirection: "row",
-  }}>
-    <h5 className="text-gray-400 text-xs">{label}:</h5>
-    <span style={{marginLeft: "15px"}}
-    >{value}</span>
-  </div>
-);
+
 
 const ProposalDetails = () => {
   const location = useLocation();
   const { student } = location.state || {};
+  const navigateTo = useNavigate();
 
   if (!student) {
     return <div>Data is missing Or not valid!</div>;
@@ -34,15 +23,6 @@ const ProposalDetails = () => {
     <br></br>
       <div className="card border-indigo-500 shadow-md rounded p-6 mb-6">
         <div className="card-body">
-          {/* 
-          <ul className="list-none">
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Email:</span> {student.student.email}</li>
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Gender:</span> {student.student.gender}</li>
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Nationality:</span> {student.student.nationality}</li>
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Degree:</span> {student.student.degree.TITLE_DEGREE}</li>
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Degree Code:</span> {student.student.COD_DEGREE}</li>
-              <li className="list-item" style={{ listStyleType: 'none' }}><span className="font-semibold">Enrollment Year:</span> {student.student.ENROLLMENT_YEAR}</li>
-            </ul> */}
             <StudentForm student={student} />
 
             <div className="overflow-y-auto" style={{ maxHeight: '270px' }}>
@@ -71,10 +51,9 @@ const ProposalDetails = () => {
             </div>
         </div>
         <Link 
-        style={{padding: "20px"}}
-        to="/applications">
+        style={{padding: "20px"}}>
         <Button
-        variant="dark"
+        variant="dark" onClick={() => navigateTo(-1)}
         >Go Back</Button>
       </Link>
       </div>
