@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import LogoutPage from "./pages/LogoutPage";
 import MainPage from './pages/MainPage';
 import StudentApplicationsPage from './pages/StudentApplicationPage';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 import './App.css';
