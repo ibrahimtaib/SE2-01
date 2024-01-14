@@ -90,4 +90,11 @@ export default {
     }
     return null;
   },
+  archiveExpiredProposals: async function () {
+    const response = await api.get("/archiveExpired");
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  },
 };

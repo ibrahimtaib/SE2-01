@@ -6,14 +6,14 @@ import DatePicker from 'react-datepicker';
 import './VirtualClock.css'
 import api from '../utils/pi';
 
-function VirtualClock() {
+function VirtualClock({setDirty}) {
   const [startDate, setStartDate] = useState(undefined);
   const [virtualDate, setVirtualDate] = useState(undefined);
   const [showCalendar, setShowCalendar] = useState(false);
   const [buttonVariant, setButtonVariant] = useState('outline-light');
   const CustomInput = forwardRef(function CustomInput({ onClick }, ref) {
     return (
-    <Button variant={buttonVariant} className="mr-3" style={{ marginLeft: '10px'}} onClick={() => {
+    <Button variant={buttonVariant} className="mr-3" style={{border: 'none' }} onClick={() => {
       onClick()
       setShowCalendar(!showCalendar)
       setStartDate(virtualDate)
@@ -25,6 +25,7 @@ function VirtualClock() {
     try {
     // richiesta al server
       api.setVirtualClock(date)
+      setDirty(true)
       setButtonVariant('success')
       setTimeout(() => {
         setButtonVariant('outline-light')
@@ -32,6 +33,7 @@ function VirtualClock() {
       setStartDate(date)
       setVirtualDate(date)
     } catch (error) {
+      console.log(error)
       setButtonVariant('danger')
     }
   }

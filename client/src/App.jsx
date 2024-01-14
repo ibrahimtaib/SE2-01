@@ -47,10 +47,9 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
+  const [dirty, setDirty] = useState(false);
   //This is the proposal to send to InsertForm
   const [proposalToInsert, setProposalToInsert] = useState(proposalStateMock);
-
-  //FIXME: This state, we should put it in the correct component to be loaded after login
   const [ProposalsList, setProposalsList] = useState([]);
 
   const refetchDynamicContentTeacher = async (teacherId) => {
@@ -80,6 +79,7 @@ function App() {
           setProposalsList(proposals);
           setLoading(false);
         }
+        setDirty(false);
       } catch (error) {
         console.error("Error in init:", error);
         setLoggedIn(false);
@@ -89,7 +89,7 @@ function App() {
     };
     init();
     console.log(proposalToInsert.degree.COD_DEGREE);
-  }, [loggedIn, update, proposalToInsert.degree.COD_DEGREE]);
+  }, [loggedIn, update, proposalToInsert.degree.COD_DEGREE, dirty]);
 
   if (!loggedIn && loading) {
     return (<LoadingSpinner />);
@@ -99,7 +99,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
-        <Route path="/" element={<HeaderPage user={user} resetProposal={resetProposal} />}>
+        <Route path="/" element={<HeaderPage user={user} resetProposal={resetProposal} setDirty={setDirty} />}>
           <Route path="/*" element={<DefaultRoute />} />
           <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
           <Route
@@ -157,11 +157,11 @@ function App() {
 
 }
 
-function HeaderPage({ user, resetProposal }) {
+function HeaderPage({ user, resetProposal, setDirty }) {
   return (
     <>
       <Header />
-      <NavBar user={user} resetProposal={resetProposal} />
+      <NavBar user={user} resetProposal={resetProposal} setDirty={setDirty} />
       <Outlet />
     </>
   )
