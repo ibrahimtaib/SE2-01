@@ -6,6 +6,7 @@
   },
   "scripts": {
     "test": "jest",
+    "docker:init": "docker-compose up -d",
     "coverage": "jest --coverage"
   },
   "devDependencies": {
