@@ -4,23 +4,31 @@ import { useState } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { useNavigate } from 'react-router-dom';
 
 function ApplicationDecisionCard(props) {
 
 
     return (
         <>
-        {props.application.proposal?<ProposalDecisionCard application={props.application}></ProposalDecisionCard>:""}
+        {props.application.proposal?<ProposalDecisionCard user={props.user} application={props.application}></ProposalDecisionCard>:""}
         {props.application.requestedThesis?<RequestThesisCard application={props.application}></RequestThesisCard>:""}
         </>
     );
 }
 
 function ProposalDecisionCard(props) {
+    const navigateTo = useNavigate();
+
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
     };
+
+    const handleModifyApplication = () => {
+        navigateTo('/student/requestForm', { state: { user: props.user, proposal: props.application.proposal, application_id: props.application.id } });
+    }
+    
     return (
         <Card className="text-left m-3">
             <Card.Header> {"Prof " + props.application.proposal.teacher.surname}</Card.Header>
@@ -43,15 +51,21 @@ function ProposalDecisionCard(props) {
                     <Button variant="outline-secondary" onClick={toggleVisibility}>
                         {isVisible ? 'Hide Details' : 'Show Details'}
                     </Button>
+
                     {props.application.status === "pending" ?
                         <Button variant="outline-secondary" disabled>
                             Status <br /><Badge bg="secondary">{props.application.status}</Badge>
                             <span className="visually-hidden">unread messages</span>
-                        </Button> : props.application.status === "accept" ?
+                        </Button> : props.application.status === "accept"  ?
+                            <>
+                            <Button variant="success" onClick={() => handleModifyApplication()} style={{ marginLeft: 'auto' , marginRight: '10px'  }}>
+                                Modify
+                            </Button>
                             <Button variant="outline-success" disabled>
                                 Status <br /><Badge bg="success">{props.application.status}</Badge>
                                 <span className="visually-hidden">unread messages</span>
-                            </Button> : <Button variant="outline-danger" disabled>
+                            </Button>
+                            </> : <Button variant="outline-danger" disabled>
                                 Status <br /><Badge bg="danger">{props.application.status}</Badge>
                                 <span className="visually-hidden">unread messages</span>
                             </Button>}
@@ -65,9 +79,25 @@ function ProposalDecisionCard(props) {
 
 function RequestThesisCard(props) {
     const [isVisible, setIsVisible] = useState(false);
+    const navigateTo = useNavigate();
+
+    const handleModifyApplication = () => {
+        navigateTo('/student/requestForm', { state: { user: props.user, proposal: thesisRequestData } });
+    }
+
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
     };
+
+    const thesisRequestData={
+        id: props.application.id,
+        title: props.application.title,
+        description: props.application.description,
+        teacher: {id: props.application.teacher.id},
+        type: props.application.type,
+        notes: props.application.notes,
+    }
+
     return (
         <Card className="text-left m-3">
             <Card.Header> {"Prof " + props.application.teacher.surname}</Card.Header>
@@ -88,11 +118,16 @@ function RequestThesisCard(props) {
                         <Button variant="outline-secondary" disabled>
                             Status <br /><Badge bg="secondary">{props.application.status}</Badge>
                             <span className="visually-hidden">unread messages</span>
-                        </Button> : props.application.status === "accept" ?
+                        </Button> : props.application.status === "accept" || props.application.status === "teacher-accepted" || props.application.status === "secretary-accepted"?
+                            <>
+                            <Button variant="success" onClick={() => handleModifyApplication()} style={{ marginLeft: 'auto' , marginRight: '10px' }}>
+                                Modify
+                            </Button>
                             <Button variant="outline-success" disabled>
                                 Status <br /><Badge bg="success">{props.application.status}</Badge>
                                 <span className="visually-hidden">unread messages</span>
-                            </Button> : <Button variant="outline-danger" disabled>
+                            </Button> 
+                            </>: <Button variant="outline-danger" disabled>
                                 Status <br /><Badge bg="danger">{props.application.status}</Badge>
                                 <span className="visually-hidden">unread messages</span>
                             </Button>}

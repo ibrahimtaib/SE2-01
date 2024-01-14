@@ -19,7 +19,7 @@ module.exports = {
                         const customTeacherObject = {
                             id: teacher.id,
                             name: `${teacher.name} ${teacher.surname}`,
-                            role: teacher.id == "auth0|655fd0b96d87729b6b3e0795"?"teacher": "secretary",
+                            role: "teacher",
                             email: teacher.email,
                         };
                         resolve(customTeacherObject);
@@ -41,6 +41,24 @@ module.exports = {
                             cds: student.COD_DEGREE
                         };
                         resolve(customStudentObject);
+                    } else {
+                        return prisma.secreatryClerk.findUnique({
+                            where: {
+                                id: userID,
+                            },
+                        });
+                    }
+                })
+                .then((secretaryClerk) => {
+                    console.log(secretaryClerk);
+                    if (secretaryClerk) {
+                        const customSecretaryClerkObject = {
+                            id: secretaryClerk.id,
+                            name: `${secretaryClerk.name} ${secretaryClerk.surname}`,
+                            role: "secretary",
+                            email: secretaryClerk.email,
+                        };
+                        resolve(customSecretaryClerkObject);
                     } else {
                         throw new Error('User not found');
                     }

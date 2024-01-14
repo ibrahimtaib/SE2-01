@@ -983,4 +983,28 @@ module.exports = {
         })
     );
   },
+
+  archiveExpiredProposals: async (dueDate) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal.updateMany({
+        where: {
+          expiration: {
+            lt: dueDate,
+          },
+        },
+        data: {
+          archived: true,
+        },
+      })
+        .then((updatedProposals) => {
+          resolve(updatedProposals);
+        })
+        .catch((error) => {
+          reject({
+            error: "An error occurred while archiving expired proposals",
+          });
+        })
+    );
+  },
+
 };
