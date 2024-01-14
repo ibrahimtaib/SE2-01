@@ -343,6 +343,8 @@ function RightSide(props) {
 
     useEffect(() => {
         props.ProposalsList.forEach((proposal) => {
+            console.log(props.user);
+            console.log(proposal.id);
           const proposalDate = new Date(proposal.date);
           const oneWeekBefore = new Date();
           oneWeekBefore.setDate(oneWeekBefore.getDate() + 7);
@@ -355,9 +357,6 @@ function RightSide(props) {
               closeOnClick: false,
               pauseOnHover: false,
               draggable: true,
-              onClose: () => {
-                console.log("Toast closed");
-              }
             });
           }
         });
@@ -377,6 +376,7 @@ function RightSide(props) {
             ) : (
                 <h2 style={{ marginLeft: '20px', marginBottom: '10px' }}>{props.user.role === "teacher" ? "My proposals" : "Available proposals"}</h2>
             )}
+            <ToastContainer />
             {props.ProposalsList.map((proposal, index) => (
                 <>
                 <ProposalCard
@@ -388,7 +388,7 @@ function RightSide(props) {
                     setProposalToInsert={props.setProposalToInsert}
                     refetchDynamicContent={props.refetchDynamicContent}
                 />
-                <ToastContainer />
+                
                 </>
 
             ))}
