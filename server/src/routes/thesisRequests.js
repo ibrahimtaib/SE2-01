@@ -78,4 +78,12 @@ router.put("/teacher/:action/:id", async (req, res) => {
   .catch((error) => res.status(500).json(error));
 });
 
+// router.put("/thesis_update/:id", async (req, res) => {  
+//   thesisRequestsController.updateThesisRequest(parseInt(req.params.id), req.body)
+//   .then((secretary) => {
+//     res.status(200).json(secretary);
+//   })
+//   .catch((error) => res.status(500).json(error));;
+// });
+
 module.exports = router;

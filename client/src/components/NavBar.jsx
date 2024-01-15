@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import API from '../API';
 import VirtualClock from './VirtualClock';
 
-function NavBar({ user , resetProposal }) {
+function NavBar({ user , resetProposal, setDirty }) {
   const navigateTo = useNavigate();
   return (
     <Navbar style={{ backgroundColor: "rgb(252, 122, 8)" }} className="sticky-top" expand="sm" variant="dark">
@@ -23,6 +23,7 @@ function NavBar({ user , resetProposal }) {
               {user.role === "student" && <Nav.Link eventKey="studentRequestForm" onClick={() => navigateTo(`student/requestForm`)}  >Request Form</Nav.Link>}
 
               {user.role === "secretary" && <Nav.Link eventKey="thesisRequestsSecretary" onClick={() => navigateTo(`/thesis-requests`)}>Thesis Requests</Nav.Link>}
+              <VirtualClock setDirty={setDirty}/>
             </Nav>
           </Navbar.Collapse>
           <NavDropdown title={user.name} id='dropdown-button-drop-start' style={{ color: "white", marginRight: "5%"}}>
@@ -46,7 +47,6 @@ function NavBar({ user , resetProposal }) {
                 }
               }}>Curriculum</NavDropdown.Item>
               </> : <></>}
-            <VirtualClock />
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={() => navigateTo("/logout")}>
               Logout
