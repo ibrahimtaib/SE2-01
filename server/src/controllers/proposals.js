@@ -818,7 +818,7 @@ module.exports = {
     }
   },
 
-  getTeacherProposals: async (teacherId) => {
+  getTeacherProposals: async (teacherId,teacherEmail) => {
     return new Promise((resolve, reject) =>
       prisma.Proposal.findMany({
         include: {
@@ -841,7 +841,16 @@ module.exports = {
           },
         },
         where: {
-          supervisor: teacherId,
+          OR: [
+            {
+              supervisor: teacherId,
+            },
+            {
+              coSupervisors: {
+                has: teacherEmail, // Assuming teacherEmail is the email of the teacher
+              },
+            },
+          ],
         },
       })
         .then((proposals) => {

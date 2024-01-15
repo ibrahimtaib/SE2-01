@@ -163,8 +163,9 @@ async function getProposalsByExpirationDate(date) {
   }
 }
 
-async function getTeacherProposals(teacherId) {
-  const response = await fetch(`${URL}proposals/teacher/${teacherId}`);
+async function getTeacherProposals(teacherId,teacherEmail) {
+  
+  const response = await fetch(`${URL}proposals/teacher/${teacherId}--${teacherEmail}`);
   const proposals = await response.json();
   if (response.ok) {
     return proposals.map(adjustPropertyNames);

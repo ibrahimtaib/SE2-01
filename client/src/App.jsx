@@ -71,7 +71,9 @@ function App() {
 
         if (userInfo && userInfo.role === "teacher") {
           const teacherId = userInfo.id;
-          const proposals = await API.getTeacherProposals(teacherId);
+          const teacherEmail = userInfo.email;
+          console.log(teacherEmail);
+          const proposals = await API.getTeacherProposals(teacherId,teacherEmail);
           setProposalsList(proposals);
           // Codice per teacher
           setLoading(false);

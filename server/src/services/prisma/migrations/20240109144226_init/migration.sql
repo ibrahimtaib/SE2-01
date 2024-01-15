@@ -11,6 +11,16 @@ CREATE TABLE "Teacher" (
 );
 
 -- CreateTable
+CREATE TABLE "SecreatryClerk" (
+    "id" TEXT NOT NULL,
+    "surname" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+
+    CONSTRAINT "SecreatryClerk_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Degree" (
     "COD_DEGREE" TEXT NOT NULL,
     "TITLE_DEGREE" TEXT NOT NULL,
@@ -85,8 +95,25 @@ CREATE TABLE "Proposal" (
     CONSTRAINT "Proposal_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "ThesisRequest" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "teacherId" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "notes" TEXT,
+    "status" TEXT NOT NULL,
+
+    CONSTRAINT "ThesisRequest_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Teacher_id_key" ON "Teacher"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SecreatryClerk_id_key" ON "SecreatryClerk"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Courses_COD_COURSE_key" ON "Courses"("COD_COURSE");
@@ -111,3 +138,9 @@ ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_supervisor_fkey" FOREIGN KEY ("s
 
 -- AddForeignKey
 ALTER TABLE "Proposal" ADD CONSTRAINT "Proposal_cds_fkey" FOREIGN KEY ("cds") REFERENCES "Degree"("COD_DEGREE") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ThesisRequest" ADD CONSTRAINT "ThesisRequest_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "Teacher"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ThesisRequest" ADD CONSTRAINT "ThesisRequest_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

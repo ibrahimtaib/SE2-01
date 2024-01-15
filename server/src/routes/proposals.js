@@ -153,11 +153,15 @@ router.get("/cds/:cds", async (req, res) => {
   }
 });
 
-router.get("/teacher/:teacherId", async (req, res) => {
-  const teacherId = req.params.teacherId;
+router.get("/teacher/:teacher", async (req, res) => {
+  const array=req.params.teacher.split("--");
+  const teacherId = array[0];
+  const teacherEmail = array[1];
+  console.log(teacherEmail);
 
   try {
-    const proposals = await proposalsController.getTeacherProposals(teacherId);
+    console.log("routers", teacherEmail);
+    const proposals = await proposalsController.getTeacherProposals(teacherId,teacherEmail);
     res.status(200).json(proposals);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
