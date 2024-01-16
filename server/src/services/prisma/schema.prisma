@@ -9,7 +9,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+//tvb frociona
 //TODO should we add a Group table? 
 //TODO should the COD_* be a string? ex: a course code is usually a combination
 // of letters and numbers
