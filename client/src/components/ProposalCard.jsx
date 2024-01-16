@@ -62,7 +62,9 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
       <Card className="text-left m-3">
         {user.role ==  "student" ? <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header> : ""}
         <Card.Body>
-          <Card.Title>{proposal.Title}</Card.Title>
+          <Card.Title>{proposal.Title} 
+          {user.email && proposal.CoSupervisor.includes(user.email.trim()) ? ' (cosupervised)' : ''}
+          </Card.Title>
           <Card.Text>
             {proposal.Description}
           </Card.Text>
