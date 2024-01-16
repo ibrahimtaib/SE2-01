@@ -53,8 +53,9 @@ function App() {
   //FIXME: This state, we should put it in the correct component to be loaded after login
   const [ProposalsList, setProposalsList] = useState([]);
 
-  const refetchDynamicContentTeacher = async (teacherId) => {
-    API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
+  const refetchDynamicContentTeacher = async (teacherId,teacherEmail) => {
+    console.log("In refetch teacherEmail",teacherEmail);
+    API.getTeacherProposals(teacherId,teacherEmail).then((proposals) => setProposalsList(proposals));
   }
 
   const resetProposal = () => {

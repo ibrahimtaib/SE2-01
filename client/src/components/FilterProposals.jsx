@@ -87,7 +87,7 @@ function LeftSide(props) {
                             setClickReset(false);
                         })
 		    }else if(props.user.role=="teacher"){
-                        API.getTeacherProposals(props.user.id).then((a) => {
+                        API.getTeacherProposals(props.user.id,props.user.email).then((a) => {
                             props.setProposalsList(a)
                             setClickReset(false);
                         })
@@ -177,6 +177,25 @@ function LeftSide(props) {
         }
       };
 
+      const handleGetCosupervisedProposals = (e) => {
+        event.preventDefault();
+      
+        if(props.user && props.user.role==="teacher"){
+            const flt = {
+                title: "",
+                coSupervisor: e.target.value,
+                level: "",
+                type: "",
+                expiration: "",
+                keywords: "",
+                groups: "",
+                supervisor: props.user.name 
+              }
+              setFilter(flt);
+              setClick(true);
+        }
+      };
+
     const handleReset = () => {
         event.preventDefault();
         setTitle("");
@@ -238,6 +257,16 @@ function LeftSide(props) {
                                     onChange={handleCosupervisorChange}
                                     className={props.user.role === 'teacher' ? 'w-100' : 'form-control-md'}
                                 />
+                                {props.user.role === 'teacher' && (
+                                <Button
+                                    variant="primary"
+                                    onClick={() => {
+                                        handleGetCosupervisedProposals({ target: { value: props.user.email } });
+                                    }}
+                                >
+                                    Cosupervised Proposals
+                                </Button>
+                            )}
                             </Form.Group>
                         )}
                     </Col>

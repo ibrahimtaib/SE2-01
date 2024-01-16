@@ -32,7 +32,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
       }, 2000);
     }).finally(() => {
       setTimeout(() => {
-        refetchDynamicContent(user.id);
+        refetchDynamicContent(user.id,user.email);
       }, 2000);
       setLoadingArchived(false);
     });
@@ -51,7 +51,7 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
       }, 2000);
     }).finally(() => {
       setTimeout(() => {
-        refetchDynamicContent(user.id);
+        refetchDynamicContent(user.id,user.email);
       }, 2000);
       setLoadingArchived(false);
     });
