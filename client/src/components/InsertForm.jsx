@@ -145,10 +145,10 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
 
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
-            cds: proposalToInsert.degree.COD_DEGREE,
+            cds: '1',
         }
     })
-    console.log("proposal to insert ", proposalToInsert)
+console.log("proposal to insert ", proposalToInsert)
     const onSubmit = (data) => {
         if (update) {
             addPageUpdate({
@@ -176,6 +176,7 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
                 });
         }
         else {
+            console.log("data ", data);
             addPage({
                 ...data,
                 expiration: new Date(data.expiration).toISOString(),
