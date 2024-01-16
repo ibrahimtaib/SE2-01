@@ -1,24 +1,52 @@
 version: "3.9"
 services:
-  postgres-client:
+  postgres:
     image: postgres:latest
     container_name: postgres-client
     hostname: postgres
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
     volumes:
       - ./postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=ibrahim
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=TMDB
+      - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-h",
+          "localhost",
+          "-U",
+          "postgres"
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   express-server:
-    build: ./server
+    build:
+      context: ./server
+      args:
+        - POSTGRES_USER=ibrahim
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=TMDB
+        - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
     ports:
       - "3001:3001"
+    environment:
+      - POSTGRES_USER=ibrahim
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=TMDB
+      - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
     depends_on:
-      - postgres-client
+      postgres:
+        condition: service_healthy
 
   react-app:
     build: ./client
