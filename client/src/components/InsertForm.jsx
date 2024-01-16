@@ -145,7 +145,7 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
 
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
-            cds: '1',
+            cds: proposalToInsert.degree.COD_DEGREE,
         }
     })
 console.log("proposal to insert ", proposalToInsert)
