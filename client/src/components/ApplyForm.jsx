@@ -36,8 +36,8 @@ function ApplyForm({proposal, user}) {
       await new Promise(resolve => setTimeout(resolve, 3000));
       setLoading(false);
       navigateTo("/");
-    }).catch(() => {
-      setMessageAlert("There was an error while submitting your application, please try again in a few moments.")
+    }).catch((error) => {
+      setMessageAlert(error?.response?.data?.error? error?.response?.data?.error: "There was an error while submitting your application, please try again in a few moments.")
       setShowAlert(true)
       setLoading(false);
     })

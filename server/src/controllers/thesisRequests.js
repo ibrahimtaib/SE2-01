@@ -199,7 +199,32 @@ module.exports = {
           });
         })
     );
-  }
+  },
 
-
+  // updateThesisRequest: async (id, newData) => {
+  //   return new Promise((resolve, reject) => {
+  //     prisma.ThesisRequest
+  //       .update({
+  //         where: {
+  //           id: id,
+  //         },
+  //         data: {
+  //           title: newData.title,
+  //           description: newData.description,
+  //           teacherId: newData.teacher,
+  //           type: newData.type,
+  //           notes: newData.notes,
+  //           status: "pending",
+  //         },
+  //       })
+  //       .then((ThesisRequest) => {
+  //         resolve(ThesisRequest);
+  //       })
+  //       .catch((error) => {
+  //         reject({
+  //           error: `An error occurred while trying to update ThesisRequest by teacher`,
+  //         });
+  //       });
+  //   });
+  // },
 };

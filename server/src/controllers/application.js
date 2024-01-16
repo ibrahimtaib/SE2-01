@@ -44,14 +44,13 @@ module.exports = {
         const prevApplication = await prisma.application.findFirst({
           where: {
             STUDENT_ID,
-            PROPOSAL_ID,
           },
         });
 
         if (prevApplication != null) {
           return reject({
             status: 400,
-            error: "Student has already applied to this proposal!",
+            error: "Student has already applied to a proposal!",
           });
         }
 
