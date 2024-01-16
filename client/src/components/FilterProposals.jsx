@@ -15,6 +15,7 @@ import API from '../API';
 import ProposalCard from './ProposalCard';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import { sendMail } from '../api/api';
 
 
 function FilterProposals(props) {
@@ -342,7 +343,7 @@ function RightSide(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        props.ProposalsList.forEach((proposal) => {
+        props.ProposalsList.forEach(async (proposal) => {
             console.log(props.user);
             console.log(proposal.id);
           const proposalDate = new Date(proposal.date);
@@ -358,6 +359,7 @@ function RightSide(props) {
               pauseOnHover: false,
               draggable: true,
             });
+            await sendMail(proposal.Title, null, proposal.teacher, 'expiration-week');
           }
         });
         

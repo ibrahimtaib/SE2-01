@@ -7,12 +7,19 @@ router.post('/send-email', (req, res) => {
 
     const subject = action === 'accept' ? 'Congratulations your Application has been Accepted' : 
         action === 'reject' ? 'We are sorry your application has been Rejected' :
+        action === 'expiration-week' ? 'Notification about expiring proposal' :
         'New Application for your proposal has been submitted';
 
     const text = action == 'apply'? 
     `Hello ${teacher.name} ${teacher.surname},
 this is a notification email to inform you that an new application has been submitted for you proposal:  ${proposalTitle}
 by the student ${student.name} ${student.surname},
+we invite you to check the platform for further details.
+Best Regards,`
+    :
+    action == 'expiration-week' ? 
+    `Hello,
+this is a notification email to inform you that the following proposal is expiring in a week:  ${proposalTitle}
 we invite you to check the platform for further details.
 Best Regards,`
     :
@@ -23,7 +30,7 @@ after the evaluation of the Mr ${teacher.name} ${teacher.surname} you have been 
 Best Regards,`;
 
     const toEmail = 's306971@studenti.polito.it'
-    const fromEmail = action === 'apply'? "Thesis-Manager@polito.it" : teacher.email;
+    const fromEmail = action === 'apply' || action === 'expiration-week' ? "Thesis-Manager@polito.it" : teacher.email;
 
     const mailOptions = {
         from: fromEmail,
@@ -35,7 +42,7 @@ Best Regards,`;
     notificationsController.sendMail(mailOptions)
     .then((info)=> res.status(200).json({message :'Email sent successfully', info: info.response}))
     .catch((error)=> res.status(200).json({
-        message :`Internal Server Error while sanding email to : ${'jaouadouchaib2@gmail.com'}`,
+        message :`Internal Server Error while sanding email to : ${toEmail}`,
         error: error
     }))
 })
