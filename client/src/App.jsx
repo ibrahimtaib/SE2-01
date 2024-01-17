@@ -80,7 +80,7 @@ function App() {
           setProposalsList(proposals);
           setLoading(false);
         } else if(userInfo && userInfo.role === "coSupervisor"){
-          const coSupervisorId = userInfo.id
+          const coSupervisorId = userInfo.email
           const proposals = await API.getProposalsByCosupervisor(coSupervisorId);
           setProposalsList(proposals);
           setLoading(false);
