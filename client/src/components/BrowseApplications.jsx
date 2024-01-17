@@ -57,11 +57,12 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
 
   const handleAccept = async () => {
     const confirmation = window.confirm("Are you sure you want to accept this proposal?");
+    const action = !isRequest?"accept":"request-accept";  
     
     if (confirmation) {
       try {
         await onAccept(application.application.id);
-        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'accept');
+        await sendMail(application.proposal.title, application.student,application.proposal.teacher, action);
       } catch (error) {
         console.error(error);
       }
@@ -70,11 +71,11 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
   
   const handleReject = async () => {
     const confirmation = window.confirm("Are you sure you want to reject this proposal?");
-    
+    const action = !isRequest?"reject":"request-reject"; 
     if (confirmation) {
       try {
         await onReject(application.application.id);
-        await sendMail(application.proposal.title, application.student,application.proposal.teacher, 'reject');
+        await sendMail(application.proposal.title, application.student,application.proposal.teacher, action);
       } catch (error) {
         console.error(error);
       }
