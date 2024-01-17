@@ -36,7 +36,27 @@ async function getAllProposals() {
 }
 
 async function archiveExpiredProposals() {
-  const response = await fetch(`${URL}proposals/archiveExpiredProposals`); // Attendere che la Promise si risolva
+  const response = await fetch(`${URL}proposals/archiveExpiredProposals`);
+
+  // Check if the response is okay
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Error: ${errorData.error || "Unknown error"}`);
+  }
+
+  const proposals = await response.json();
+
+  // Ensure that proposals is an array before mapping
+  if (Array.isArray(proposals)) {
+    return proposals.map(adjustPropertyNames);
+  } else {
+    throw new Error("Invalid response format: Expected an array");
+  }
+}
+
+
+async function archiveProposal(id) {
+  const response = await fetch(`${URL}proposals/archiveProposals/${id}`); // Attendere che la Promise si risolva
   const proposals = await response.json(); // Attendere che la Promise si risolva
   if (response.ok) {
     return proposals.map(adjustPropertyNames);
@@ -258,7 +278,7 @@ async function getExamAndStudentById(studentId) {
   }
 }
 
-async function acceptApplication(applicationId) {
+async function acceptApplication(applicationId,proposal) {
   try {
     const acceptResponse = await fetch(
       `${URL}applications/accept-application/${applicationId}`,
@@ -270,11 +290,18 @@ async function acceptApplication(applicationId) {
       }
     );
 
+    
+
     const acceptData = await acceptResponse.json();
 
     if (!acceptResponse.ok) {
       throw new Error(acceptData.error || "Failed to accept application");
     }
+
+    const archivedProposal = await fetch(
+      `${URL}proposals/archiveProposal/${proposal}`,
+    );
+    console.log(archivedProposal);
 
     const proposalIdResponse = await fetch(
       `${URL}applications/get-proposal-id/${applicationId}`

@@ -1056,4 +1056,22 @@ module.exports = {
     );
   },
 
+  archiveProposal: async (proposalId) => {
+    try {
+      const updatedProposal = await prisma.proposal.update({
+        where: {
+          id: parseInt(proposalId),
+        },
+        data: {
+          archived: true,
+        },
+      });
+      return updatedProposal;
+    } catch (error) {
+      console.log(error);
+      throw new Error("An error occurred while archiving the proposal");
+    }
+  },
+  
+
 };

@@ -121,6 +121,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
                             navigateTo(`/add`);
                           }}>Copy</Dropdown.Item>
                         <Dropdown.Item
+                          disabled={!proposal.deletable}
                           onClick={() => {
                             setUpdate(true);
                             setProposalToInsert({
