@@ -199,10 +199,17 @@
 
 ## Story #17 - Add Academic Co-Supervisor
 
+- Click on "Add Proposal" located at the top-right corner
 
+![](images/Story_17_1.png)
 
+- Fill the form and add the co-supervisor mail
 
+![](images/Story_17_2.png)
 
+- Check on the co-supervisor account if there is present the new application
+
+![](images/Story_17_3.png)
 
 
 ## Story #18 - Notify Expiration
