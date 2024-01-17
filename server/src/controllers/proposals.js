@@ -56,7 +56,7 @@ module.exports = {
   },
   /**
    * Archive a proposal and set all applications to canceled. Returns an object with status 200 if successful.
-   * 400 if proposal doesn't exist, 500 if an error occurred.
+   * 400 if proposal doesn't exist or is archived, 500 if an error occurred.
    * @date 2023-11-23
    * @param {Number} id
    * @returns {{status: Number, message: String} | {status: Number, error: String}}
@@ -84,6 +84,15 @@ module.exports = {
             message: "Proposal does not exist!",
           });
         }
+
+        //Check if proposal can be archived
+        if (proposal.archived) {
+          return reject({
+            status: 400,
+            message: "Proposal is archived!",
+          });
+        }
+
         // Check if proposal can be deleted
         if (proposal.applications.length > 0) {
           return reject({
@@ -980,6 +989,7 @@ module.exports = {
       id,
       title,
       supervisor,
+      coSupervisors,
       keywords,
       type,
       groups,
@@ -999,6 +1009,7 @@ module.exports = {
         data: {
           title,
           supervisor,
+          coSupervisors,
           keywords,
           type,
           groups,
@@ -1046,5 +1057,23 @@ module.exports = {
         })
     );
   },
+
+  archiveProposal: async (proposalId) => {
+    try {
+      const updatedProposal = await prisma.proposal.update({
+        where: {
+          id: parseInt(proposalId),
+        },
+        data: {
+          archived: true,
+        },
+      });
+      return updatedProposal;
+    } catch (error) {
+      console.log(error);
+      throw new Error("An error occurred while archiving the proposal");
+    }
+  },
+  
 
 };

@@ -17,12 +17,13 @@ import MainPage from './pages/MainPage';
 import StudentApplicationsPage from './pages/StudentApplicationPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faker } from '@faker-js/faker';
 
 
 import './App.css';
 
 
-import { getUserInfo } from "./api/api";
+import api,{ getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import StudentRequestPage from "./pages/StudentRequestPage";
@@ -32,8 +33,8 @@ import ApplicationsPage from "./pages/applicationsPage";
 function App() {
 
   const proposalStateMock = {
-    title: "Thesis Proposal Title",
-    description: "This is a thesis description, it contains information about the thesis. This should be filled with relevant information that the student must know before applying to the thesis proposal.",
+    title: faker.lorem.words(3),
+    description: faker.lorem.paragraph(),
     expiration: "2024-12-31",
     degree: {
       COD_DEGREE: "0"
@@ -44,6 +45,18 @@ function App() {
     requiredKnowledge: "sample",
     keywords: ["keywordsample"],
   };
+
+  const getDegrees = () => {
+    api.get('/degrees')
+        .then((response) => {
+          if (response.data.length > 0) {
+            const firstDegree = response.data[0];
+            proposalStateMock.degree=response.data[0];
+        }
+        }
+        )
+}
+getDegrees();
 
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -65,22 +78,25 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
+
       try {
         const userInfo = await getUserInfo();
         setLoggedIn(true);
         setUser(userInfo);
-
         if (userInfo && userInfo.role === "teacher") {
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
           const teacherId = userInfo.id;
           const proposals = await API.getTeacherProposals(teacherId);
           setProposalsList(proposals);
           setLoading(false);
         } else if (userInfo && userInfo.role === "student") {
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
           const proposals = await API.getProposalsByCds(userInfo.cds);
           setProposalsList(proposals);
           setLoading(false);
         } else if(userInfo && userInfo.role === "coSupervisor"){
-          const coSupervisorId = userInfo.id
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
+          const coSupervisorId = userInfo.email
           const proposals = await API.getProposalsByCosupervisor(coSupervisorId);
           setProposalsList(proposals);
           setLoading(false);
@@ -151,7 +167,7 @@ function App() {
           ):(
             <>
               <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
-              <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
+              <Route path="/applications/*" element={<ApplicationsPage user={user} setDirty={setDirty} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
               <Route path="thesis-requests/*" element={<ThesisRequestsPage user={user} />} />
             </>

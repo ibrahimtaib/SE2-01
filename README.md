@@ -1,10 +1,12 @@
-![Coverage](https://img.shields.io/badge/Coverage-85.48%25-green)
+![Coverage](https://img.shields.io/badge/Coverage-82.6%25-green)
 ![Total tests](https://img.shields.io/badge/Total%20tests-200-green)
 
 
 # SE2-01
 
-Main project for Software Engineering 2 at PoliTo
+Main project for Software Engineering 2 at PoliTo.
+
+_This work is under the MIT license. We chose this license to ensure that the original copyright notice is retained in future forks of the software, providing attribution to our original work while maintaining freedom for future developers and contributors._
 
 ## Users
 

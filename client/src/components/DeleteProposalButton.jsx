@@ -42,7 +42,7 @@ function DeleteProposalButton({proposal}) {
 	}
 	return (
 		<>
-		<Button as={Dropdown.Item} style={{width : "100%" , color: "white", textAlign : "left", backgroundColor : "red"}} disabled={!proposal.deletable} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
+		<Button as={Dropdown.Item} style={{width : "100%" , color: "white", textAlign : "left", backgroundColor : "red"}} disabled={!proposal.deletable || proposal.archived} variant="danger" onClick={() => setShowAlert(true)}>Delete</Button>
 
 		<Modal animation={false} {...backdrop} show={showAlert} onHide={modalClose}>
 		<Modal.Header closeButton>  

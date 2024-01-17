@@ -66,6 +66,7 @@ export const logout = async () => {
 };
 
 export const addPageUpdate = async (proposal) => {
+  console.log(proposal)
   try {
     const response = await api.post("/proposals/update", proposal);
     return response.data;

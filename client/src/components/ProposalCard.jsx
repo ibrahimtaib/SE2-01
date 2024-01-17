@@ -7,6 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useNavigate } from 'react-router-dom';
 import { addPageUpdate } from '../api/api';
 import DeleteProposalButton from './DeleteProposalButton';
+import API from '../API';
 
 function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToInsert, refetchDynamicContent }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,25 +25,30 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
     return expirationDate < currentDate;
   };
 
-  const handleArchive = () => {
+  const handleArchive = (proposalId) => {
     setLoadingArchived(true);
-
+  
     addPageUpdate({
       ...proposal,
-      archived: true
-    }).then(() => {
-      setArchived(true);
-      setTimeout(() => {
-        setArchived(false);
-      }, 2000);
-    }).finally(() => {
-      setTimeout(() => {
-        refetchDynamicContent(user.id);
-      }, 2000);
-      setLoadingArchived(false);
-    });
-  }
-
+      archived: true,
+    })
+      .then(() => {
+        setArchived(true);
+        return API.cancelApplicationsByProposalId(proposalId);
+      })
+      .then(() => {
+        setTimeout(() => {
+          setArchived(false);
+        }, 2000);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          refetchDynamicContent(user.id);
+        }, 2000);
+        setLoadingArchived(false);
+      });
+  };
+  
   const handleExtract = () => {
     setLoadingArchived(true);
 
@@ -121,6 +127,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
                             navigateTo(`/add`);
                           }}>Copy</Dropdown.Item>
                         <Dropdown.Item
+                          disabled={!proposal.deletable}
                           onClick={() => {
                             setUpdate(true);
                             setProposalToInsert({
@@ -140,7 +147,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
                             });
                             navigateTo(`/add`);
                           }}>Update</Dropdown.Item>
-                        {showArchived ? <Dropdown.Item onClick={handleExtract}>Extract</Dropdown.Item> : <Dropdown.Item onClick={handleArchive}>Archive</Dropdown.Item>}
+                        {showArchived ? <Dropdown.Item onClick={handleExtract}>Extract</Dropdown.Item> : <Dropdown.Item onClick={() => handleArchive(proposal.id)}>Archive</Dropdown.Item>}
                         <DeleteProposalButton proposal={proposal} />
                       </Dropdown.Menu>
                     </Dropdown>

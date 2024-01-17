@@ -8,8 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import api, { addPage, addPageUpdate } from "../api/api";
 
 const Types = {
-    experimental: "Experimental",
-    nrd: "Non-research dissertation",
+    research: "Research",
+    experimental: "Abroad",
+    nrd: "Company",
 }
 
 const styles = {

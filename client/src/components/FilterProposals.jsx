@@ -362,14 +362,17 @@ function RightSide(props) {
 
     useEffect(() => {
         props.ProposalsList.forEach(async (proposal) => {
-            console.log(props.user);
-            console.log(proposal.id);
           const proposalDate = new Date(proposal.date);
           const oneWeekBefore = new Date();
           oneWeekBefore.setDate(oneWeekBefore.getDate() + 7);
+          console.log(proposalDate + ' deve essere uguale a' + oneWeekBefore);
+
+          if(proposalDate <= new Date()){
+            console.log('proposal has expired: ' + proposal.Title)
+          }
     
           if (proposalDate <= oneWeekBefore && props.user.role === "teacher") {
-            toast.info(`Proposal "${proposal.Title}" is expiring in a week!`, {
+            toast.info(`Proposal "${proposal.Title}" is expiring soon!`, {
               position: 'top-right',
               autoClose: 5000, 
               hideProgressBar: false,
@@ -381,7 +384,7 @@ function RightSide(props) {
           }
         });
         
-      }, [props.ProposalsList]);
+      }, []);
     
 
     if (!props.ProposalsList || props.ProposalsList.length === 0) {

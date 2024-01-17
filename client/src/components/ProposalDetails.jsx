@@ -46,9 +46,6 @@ const ProposalDetails = () => {
               <span className="font-semibold">Expiration Date:</span> <span style={{ color: 'gray' }}>{proposal.expiration}</span>
             </p></ListGroup.Item>
             <ListGroup.Item><p className="mb-2">
-              <span className="font-semibold">Groups:</span> <span style={{ color: 'gray' }}>To set in database</span>
-            </p></ListGroup.Item>
-            <ListGroup.Item><p className="mb-2">
               <span className="font-semibold">Required Knowledge:</span><span style={{ color: 'gray' }}> {proposal.requiredKnowledge}</span>
             </p></ListGroup.Item>
 
