@@ -89,4 +89,18 @@ export const sendMail = async (proposalTitle, student, teacher, action) => {
   }
 };
 
+export const sendMailCosup = async (proposalTitle, student, teacher, action) => {
+  try {
+    const response = await api.post("/cosup/send-email/", {
+      proposalTitle,
+      student,
+      teacher,
+      action,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default api;
