@@ -5,6 +5,8 @@ GET http://localhost:3001/proposals/title/propOSTA HTTP/1.1
 ###
 GET http://localhost:3001/proposals/teacher/auth0|655fd0b96d87729b6b3e0795 HTTP/1.1
 ###
+GET http://localhost:3001/proposals/cosupervisor/1 HTTP/1.1
+###
 GET http://localhost:3001/proposals/supervisor/rossi%20mario HTTP/1.1
 ###
 GET http://localhost:3001/proposals/cosupervisor/giulia HTTP/1.1
