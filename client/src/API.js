@@ -35,6 +35,16 @@ async function getAllProposals() {
   }
 }
 
+async function archiveExpiredProposals() {
+  const response = await fetch(`${URL}proposals/archiveExpiredProposals`); // Attendere che la Promise si risolva
+  const proposals = await response.json(); // Attendere che la Promise si risolva
+  if (response.ok) {
+    return proposals.map(adjustPropertyNames);
+  } else {
+    throw proposals;
+  }
+}
+
 async function getProposalsByTitle(title) {
   const response = await fetch(`${URL}proposals/title/${title}`); // Attendere che la Promise si risolva
   const proposals = await response.json(); // Attendere che la Promise si risolva
@@ -559,6 +569,7 @@ async function RejectThesisRequestsByTeacher(id){
 
 const API = {
   getAllProposals,
+  archiveExpiredProposals,
   getProposalsByTitle,
   getProposalsByCosupervisor,
   getProposalsBySupervisor,

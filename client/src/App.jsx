@@ -66,21 +66,24 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
+
       try {
         const userInfo = await getUserInfo();
         setLoggedIn(true);
         setUser(userInfo);
-
         if (userInfo && userInfo.role === "teacher") {
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
           const teacherId = userInfo.id;
           const proposals = await API.getTeacherProposals(teacherId);
           setProposalsList(proposals);
           setLoading(false);
         } else if (userInfo && userInfo.role === "student") {
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
           const proposals = await API.getProposalsByCds(userInfo.cds);
           setProposalsList(proposals);
           setLoading(false);
         } else if(userInfo && userInfo.role === "coSupervisor"){
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
           const coSupervisorId = userInfo.email
           const proposals = await API.getProposalsByCosupervisor(coSupervisorId);
           setProposalsList(proposals);
