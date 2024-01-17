@@ -87,6 +87,19 @@
 
 ## Story #9 - Notify Application Decision
 
+- I log in as a professor
+
+![](images/Story_9_1.png)
+
+- I accept an application
+
+![](images/Story_9_2.png)
+
+- The email arrives correctly
+
+![](images/Story_9_3.png)
+
+
 ## Story #10 - Delete Proposal
 
 - Click on the right menu of a proposal and select "Delete"
@@ -139,6 +152,19 @@
 
 
 ## Story #14 - Notifty Application
+
+- I log in from the student account
+
+![](images/Story_14_1.png)
+
+- I apply for a thesis
+
+![](images/Story_14_2.png)
+
+- The email arrives correctly
+
+![](images/Story_14_3.png)
+
 
 ## Story #26 - Insert Student Request
 
@@ -226,6 +252,13 @@
 
 
 ## Story #18 - Notify Expiration
+
+- The "Machine Learning Update" proposal is about to expire
+
+![](images/Story_15_1.png)
+
+- A notification email is sent correctly
+![](images/Story_18_3.png)
 
 ## Story #30 - Student Request from Application
 
