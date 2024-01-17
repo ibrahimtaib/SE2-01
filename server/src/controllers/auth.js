@@ -61,22 +61,18 @@ module.exports = {
                             },
                             include: {
                                 teacher: true,
-                                proposal: true,
                             },
                         });
                     }
                 })
                 .then((coSupervisor) => {
-                    console.log("ciaoooooooooooooooooooooooooooooooooooooooooo");
-                    console.log(coSupervisor);
                     if (coSupervisor) {
                         const customCoSupervisorObject = {
                             id: coSupervisor.id,
                             name: `${coSupervisor.name} ${coSupervisor.surname}`,
                             role: "coSupervisor",
                             email: coSupervisor.email,
-                            teacher: coSupervisor.teacher,
-                            proposal: coSupervisor.proposal,
+                            //teacher: coSupervisor.teacher,
                         };
                         resolve(customCoSupervisorObject);
                     } else {
