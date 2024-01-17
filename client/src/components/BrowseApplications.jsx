@@ -61,7 +61,7 @@ const ProposalCard = ({ application, onAccept, onReject, isRequest=false, user }
     
     if (confirmation) {
       try {
-        await onAccept(application.application.id);
+        await onAccept(application.application.id,application.proposal.id);
         await sendMail(application.proposal.title, application.student,application.proposal.teacher, action);
       } catch (error) {
         console.error(error);

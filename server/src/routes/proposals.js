@@ -57,6 +57,17 @@ router.get("/archiveExpiredProposals", async (req, res) => {
   }
 });
 
+router.get("/archiveProposal/:id", async (req, res) => {
+  try {
+    id = req.params.id;
+    console.log(id);
+    const updatedProposal = await proposalsController.archiveProposal(id);
+    res.status(200).json(updatedProposal);
+  } catch (error) {
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
+});
+
 router.get("/title/:searchString", async (req, res) => {
   const searchString = req.params.searchString;
 

@@ -4,6 +4,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = require("./prisma");
 const { resolve } = require("path");
+const { STATUS } = require("../constants/application.js");
 
 module.exports = {
   getApplicationsStudentsProposalsDegreesByTeacherId: async (teacherId) => {
@@ -212,7 +213,25 @@ module.exports = {
     } catch (error) {
       throw new Error('An error occurred while querying the database');
     }
-  }
+  },
+
+  cancelApplicationsByProposalId: async (proposalId) => {
+    try {
+      const canceledApplications = await prisma.Application.updateMany({
+        where: {
+          PROPOSAL_ID: parseInt(proposalId),
+        },
+        data: {
+          status: STATUS.canceled,
+        },
+      });
+  
+      return canceledApplications;
+    } catch (error) {
+      console.log(error);
+      throw new Error("An error occurred while canceling applications");
+    }
+  },
 
 
 }

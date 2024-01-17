@@ -127,6 +127,17 @@ router.get("/student/:studentId", async (req, res) => {
   }
 });
 
+router.get("/cancel-by-proposal/:proposalId", async (req, res) => {
+  const proposalId = req.params.proposalId;
+
+  try {
+    const canceledApplications = await applicationsController.cancelApplicationsByProposalId(proposalId);
+    res.status(200).json(canceledApplications);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.post("/accept-application/:applicationId", async (req, res) => {
   const applicationId = req.params.applicationId;
 
