@@ -5,6 +5,7 @@ const { STATUS } = require("../constants/application");
 const { rejects } = require("assert");
 const { getVirtualClock } = require("./virtualClock");
 module.exports = {
+  
   createProposal: async (body) => {
     const {
       title,
@@ -123,7 +124,7 @@ module.exports = {
       }
     });
   },
-  
+
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
       prisma.Degree.findMany()
@@ -342,9 +343,9 @@ module.exports = {
       throw new Error('An error occurred while querying the database');
     }
   },
-  
-  
-  
+
+
+
   getProposalsBySupervisor: async (nameOrSurname) => {
     try {
       const [name, surname] = nameOrSurname.split(" ");
@@ -440,7 +441,7 @@ module.exports = {
       throw new Error("An error occurred while querying the database");
     }
   },
-  
+
   getProposalsByKeywords: async (keywords) => {
     const separatedKeywords = keywords
       .split(",")
@@ -861,6 +862,45 @@ module.exports = {
           return reject({
             error:
               "An error occurred while querying the database for applications",
+          });
+        })
+    );
+  },
+
+  getCoSupervisorProposals: async (cosupervisorId) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal.findMany({
+        where: {
+          coSupervisors: {
+            contains: cosupervisorId,
+          },
+        },
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+              name: true,
+              id: true,
+            },
+          },
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
+          },
+          applications: {
+            where: {
+              status: STATUS.accepted,
+            },
+          },
+        },
+      })
+        .then((proposals) => {
+          resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database for cosupervisors proposals.",
           });
         })
     );

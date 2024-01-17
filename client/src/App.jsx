@@ -74,10 +74,14 @@ function App() {
           const teacherId = userInfo.id;
           const proposals = await API.getTeacherProposals(teacherId);
           setProposalsList(proposals);
-          // Codice per teacher
           setLoading(false);
         } else if (userInfo && userInfo.role === "student") {
           const proposals = await API.getProposalsByCds(userInfo.cds);
+          setProposalsList(proposals);
+          setLoading(false);
+        } else if(userInfo && userInfo.role === "coSupervisor"){
+          const coSupervisorId = userInfo.id
+          const proposals = await API.getProposalsByCosupervisor(coSupervisorId);
           setProposalsList(proposals);
           setLoading(false);
         }
