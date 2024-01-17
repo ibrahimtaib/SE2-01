@@ -141,7 +141,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
                             navigateTo(`/add`);
                           }}>Update</Dropdown.Item>
                         {showArchived ? <Dropdown.Item onClick={handleExtract}>Extract</Dropdown.Item> : <Dropdown.Item onClick={handleArchive}>Archive</Dropdown.Item>}
-                        <DeleteProposalButton proposal={proposal} />
+                        {proposal.archived ?  <></> : <DeleteProposalButton proposal={proposal} />}
                       </Dropdown.Menu>
                     </Dropdown>
                   </>
