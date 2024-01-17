@@ -1,34 +1,19 @@
-FROM node:16.13
+# Stage 1: Build the Express.js app
+FROM node:14
 
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package.json and package-lock.json files
 COPY package*.json ./
+
+# Install app dependencies
 RUN npm install
 
-# Copy Prisma schema and generate Prisma client
-COPY src/services/prisma ./prisma
-ENV DATABASE_URL "postgresql://ibrahim:password@172.19.0.2:5432/TMDB?schema=public&sslmode=prefer"
-
-ENV POSTGRES_PASSWORD "password"
-ENV POSTGRES_USER "ibrahim"
-# Add the following lines to navigate to /src/services and run prisma db push
-# WORKDIR /app/src/services
-
-# If needed, add any other dependencies or configurations specific to your services
-RUN npx prisma generate
-
-# Run Prisma db push
-# RUN npx prisma db push
-
-# RUN npx prisma migrate dev
-
-# Navigate back to the main app directory
-WORKDIR /app
-
-# Copy the rest of the application files
+# Copy the rest of the app files
 COPY . .
 
+# Expose the port the app will run on
 EXPOSE 3001
 
+# Command to run the application
 CMD ["npm", "start"]

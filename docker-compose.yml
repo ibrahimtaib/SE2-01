@@ -1,56 +1,34 @@
 version: "3.9"
 services:
-  postgres:
+  postgress:
     image: postgres:latest
-    container_name: postgres-client
-    hostname: postgres
-    ports:
-      - 127.0.0.1:5432:5432
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=ibrahim
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=TMDB
-      - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
+      POSTGRES_DB: TMDB
+      POSTGRES_USER: ibrahim
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
 
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "pg_isready",
-          "-q",
-          "-h",
-          "localhost",
-          "-U",
-          "postgres"
-        ]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  express-server:
+  prisma:
     build:
-      context: ./server
-      args:
-        - POSTGRES_USER=ibrahim
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=TMDB
-        - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
-    ports:
-      - "3001:3001"
-    environment:
-      - POSTGRES_USER=ibrahim
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=TMDB
-      - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
+      context: ./app/server/src/services
+      dockerfile: Dockerfile
+      target: prisma-builder
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
+
+  express-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prisma
 
   react-app:
     build: ./client
     ports:
       - "5173:5173"
     depends_on:
-      - express-server
+      - express-app
