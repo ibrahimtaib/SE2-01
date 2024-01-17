@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import api, { addPage, addPageUpdate } from "../api/api";
+import { sendMail } from '../api/api';
 
 const Types = {
     experimental: "Experimental",
@@ -142,15 +143,35 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
     const [successfullySent, setSuccesfullySent] = useState(false);
 
     const navigateTo = useNavigate();
+    const cosupModifications="none";
 
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
             cds: proposalToInsert.degree.COD_DEGREE,
         }
     })
-console.log("proposal to insert ", proposalToInsert)
+
+    let originalCosupervisors=[...proposalToInsert.coSupervisors];
+    
+     console.log("proposal to insert original ", originalCosupervisors)
+     const sendMailFunction = async () => {
+        try {
+            await sendMail(null, null, null, 'added-cosup');
+        } catch (error) {
+            console.error("Error sending mail:", error);
+        }
+    };
     const onSubmit = (data) => {
         if (update) {
+            console.log("new array:",cosupervisors.map((cosupervisor) => cosupervisor.trim()));
+            const newCosupervisor=cosupervisors.map((cosupervisor) => cosupervisor.trim());
+            const comparison=compareStringArrays(originalCosupervisors,newCosupervisor);
+            console.log("comparison:",comparison);
+            console.log("data ", data);
+            if(comparison=="added")
+            {
+                sendMailFunction();
+            }
             addPageUpdate({
                 ...data,
                 id: proposalToInsert.id,
@@ -176,7 +197,17 @@ console.log("proposal to insert ", proposalToInsert)
                 });
         }
         else {
+            console.log("new array:",cosupervisors.map((cosupervisor) => cosupervisor.trim()));
+            const newCosupervisor=cosupervisors.map((cosupervisor) => cosupervisor.trim());
+            originalCosupervisors=[];
+            const comparison=compareStringArrays(originalCosupervisors,newCosupervisor);
+            console.log("comparison:",comparison);
             console.log("data ", data);
+            if(comparison=="added")
+            {
+                sendMailFunction();
+            }
+
             addPage({
                 ...data,
                 expiration: new Date(data.expiration).toISOString(),
@@ -512,4 +543,22 @@ function KeywordsInput(props) {
     );
 }
 
+function compareStringArrays(array1, array2) {
+    // Trim and sort the arrays to ensure consistent comparison
+    const trimmedArray1 = array1.map((str) => str.trim()).sort();
+    const trimmedArray2 = array2.map((str) => str.trim()).sort();
+  
+    const added = trimmedArray2.filter((str) => !trimmedArray1.includes(str));
+    const deleted = trimmedArray1.filter((str) => !trimmedArray2.includes(str));
+  
+    if (added.length > 0 && deleted.length > 0) {
+      return 'both';
+    } else if (added.length > 0) {
+      return 'added';
+    } else if (deleted.length > 0) {
+      return 'deleted';
+    } else {
+      return 'none';
+    }
+  }
 
