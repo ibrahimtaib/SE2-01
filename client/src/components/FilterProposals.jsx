@@ -372,7 +372,7 @@ function RightSide(props) {
           }
     
           if (proposalDate <= oneWeekBefore && props.user.role === "teacher") {
-            toast.info(`Proposal "${proposal.Title}" is expiring in a week!`, {
+            toast.info(`Proposal "${proposal.Title}" is expiring soon!`, {
               position: 'top-right',
               autoClose: 5000, 
               hideProgressBar: false,

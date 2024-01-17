@@ -152,6 +152,19 @@
 
 ## Story #15 - Proposal expiration
 
+- The "Machine Learning Update" proposal is about to expire
+
+![](images/Story_15_1.png)
+
+-  Click on the virtual clock to change the date to one that exceeds the deadline of the proposal
+
+![](images/Story_15_2.png)
+
+-The proposal is archived successfully as the expiration date has been surpassed
+
+![](images/Story_15_3.png)
+
+
 ## Story #27 - Secretary Approve Student requests
 
 - Login to the secretariat's account
