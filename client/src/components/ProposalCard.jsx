@@ -64,7 +64,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
 
   return (
     <>
-      <Card className={`text-left m-3 ${isExpired() ? 'expired-proposal' : ''}`}>
+      <Card className={`text-left m-3 ${user.role === 'student' && isExpired() ? 'expired-proposal' : ''}`}>
         {user.role == "student" ? <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header> : ""}
         <Card.Body>
           <Card.Title>{proposal.Title}</Card.Title>
@@ -153,7 +153,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
         </Card.Body>
         <Card.Footer className="text-muted">
           Expiration: {proposal.Expiration}
-          {isExpired() && <span className="expired-label">expired</span>}
+          {user.role === 'student' && isExpired() && <span className="expired-label">expired</span>}
 
         </Card.Footer>
       </Card>
