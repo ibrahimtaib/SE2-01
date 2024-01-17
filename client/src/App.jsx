@@ -80,6 +80,10 @@ function App() {
           const proposals = await API.getProposalsByCds(userInfo.cds);
           setProposalsList(proposals);
           setLoading(false);
+        } else if(userInfo && userInfo.role === "coSupervisor"){
+          const proposals = await API.getProposalsByCds(userInfo.cds);
+          setProposalsList(proposals);
+          setLoading(false);
         }
         setDirty(false);
       } catch (error) {

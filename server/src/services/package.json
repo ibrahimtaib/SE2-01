@@ -18,11 +18,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.5.2",
+    "@prisma/client": "^5.8.1",
     "docker-compose": "^0.24.3"
   },
   "devDependencies": {
     "faker": "^5.5.3",
-    "prisma": "^5.5.2"
+    "prisma": "^5.8.1"
   }
 }

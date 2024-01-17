@@ -98,10 +98,11 @@ model Proposal {
 }
 
 model CoSupervisor {
-  id         Int      @id @default(autoincrement())
+  id         String      @id @unique
   name       String
+  surname    String
   email      String
-  teacherId  String?
+  teacherId  String? 
   proposalId Int
   teacher    Teacher? @relation(fields: [teacherId], references: [id])
   proposal   Proposal @relation(fields: [proposalId], references: [id])
