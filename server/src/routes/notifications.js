@@ -31,7 +31,7 @@ this is a notification email following your Thesis Request Titled:  ${proposalTi
 after the evaluation of the Mr ${teacher.name} ${teacher.surname} your  request has been ${action.split('-')[1]}ed.
  we invite you to check the platform for further details.
 Best Regards,`
-    : action=='added-cosup'
+    : action =='added-cosup'
     ? 'You have been added to a new proposal as cosupervisor'
     : `Hello ${student.name} ${student.surname}, 
 this is a notification email following your application for the proposal:  ${proposalTitle}
