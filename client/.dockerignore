@@ -1,0 +1,48 @@
+# Ignore common build artifacts
+node_modules
+build
+dist
+
+# Ignore development and build files
+*.log
+*.pid
+*.seed
+*.pid.lock
+*.log
+.DS_Store
+.cache
+.history
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore environment-specific files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore package manager lock files
+package-lock.json
+yarn.lock
+
+# Ignore Docker-related files
+.dockerignore
+Dockerfile
+
+# Ignore editor-specific files
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
