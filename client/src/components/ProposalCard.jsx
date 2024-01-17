@@ -29,7 +29,7 @@ function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToIn
 
     addPageUpdate({
       ...proposal,
-      archived: true
+      archived: true,
     }).then(() => {
       setArchived(true);
       setTimeout(() => {
