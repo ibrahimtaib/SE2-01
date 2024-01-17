@@ -9,6 +9,7 @@ router.post('/send-email', (req, res) => {
         action === 'reject' ? 'We are sorry your application has been Rejected' :
         action === 'request-reject' ? 'We are sorry your Thesis Request has been Rejected' :
         action === 'request-accept' ? 'Congratulations your Thesis Request has been Accepted' :
+        action === 'request' ? 'New Thesis request has been submitted with you as a supervisor' :
         action === 'expiration-week' ? 'Notification about expiring proposal' :
         'New Application for your proposal has been submitted';
 
@@ -29,16 +30,30 @@ Best Regards,`
     ? `Hello ${student.name} ${student.surname}, 
 this is a notification email following your Thesis Request Titled:  ${proposalTitle}
 after the evaluation of the Mr ${teacher.name} ${teacher.surname} your  request has been ${action.split('-')[1]}ed.
- we invite you to check the platform for further details.
+we invite you to check the platform for further details.
+Best Regards,`
+
+    : action == 'request-accept' || action == 'request-reject'
+    ? `Hello ${student.name} ${student.surname}, 
+this is a notification email following your Thesis Request Titled:  ${proposalTitle}
+after the evaluation of the Mr ${teacher.name} ${teacher.surname} your  request has been ${action.split('-')[1]}ed.
+we invite you to check the platform for further details.
+Best Regards,`
+
+    : action == 'request'
+    ? `Hello ${teacher.name} ${teacher.surname},
+this is a notification email to inform you that an new theis request titled :  ${proposalTitle} has been submitted with you as a supervisor
+by the student ${student.name} ${student.surname},
+we invite you to check the platform for further details.
 Best Regards,`
 
     : `Hello ${student.name} ${student.surname}, 
 this is a notification email following your application for the proposal:  ${proposalTitle}
 after the evaluation of the Mr ${teacher.name} ${teacher.surname} you have been ${action}ed.
- we invite you to check the platform for further details.
+we invite you to check the platform for further details.
 Best Regards,`;
 
-    const toEmail = 's319095@studenti.polito.it'
+    const toEmail = 'jaouadouchaib2@gmail.com'
     const fromEmail = "Thesis-Manager@polito.it";
 
     const mailOptions = {
