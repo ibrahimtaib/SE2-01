@@ -20,3 +20,5 @@ To access the thesis managment page, you should authenticate with the following 
 | auth0|656262016d87729b6b3f8a7c | s654321@polito.it          | teacher |
 | auth0|65748ba4c0b6e8bafce62ed6 | s123456@secretary.polito.it| secretary |
 | auth0|65748c9cc0b6e8bafce62f51 | s654321@secretary.polito.it| secretary |
+| auth0|65a184585c3ac28cfeb3a679 | s123456@cosup.polito.it    | co-supervisor |
+| auth0|65a184baf7f3c33a2dccefb8 | s654321@cosup.polito.it    | co-supervisor |
