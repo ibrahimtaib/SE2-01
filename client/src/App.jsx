@@ -17,6 +17,7 @@ import MainPage from './pages/MainPage';
 import StudentApplicationsPage from './pages/StudentApplicationPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faker } from '@faker-js/faker';
 
 
 import './App.css';
@@ -32,8 +33,8 @@ import ApplicationsPage from "./pages/applicationsPage";
 function App() {
 
   const proposalStateMock = {
-    title: "Thesis Proposal Title",
-    description: "This is a thesis description, it contains information about the thesis. This should be filled with relevant information that the student must know before applying to the thesis proposal.",
+    title: faker.lorem.words(3),
+    description: faker.lorem.paragraph(),
     expiration: "2024-12-31",
     degree: {
       COD_DEGREE: "0"

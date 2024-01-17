@@ -38,7 +38,7 @@ after the evaluation of the Mr ${teacher.name} ${teacher.surname} you have been 
  we invite you to check the platform for further details.
 Best Regards,`;
 
-    const toEmail = 'jaouadouchaib2@gmail.com'
+    const toEmail = 's319095@studenti.polito.it'
     const fromEmail = "Thesis-Manager@polito.it";
 
     const mailOptions = {
