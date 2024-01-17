@@ -172,6 +172,16 @@ async function getTeacherProposals(teacherId) {
     throw proposals;
   }
 }
+
+async function getCoSupervisorProposals(cosupervisorId) {
+  const response = await fetch(`${URL}proposals/cosupervisorId/${cosupervisorId}`);
+  const proposals = await response.json();
+  if (response.ok) {
+    return proposals.map(adjustPropertyNames);
+  } else {
+    throw proposals;
+  }
+}
 async function filterProposals(data) {
   console.log(data);
   try {
@@ -572,6 +582,7 @@ const API = {
   getUserInfo,
   getApplicationsByStudentId,
   getTeacherProposals,
+  getCoSupervisorProposals,
   getTeachers,
   getRequestedThesisByStudentId,
   submitNewThesisRequest,
