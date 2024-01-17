@@ -980,6 +980,7 @@ module.exports = {
       id,
       title,
       supervisor,
+      coSupervisors,
       keywords,
       type,
       groups,
@@ -999,6 +1000,7 @@ module.exports = {
         data: {
           title,
           supervisor,
+          coSupervisors,
           keywords,
           type,
           groups,
