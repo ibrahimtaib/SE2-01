@@ -101,7 +101,6 @@ model CoSupervisor {
   id         String   @id @unique
   name       String
   surname    String
-  surname    String
   email      String
   teacherId  String?
   teacher    Teacher? @relation(fields: [teacherId], references: [id])
