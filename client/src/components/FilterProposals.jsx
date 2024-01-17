@@ -93,6 +93,11 @@ function LeftSide(props) {
                             props.setProposalsList(a)
                             setClickReset(false);
                         })
+                    } else if (props.user.role == "coSupervisor"){
+                        API.getCoSupervisorProposals(props.user.id).then((a) => {
+                            props.setProposalsList(a)
+                            setClickReset(false);
+                        })
                     }
                 } catch (err) {
                     setClickReset(false);
@@ -164,6 +169,19 @@ function LeftSide(props) {
             setFilter(flt);
             setClick(true);
         } else if (props.user && props.user.role === "teacher") {
+            const flt = {
+                title: title,
+                coSupervisor: cosupervisor,
+                level: level,
+                type: type,
+                expiration: date,
+                keywords: keywords,
+                groups: groups,
+                supervisor: props.user.name
+            }
+            setFilter(flt);
+            setClick(true);
+        } else if (props.user && props.user.role === "coSupervisor") {
             const flt = {
                 title: title,
                 coSupervisor: cosupervisor,
