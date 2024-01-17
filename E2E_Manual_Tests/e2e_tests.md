@@ -236,6 +236,16 @@
 
 ## Story #29 - Notify Professor Thesis Request
 
+- Insert a new thesis proposal 
+
+![](images/Story_29_1.png)
+
+- A notification email is sent correctly at the professor
+
+![](images/Story_29_2.png)
+
+
+
 ## Story #17 - Add Academic Co-Supervisor
 
 - Click on "Add Proposal" located at the top-right corner

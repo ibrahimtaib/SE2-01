@@ -72,6 +72,7 @@ const InsertStudentRequestForm = ({user}) => {
         // Check if title, description, teacher, and type are empty
         const requiredFields = ['title', 'description', 'teacher', 'type'];
         const missingFields = requiredFields.filter(field => formData[field] === '');
+        let real_teacher = null
 
         if (missingFields.length > 0) {
             setErrorMessage(`Please fill in the following fields: ${missingFields.join(', ')}.`);
@@ -99,7 +100,15 @@ const InsertStudentRequestForm = ({user}) => {
                 name: "Jane",
                 surname: "Doe"
               }
-            await sendMail(formData.title, studentForEmail, formData.teacher, "request")
+
+            for(const teacher of teachers) {
+                if(teacher.id === formData.teacher) {
+                    real_teacher = teacher;
+                    break; 
+                }
+            }
+
+            await sendMail(formData.title, user, real_teacher, "request")
 
             await new Promise(resolve => setTimeout(resolve, 1000));
         
