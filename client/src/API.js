@@ -65,6 +65,29 @@ async function archiveProposal(id) {
   }
 }
 
+async function cancelApplicationsByProposalId(proposalId) {
+  try {
+    const response = await fetch(`${URL}applications/cancel-by-proposal/${proposalId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to cancel applications");
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("An error occurred while canceling applications");
+  }
+}
+
+
 async function getProposalsByTitle(title) {
   const response = await fetch(`${URL}proposals/title/${title}`); // Attendere che la Promise si risolva
   const proposals = await response.json(); // Attendere che la Promise si risolva
@@ -596,6 +619,7 @@ async function RejectThesisRequestsByTeacher(id){
 
 const API = {
   getAllProposals,
+  cancelApplicationsByProposalId,
   archiveExpiredProposals,
   getProposalsByTitle,
   getProposalsByCosupervisor,
