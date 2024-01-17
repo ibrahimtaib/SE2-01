@@ -1,4 +1,4 @@
-![Coverage](https://img.shields.io/badge/Coverage-85.48%25-green)
+![Coverage](https://img.shields.io/badge/Coverage-85.36%25-green)
 ![Total tests](https://img.shields.io/badge/Total%20tests-200-green)
 
 
