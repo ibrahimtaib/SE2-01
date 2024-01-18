@@ -7,6 +7,7 @@ const applicationsRouter = require("./applications");
 const authRouter = require("./auth.js");
 const virtualClockRouter = require("./virtualClock");
 const secretariesRouter = require("./thesisRequests.js");
+const cosup = require("./notificationsCosup");
 
 const notificationsRouter = require("./notifications");
 
@@ -18,6 +19,7 @@ router.use("/degrees", degreesRouter);
 router.use("/applications", applicationsRouter);
 router.use("/", authRouter);
 router.use("/notifications", notificationsRouter);
+router.use("/cosup", cosup);
 router.use("/thesisRequests", secretariesRouter);
 router.use("/virtualClock", virtualClockRouter);
 router.use("*", (req, res) => [res.status(404).send("Endpoint not found")]);

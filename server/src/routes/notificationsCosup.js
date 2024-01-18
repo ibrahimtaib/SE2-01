@@ -27,30 +27,30 @@ we invite you to check the platform for further details.
 Best Regards,`
 
     : action == 'request-accept' || action == 'request-reject'
-    ? `Hello ${student.name} ${student.surname}, 
-this is a notification email following your Thesis Request Titled:  ${proposalTitle}
-after the evaluation of the Mr ${teacher.name} ${teacher.surname} your  request has been ${action.split('-')[1]}ed.
+    ? `Hello, 
+this is a notification email following the Thesis Request Titled:  ${proposalTitle}
+after the evaluation of the Mr ${teacher.name} ${teacher.surname} the  request has been ${action.split('-')[1]}ed.
 we invite you to check the platform for further details.
 Best Regards,`
 
     : action == 'request-accept' || action == 'request-reject'
-    ? `Hello ${student.name} ${student.surname}, 
-this is a notification email following your Thesis Request Titled:  ${proposalTitle}
-after the evaluation of the Mr ${teacher.name} ${teacher.surname} your  request has been ${action.split('-')[1]}ed.
+    ? `Hello, 
+this is a notification email following the Thesis Request Titled:  ${proposalTitle}
+after the evaluation of the Mr ${teacher.name} ${teacher.surname} the  request has been ${action.split('-')[1]}ed.
 we invite you to check the platform for further details.
 Best Regards,`
 
     : action == 'request'
     ? `Hello ${teacher.name} ${teacher.surname},
 this is a notification email to inform you that an new theis request titled :  ${proposalTitle} has been submitted with you as a supervisor
-by the student ${student.name},
+by the student ${student.name} ${student.surname},
 we invite you to check the platform for further details.
 Best Regards,`
 
-    : `Hello ${student.name} ${student.surname}, 
-this is a notification email following your application for the proposal:  ${proposalTitle}
-after the evaluation of the Mr ${teacher.name} ${teacher.surname} you have been ${action}ed.
-we invite you to check the platform for further details.
+    : `Hello ${teacher.name} ${teacher.surname},
+this is a notification email regarding your cosupervisor role for the proposal: ${proposalTitle}.
+After the evaluation of the teacher, the application has been ${action}ed.
+We invite you to check the platform for further details.
 Best Regards,`;
 
     const toEmail = 's309075@studenti.polito.it'
