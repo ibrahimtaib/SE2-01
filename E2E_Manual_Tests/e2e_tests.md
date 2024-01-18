@@ -87,6 +87,19 @@
 
 ## Story #9 - Notify Application Decision
 
+- I log in as a professor
+
+![](images/Story_9_1.png)
+
+- I accept an application
+
+![](images/Story_9_2.png)
+
+- The email arrives correctly
+
+![](images/Story_9_3.png)
+
+
 ## Story #10 - Delete Proposal
 
 - Click on the right menu of a proposal and select "Delete"
@@ -139,6 +152,19 @@
 
 
 ## Story #14 - Notifty Application
+
+- I log in from the student account
+
+![](images/Story_14_1.png)
+
+- I apply for a thesis
+
+![](images/Story_14_2.png)
+
+- The email arrives correctly
+
+![](images/Story_14_3.png)
+
 
 ## Story #26 - Insert Student Request
 
@@ -210,6 +236,16 @@
 
 ## Story #29 - Notify Professor Thesis Request
 
+- Insert a new thesis proposal 
+
+![](images/Story_29_1.png)
+
+- A notification email is sent correctly at the professor
+
+![](images/Story_29_2.png)
+
+
+
 ## Story #17 - Add Academic Co-Supervisor
 
 - Click on "Add Proposal" located at the top-right corner
@@ -226,6 +262,13 @@
 
 
 ## Story #18 - Notify Expiration
+
+- The "Machine Learning Update" proposal is about to expire
+
+![](images/Story_15_1.png)
+
+- A notification email is sent correctly
+![](images/Story_18_3.png)
 
 ## Story #30 - Student Request from Application
 
@@ -254,6 +297,16 @@
 
 ## Story #20 - Notify Application Decision Supervisor
 
+- I log in from the professor's account
 
+![](images/Story_20_1.png)
+
+- I accept an application from a student for whom the specified co-supervisor is also present
+
+![](images/Story_20_2.png)
+
+- The email is correctly delivered to the co-supervisor
+
+![](images/Story_20_3.png)
 
 

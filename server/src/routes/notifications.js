@@ -43,7 +43,7 @@ Best Regards,`
     : action == 'request'
     ? `Hello ${teacher.name} ${teacher.surname},
 this is a notification email to inform you that an new theis request titled :  ${proposalTitle} has been submitted with you as a supervisor
-by the student ${student.name} ${student.surname},
+by the student ${student.name},
 we invite you to check the platform for further details.
 Best Regards,`
 

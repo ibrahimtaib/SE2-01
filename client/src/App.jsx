@@ -23,7 +23,7 @@ import { faker } from '@faker-js/faker';
 import './App.css';
 
 
-import { getUserInfo } from "./api/api";
+import api,{ getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
 import StudentDetailsPage from "./pages/StudentDetailsPage";
 import StudentRequestPage from "./pages/StudentRequestPage";
@@ -45,6 +45,18 @@ function App() {
     requiredKnowledge: "sample",
     keywords: ["keywordsample"],
   };
+
+  const getDegrees = () => {
+    api.get('/degrees')
+        .then((response) => {
+          if (response.data.length > 0) {
+            const firstDegree = response.data[0];
+            proposalStateMock.degree=response.data[0];
+        }
+        }
+        )
+}
+getDegrees();
 
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -155,7 +167,7 @@ function App() {
           ):(
             <>
               <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
-              <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
+              <Route path="/applications/*" element={<ApplicationsPage user={user} setDirty={setDirty} />} />
               <Route path="/students/:id" element={<StudentDetailsPage />} />
               <Route path="thesis-requests/*" element={<ThesisRequestsPage user={user} />} />
             </>
