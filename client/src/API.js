@@ -603,7 +603,6 @@ async function RejectThesisRequestsByTeacher(id){
 //       body: JSON.stringify(newData),
 //     });
 
-//     const data = await response.json();
 
 //     if (response.ok) {
 //       return data;

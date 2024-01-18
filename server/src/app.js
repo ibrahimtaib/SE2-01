@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const saml = require('passport-saml');
 const passport = require('passport');
+require('./seedData');
 
 const cors = require("cors");
 const helmet = require("helmet");
