@@ -9,22 +9,16 @@ services:
     ports:
       - "5432:5432"
 
-  prisma:
-    build:
-      context: ./app/server/src/services
-      dockerfile: Dockerfile
-      target: prisma-builder
-    depends_on:
-      - postgres
-
   express-app:
     build:
-      context: ./app
+      context: ./server
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
-      - prisma
+      - postgress
+    environment:
+      - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
 
   react-app:
     build: ./client
