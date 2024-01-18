@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-import { fakerIT as faker } from '@faker-js/faker';
+const { fakerIT: faker } = require('@faker-js/faker');
+
 
 const teachersData = [
   { id: "auth0|655fd0b96d87729b6b3e0795", surname: faker.person.lastName() , name: faker.person.firstName() , email: "s123456@studenti.polito.it", COD_GROUP: "G1", COD_DEPARTMENT: "D1" },
@@ -27,15 +28,21 @@ const degreesData = [
     { COD_DEGREE: "1", TITLE_DEGREE: "Electrical Engineering" },
 ];
 
-const careersData = [
-    { id: "1", COD_COURSE: "Course1", TITLE_COURSE: "Introduction to Programming", CFU: 6, grade: 27, date: 2022, studentId: "auth0|6562618e022f6b2083b51755" },
-    { id: "2", COD_COURSE: "Course2", TITLE_COURSE: "Digital Circuits", CFU: 8, grade: 30, date: 2023, studentId: "auth0|656262016d87729b6b3f8a7c" },
-    { id: "3", COD_COURSE: "Course1", TITLE_COURSE: "Introduction to Sinusoidal Circuits", CFU: 6, grade: 21, date: 2022, studentId: "auth0|656262016d87729b6b3f8a7c" },
-    { id: "4", COD_COURSE: "Course2", TITLE_COURSE: "Software Engineering II", CFU: 8, grade: 30, date: 2023, studentId: "auth0|6562618e022f6b2083b51755" },
-  ];
-
 async function checkAndAddData() {
   try {
+
+    const existingDegrees = await prisma.degree.findMany({
+      where: {
+        COD_DEGREE: { in: degreesData.map(degree => degree.COD_DEGREE) },
+      },
+    });
+    const degreesToAdd = degreesData.filter(degree => !existingDegrees.some(existing => existing.COD_DEGREE === degree.COD_DEGREE));
+
+    if (degreesToAdd.length > 0) {
+      // Add degrees
+      await prisma.degree.createMany({ data: degreesToAdd });
+      console.log('Degrees added to the database.');
+    }
     // Check if teachers exist
     const existingTeachers = await prisma.teacher.findMany({
       where: {
@@ -92,33 +99,7 @@ async function checkAndAddData() {
       console.log('Secretary Clerks added to the database.');
     }
 
-    // Check if degrees exist
-    const existingDegrees = await prisma.degree.findMany({
-        where: {
-          COD_DEGREE: { in: degreesData.map(degree => degree.COD_DEGREE) },
-        },
-      });
-      const degreesToAdd = degreesData.filter(degree => !existingDegrees.some(existing => existing.COD_DEGREE === degree.COD_DEGREE));
-  
-      if (degreesToAdd.length > 0) {
-        // Add degrees
-        await prisma.degree.createMany({ data: degreesToAdd });
-        console.log('Degrees added to the database.');
-      }
-  
-      // Check if careers exist
-      const existingCareers = await prisma.career.findMany({
-        where: {
-          id: { in: careersData.map(career => career.id) },
-        },
-      });
-      const careersToAdd = careersData.filter(career => !existingCareers.some(existing => existing.id === career.id));
-  
-      if (careersToAdd.length > 0) {
-        // Add careers
-        await prisma.career.createMany({ data: careersToAdd });
-        console.log('Careers added to the database.');
-      }
+
 
   } catch (error) {
     console.error('Error adding data to the database:', error);
