@@ -72,22 +72,19 @@ TEMPLATE FOR RETROSPECTIVE (Team 01)
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-    - We over estimated the tasks to be sure to have enough time to complete them.
+    - We estimated tasks to the best of our abilities, we haven't found any particular reason for eventual errors in estimation
 
 - What lessons did you learn (both positive and negative) in this sprint?
-    - During this sprint, we've collectively enhanced our proficiency in utilizing tools like YouTrack or GitHub issues and significantly improved our navigation across all aspects of website management. Moreover, we've ensured more frequent feedback exchange among team members and improved cooperation in resolving encountered issues.
-
+    - We keep refining our communication and organization as time goes on, some sprints teach us more than others, but we keep improving steadily
 - Which improvement goals set in the previous retrospective were you able to achieve?
-    - Compared to the last retrospective, we've successfully enhanced our work division, enabling each of us to work independently without waiting for others' outcomes. Additionally, we've autonomously handled conflicts while relying on the group's collaboration when needed.
-    - Compared to our last retrospective, each of us has improved our testing capabilities. We've identified specific aspects of our code that required more attention, successfully addressing previously failed tests and consequently significantly enhancing our coverage.  
-  
+    - Compared to the last sprint, where we missed one story, we were able to recover that story and also finish the ones we commited to.
 - Which ones you were not able to achieve? Why?
-    - We weren't able to finish all the stories we commited to, we encountered a moment of misunderstanding where we didn't realize that one of the stories to be implemented hadn't been assigned to any of us.
+    - We weren't able to increase the coverage above 90%, because we added a lot more code but we didn't have time to cover all the new lines and the ones that still had to be covered. Nevertheless, we still maintain a very close coverage to 90%
 
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-    - Ensuring that we have completed all the stories we committed to.
-    - Increase the coverage above 90%.
+    - Maintain the balance we found between the different tasks
+    - Avoid creating significant technical debt
 
 - One thing you are proud of as a Team!
-    - We are proud of our software engineer team's problem-solving skills, collaborative spirit, and commitment to delivering valid solutions. 
+    - We are proud of the work we did. Working together regularly was a new experience, but we're happy we were all in the same team
