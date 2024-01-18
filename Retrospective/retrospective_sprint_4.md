@@ -58,14 +58,14 @@ TEMPLATE FOR RETROSPECTIVE (Team 01)
 - Code review 
   - Total hours estimated: 35h
   - Total hours spent: 40h
-- Technical Debt management:   ############################################################################################################################################### -> 
-  - Total hours estimated: 23h
-  - Total hours spent: 25h
-  - Hours estimated for remediation by SonarQube: 25h 30m
-  - Hours estimated for remediation by SonarQube only for the selected and planned issues: 4h
+- Technical Debt management:   
+  - Total hours estimated: 30h
+  - Total hours spent: 33h
+  - Hours estimated for remediation by SonarQube: 5h
+  - Hours estimated for remediation by SonarQube only for the selected and planned issues: 5h30m
   - Hours spent on remediation: 6h
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.6
-  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): c, a, a
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 1.1%
+  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): a, a, a
   
 
 
