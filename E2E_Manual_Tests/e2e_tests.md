@@ -297,6 +297,16 @@
 
 ## Story #20 - Notify Application Decision Supervisor
 
+- I log in from the professor's account
 
+![](images/Story_20_1.png)
+
+- I accept an application from a student for whom the specified co-supervisor is also present
+
+![](images/Story_20_2.png)
+
+- The email is correctly delivered to the co-supervisor
+
+![](images/Story_20_3.png)
 
 
