@@ -5,6 +5,7 @@ const { STATUS } = require("../constants/application");
 const { rejects } = require("assert");
 const { getVirtualClock } = require("./virtualClock");
 module.exports = {
+  
   createProposal: async (body) => {
     const {
       title,
@@ -55,7 +56,7 @@ module.exports = {
   },
   /**
    * Archive a proposal and set all applications to canceled. Returns an object with status 200 if successful.
-   * 400 if proposal doesn't exist, 500 if an error occurred.
+   * 400 if proposal doesn't exist or is archived, 500 if an error occurred.
    * @date 2023-11-23
    * @param {Number} id
    * @returns {{status: Number, message: String} | {status: Number, error: String}}
@@ -83,6 +84,15 @@ module.exports = {
             message: "Proposal does not exist!",
           });
         }
+
+        //Check if proposal can be archived
+        if (proposal.archived) {
+          return reject({
+            status: 400,
+            message: "Proposal is archived!",
+          });
+        }
+
         // Check if proposal can be deleted
         if (proposal.applications.length > 0) {
           return reject({
@@ -123,7 +133,7 @@ module.exports = {
       }
     });
   },
-  
+
   getAllCds: async () => {
     return new Promise((resolve, reject) =>
       prisma.Degree.findMany()
@@ -342,9 +352,9 @@ module.exports = {
       throw new Error('An error occurred while querying the database');
     }
   },
-  
-  
-  
+
+
+
   getProposalsBySupervisor: async (nameOrSurname) => {
     try {
       const [name, surname] = nameOrSurname.split(" ");
@@ -440,7 +450,7 @@ module.exports = {
       throw new Error("An error occurred while querying the database");
     }
   },
-  
+
   getProposalsByKeywords: async (keywords) => {
     const separatedKeywords = keywords
       .split(",")
@@ -866,6 +876,45 @@ module.exports = {
     );
   },
 
+  getCoSupervisorProposals: async (cosupervisorId) => {
+    return new Promise((resolve, reject) =>
+      prisma.Proposal.findMany({
+        where: {
+          coSupervisors: {
+            contains: cosupervisorId,
+          },
+        },
+        include: {
+          teacher: {
+            select: {
+              surname: true,
+              name: true,
+              id: true,
+            },
+          },
+          degree: {
+            select: {
+              TITLE_DEGREE: true,
+            },
+          },
+          applications: {
+            where: {
+              status: STATUS.accepted,
+            },
+          },
+        },
+      })
+        .then((proposals) => {
+          resolve(proposals);
+        })
+        .catch(() => {
+          return reject({
+            error: "An error occurred while querying the database for cosupervisors proposals.",
+          });
+        })
+    );
+  },
+
   getAllProposals: async () => {
     return new Promise((resolve, reject) =>
       prisma.Proposal
@@ -940,6 +989,7 @@ module.exports = {
       id,
       title,
       supervisor,
+      coSupervisors,
       keywords,
       type,
       groups,
@@ -959,6 +1009,7 @@ module.exports = {
         data: {
           title,
           supervisor,
+          coSupervisors,
           keywords,
           type,
           groups,
@@ -1006,5 +1057,23 @@ module.exports = {
         })
     );
   },
+
+  archiveProposal: async (proposalId) => {
+    try {
+      const updatedProposal = await prisma.proposal.update({
+        where: {
+          id: parseInt(proposalId),
+        },
+        data: {
+          archived: true,
+        },
+      });
+      return updatedProposal;
+    } catch (error) {
+      console.log(error);
+      throw new Error("An error occurred while archiving the proposal");
+    }
+  },
+  
 
 };

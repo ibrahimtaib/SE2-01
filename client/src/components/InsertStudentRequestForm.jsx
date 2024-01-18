@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import API from '../API';
-import { useNavigate } from 'react-router-dom';
+import { sendMail } from '../api/api';
 
 
 const InsertStudentRequestForm = ({user}) => {
@@ -11,7 +12,6 @@ const InsertStudentRequestForm = ({user}) => {
     const location = useLocation();
     
     const proposal = location.state ? location.state.proposal : null;
-    const application_id = location.state ? location.state.application_id : null;
 
 
     const [teachers, setTeachers] = useState([]);
@@ -72,6 +72,7 @@ const InsertStudentRequestForm = ({user}) => {
         // Check if title, description, teacher, and type are empty
         const requiredFields = ['title', 'description', 'teacher', 'type'];
         const missingFields = requiredFields.filter(field => formData[field] === '');
+        let real_teacher = null
 
         if (missingFields.length > 0) {
             setErrorMessage(`Please fill in the following fields: ${missingFields.join(', ')}.`);
@@ -92,8 +93,24 @@ const InsertStudentRequestForm = ({user}) => {
             }
             setSubmitted(true);
             handleReset();
+            //application.proposal.title, application.student,application.proposal.teacher, action
+            const studentForEmail = {
+                email: "jane.doe@example.com",
+                id: 1,
+                name: "Jane",
+                surname: "Doe"
+              }
 
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            for(const teacher of teachers) {
+                if(teacher.id === formData.teacher) {
+                    real_teacher = teacher;
+                    break; 
+                }
+            }
+
+            await sendMail(formData.title, user, real_teacher, "request")
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
         
             navigateTo('/student/applications');
         } catch (error) {

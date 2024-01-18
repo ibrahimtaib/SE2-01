@@ -7,8 +7,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useNavigate } from 'react-router-dom';
 import { addPageUpdate } from '../api/api';
 import DeleteProposalButton from './DeleteProposalButton';
+import API from '../API';
 
-function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToInsert, refetchDynamicContent }) {
+function ProposalCard({ showArchived, user, proposal, setUpdate, setProposalToInsert, refetchDynamicContent }) {
   const [isVisible, setIsVisible] = useState(false);
   const [archived, setArchived] = useState(false);
   const [loadingArchived, setLoadingArchived] = useState(false);
@@ -18,29 +19,39 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
     setIsVisible(!isVisible);
   };
 
+  const isExpired = () => {
+    const expirationDate = new Date(proposal.date);
+    const currentDate = new Date();
+    return expirationDate < currentDate;
+  };
 
-  const handleArchive = () => {
+  const handleArchive = (proposalId) => {
     setLoadingArchived(true);
-    
+  
     addPageUpdate({
       ...proposal,
-      archived: true
-    }).then(() => {
-      setArchived(true);
-      setTimeout(() => {
-        setArchived(false);
-      }, 2000);
-    }).finally(() => {
-      setTimeout(() => {
-        refetchDynamicContent(user.id);
-      }, 2000);
-      setLoadingArchived(false);
-    });
-  }
+      archived: true,
+    })
+      .then(() => {
+        setArchived(true);
+        return API.cancelApplicationsByProposalId(proposalId);
+      })
+      .then(() => {
+        setTimeout(() => {
+          setArchived(false);
+        }, 2000);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          refetchDynamicContent(user.id);
+        }, 2000);
+        setLoadingArchived(false);
+      });
+  };
   
   const handleExtract = () => {
     setLoadingArchived(true);
-    
+
     addPageUpdate({
       ...proposal,
       archived: false
@@ -59,8 +70,8 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
 
   return (
     <>
-      <Card className="text-left m-3">
-        {user.role ==  "student" ? <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header> : ""}
+      <Card className={`text-left m-3 ${user.role === 'student' && isExpired() ? 'expired-proposal' : ''}`}>
+        {user.role == "student" ? <Card.Header>{proposal.Name} {proposal.Surname}</Card.Header> : ""}
         <Card.Body>
           <Card.Title>{proposal.Title}</Card.Title>
           <Card.Text>
@@ -80,71 +91,78 @@ function ProposalCard({showArchived, user, proposal, setUpdate, setProposalToIns
             <Button variant="outline-secondary" onClick={toggleVisibility}>
               {isVisible ? 'Hide Details' : 'Show Details'}
             </Button>
-            <div id='buttons' >
-              {user.role === "student" ? (
-                <Button
-                  onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
-                  variant="success">
-                  Apply
-                </Button>
-              ) : (
-                <>
-                  <Dropdown>
+            {user.role === "student" || user.role === "teacher" ? (
+              <div id='buttons'>
+                {user.role === "student" ? (
+                  <Button
+                    onClick={() => navigateTo(`/proposals/${proposal.id}/apply`)}
+                    variant="success">
+                    Apply
+                  </Button>
+                ) : (
+                  <>
+                    <Dropdown>
+                      <Dropdown.Toggle title='Actions' variant="" id="dropdown-button-drop-start" />
+                      <Dropdown.Menu>
+                        <Dropdown.Item style={{
+                          borderColor: "#1a365d",
+                        }}
+                          onClick={() => {
+                            setUpdate(false);
+                            setProposalToInsert({
+                              id: proposal.id,
+                              title: proposal.Title,
+                              description: proposal.Description,
+                              expiration: proposal.date,
+                              coSupervisors: proposal.CoSupervisor,
+                              keywords: proposal.Keywords,
+                              degree: {
+                                COD_DEGREE: proposal.Cds
+                              },
+                              teacherID: proposal.teacherID,
+                              date: proposal.date,
+                              requiredKnowledge: proposal.RequiredKnowledge,
+                              notes: proposal.Notes
+                            });
+                            navigateTo(`/add`);
+                          }}>Copy</Dropdown.Item>
+                        <Dropdown.Item
+                          disabled={!proposal.deletable}
+                          onClick={() => {
+                            setUpdate(true);
+                            setProposalToInsert({
+                              id: proposal.id,
+                              title: proposal.Title,
+                              description: proposal.Description,
+                              expiration: proposal.date,
+                              coSupervisors: proposal.CoSupervisor,
+                              keywords: proposal.Keywords,
+                              degree: {
+                                COD_DEGREE: proposal.Cds
+                              },
+                              teacherID: proposal.teacherID,
+                              date: proposal.date,
+                              requiredKnowledge: proposal.RequiredKnowledge,
+                              notes: proposal.Notes
+                            });
+                            navigateTo(`/add`);
+                          }}>Update</Dropdown.Item>
+                        {showArchived ? <Dropdown.Item onClick={handleExtract}>Extract</Dropdown.Item> : <Dropdown.Item onClick={() => handleArchive(proposal.id)}>Archive</Dropdown.Item>}
+                        <DeleteProposalButton proposal={proposal} />
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </>
+                )}
+              </div>
+            ) : null}
 
-                    <Dropdown.Toggle title='Actions' variant="" id="dropdown-button-drop-start" />
-                    <Dropdown.Menu>
-                      <Dropdown.Item style={{
-                        borderColor: "#1a365d",
-                      }}
-                        onClick={() => {
-                          setUpdate(false);
-                          setProposalToInsert({
-                            id: proposal.id,
-                            title: proposal.Title,
-                            description: proposal.Description,
-                            expiration: proposal.date,
-                            coSupervisors: proposal.CoSupervisor,
-                            keywords: proposal.Keywords,
-                            degree: {
-                              COD_DEGREE: proposal.Cds
-                            },
-                            teacherID: proposal.teacherID,
-                            date: proposal.date,
-                            requiredKnowledge: proposal.RequiredKnowledge,
-                            notes: proposal.Notes
-                          });
-                          navigateTo(`/add`);
-                        }}>Copy</Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => {
-                          setUpdate(true);
-                          setProposalToInsert({
-                            id: proposal.id,
-                            title: proposal.Title,
-                            description: proposal.Description,
-                            expiration: proposal.date,
-                            coSupervisors: proposal.CoSupervisor,
-                            keywords: proposal.Keywords,
-                            degree: {
-                              COD_DEGREE: proposal.Cds
-                            },
-                            teacherID: proposal.teacherID,
-                            date: proposal.date,
-                            requiredKnowledge: proposal.RequiredKnowledge,
-                            notes: proposal.Notes
-                          });
-                          navigateTo(`/add`);
-                        }}>Update</Dropdown.Item>
-                      {showArchived ? <Dropdown.Item onClick={handleExtract}>Extract</Dropdown.Item> : <Dropdown.Item onClick={handleArchive}>Archive</Dropdown.Item>}
-                      <DeleteProposalButton proposal={proposal} />
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </>
-              )}
-            </div>
           </div>
         </Card.Body>
-        <Card.Footer className="text-muted">Expiration: {proposal.Expiration}</Card.Footer>
+        <Card.Footer className="text-muted">
+          Expiration: {proposal.Expiration}
+          {user.role === 'student' && isExpired() && <span className="expired-label">expired</span>}
+
+        </Card.Footer>
       </Card>
       <Modal show={archived}>
         <Modal.Body>

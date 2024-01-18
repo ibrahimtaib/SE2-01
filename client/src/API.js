@@ -35,6 +35,59 @@ async function getAllProposals() {
   }
 }
 
+async function archiveExpiredProposals() {
+  const response = await fetch(`${URL}proposals/archiveExpiredProposals`);
+
+  // Check if the response is okay
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Error: ${errorData.error || "Unknown error"}`);
+  }
+
+  const proposals = await response.json();
+
+  // Ensure that proposals is an array before mapping
+  if (Array.isArray(proposals)) {
+    return proposals.map(adjustPropertyNames);
+  } else {
+    throw new Error("Invalid response format: Expected an array");
+  }
+}
+
+
+async function archiveProposal(id) {
+  const response = await fetch(`${URL}proposals/archiveProposals/${id}`); // Attendere che la Promise si risolva
+  const proposals = await response.json(); // Attendere che la Promise si risolva
+  if (response.ok) {
+    return proposals.map(adjustPropertyNames);
+  } else {
+    throw proposals;
+  }
+}
+
+async function cancelApplicationsByProposalId(proposalId) {
+  try {
+    const response = await fetch(`${URL}applications/cancel-by-proposal/${proposalId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to cancel applications");
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("An error occurred while canceling applications");
+  }
+}
+
+
 async function getProposalsByTitle(title) {
   const response = await fetch(`${URL}proposals/title/${title}`); // Attendere che la Promise si risolva
   const proposals = await response.json(); // Attendere che la Promise si risolva
@@ -172,6 +225,16 @@ async function getTeacherProposals(teacherId) {
     throw proposals;
   }
 }
+
+async function getCoSupervisorProposals(cosupervisorId) {
+  const response = await fetch(`${URL}proposals/cosupervisorId/${cosupervisorId}`);
+  const proposals = await response.json();
+  if (response.ok) {
+    return proposals.map(adjustPropertyNames);
+  } else {
+    throw proposals;
+  }
+}
 async function filterProposals(data) {
   console.log(data);
   try {
@@ -238,7 +301,7 @@ async function getExamAndStudentById(studentId) {
   }
 }
 
-async function acceptApplication(applicationId) {
+async function acceptApplication(applicationId,proposal) {
   try {
     const acceptResponse = await fetch(
       `${URL}applications/accept-application/${applicationId}`,
@@ -250,11 +313,18 @@ async function acceptApplication(applicationId) {
       }
     );
 
+    
+
     const acceptData = await acceptResponse.json();
 
     if (!acceptResponse.ok) {
       throw new Error(acceptData.error || "Failed to accept application");
     }
+
+    const archivedProposal = await fetch(
+      `${URL}proposals/archiveProposal/${proposal}`,
+    );
+    console.log(archivedProposal);
 
     const proposalIdResponse = await fetch(
       `${URL}applications/get-proposal-id/${applicationId}`
@@ -533,7 +603,6 @@ async function RejectThesisRequestsByTeacher(id){
 //       body: JSON.stringify(newData),
 //     });
 
-//     const data = await response.json();
 
 //     if (response.ok) {
 //       return data;
@@ -549,6 +618,8 @@ async function RejectThesisRequestsByTeacher(id){
 
 const API = {
   getAllProposals,
+  cancelApplicationsByProposalId,
+  archiveExpiredProposals,
   getProposalsByTitle,
   getProposalsByCosupervisor,
   getProposalsBySupervisor,
@@ -572,6 +643,7 @@ const API = {
   getUserInfo,
   getApplicationsByStudentId,
   getTeacherProposals,
+  getCoSupervisorProposals,
   getTeachers,
   getRequestedThesisByStudentId,
   submitNewThesisRequest,

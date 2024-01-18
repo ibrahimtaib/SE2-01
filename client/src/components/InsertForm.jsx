@@ -8,8 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import api, { addPage, addPageUpdate } from "../api/api";
 
 const Types = {
-    experimental: "Experimental",
-    nrd: "Non-research dissertation",
+    research: "Research",
+    experimental: "Abroad",
+    nrd: "Company",
 }
 
 const styles = {
@@ -148,7 +149,7 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
             cds: proposalToInsert.degree.COD_DEGREE,
         }
     })
-    console.log("proposal to insert ", proposalToInsert)
+console.log("proposal to insert ", proposalToInsert)
     const onSubmit = (data) => {
         if (update) {
             addPageUpdate({
@@ -176,6 +177,7 @@ export default function InsertForm({ user, update, proposalToInsert, refetchDyna
                 });
         }
         else {
+            console.log("data ", data);
             addPage({
                 ...data,
                 expiration: new Date(data.expiration).toISOString(),

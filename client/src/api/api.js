@@ -66,6 +66,7 @@ export const logout = async () => {
 };
 
 export const addPageUpdate = async (proposal) => {
+  console.log(proposal)
   try {
     const response = await api.post("/proposals/update", proposal);
     return response.data;
@@ -77,6 +78,20 @@ export const addPageUpdate = async (proposal) => {
 export const sendMail = async (proposalTitle, student, teacher, action) => {
   try {
     const response = await api.post("/notifications/send-email", {
+      proposalTitle,
+      student,
+      teacher,
+      action,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendMailCosup = async (proposalTitle, student, teacher, action) => {
+  try {
+    const response = await api.post("/cosup/send-email/", {
       proposalTitle,
       student,
       teacher,

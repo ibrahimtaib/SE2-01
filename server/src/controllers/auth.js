@@ -1,11 +1,6 @@
 const prisma = require('./prisma');
 
 module.exports = {
-    /**
-     * Check if user is in the database and return a user object to the front-end
-     * @param {string} userID
-     * @returns {Promise<object>} customObject
-     */
     checkUser: (userID) => {
         return new Promise((resolve, reject) => {
             prisma.teacher
@@ -38,11 +33,11 @@ module.exports = {
                             name: `${student.name} ${student.surname}`,
                             role: "student",
                             email: student.email,
-                            cds: student.COD_DEGREE
+                            cds: student.COD_DEGREE,
                         };
                         resolve(customStudentObject);
                     } else {
-                        return prisma.secreatryClerk.findUnique({
+                        return prisma.secretaryClerk.findUnique({
                             where: {
                                 id: userID,
                             },
@@ -59,6 +54,27 @@ module.exports = {
                             email: secretaryClerk.email,
                         };
                         resolve(customSecretaryClerkObject);
+                    } else {
+                        return prisma.coSupervisor.findUnique({
+                            where: {
+                                id: userID,
+                            },
+                            include: {
+                                teacher: true,
+                            },
+                        });
+                    }
+                })
+                .then((coSupervisor) => {
+                    if (coSupervisor) {
+                        const customCoSupervisorObject = {
+                            id: coSupervisor.id,
+                            name: `${coSupervisor.name} ${coSupervisor.surname}`,
+                            role: "coSupervisor",
+                            email: coSupervisor.email,
+                            //teacher: coSupervisor.teacher,
+                        };
+                        resolve(customCoSupervisorObject);
                     } else {
                         throw new Error('User not found');
                     }

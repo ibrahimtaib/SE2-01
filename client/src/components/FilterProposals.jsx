@@ -15,6 +15,7 @@ import API from '../API';
 import ProposalCard from './ProposalCard';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import { sendMail } from '../api/api';
 
 
 function FilterProposals(props) {
@@ -93,6 +94,11 @@ function LeftSide(props) {
                             props.setProposalsList(a)
                             setClickReset(false);
                         })
+                    } else if (props.user.role == "coSupervisor"){
+                        API.getCoSupervisorProposals(props.user.id).then((a) => {
+                            props.setProposalsList(a)
+                            setClickReset(false);
+                        })
                     }
                 } catch (err) {
                     setClickReset(false);
@@ -164,6 +170,19 @@ function LeftSide(props) {
             setFilter(flt);
             setClick(true);
         } else if (props.user && props.user.role === "teacher") {
+            const flt = {
+                title: title,
+                coSupervisor: cosupervisor,
+                level: level,
+                type: type,
+                expiration: date,
+                keywords: keywords,
+                groups: groups,
+                supervisor: props.user.name
+            }
+            setFilter(flt);
+            setClick(true);
+        } else if (props.user && props.user.role === "coSupervisor") {
             const flt = {
                 title: title,
                 coSupervisor: cosupervisor,
@@ -342,15 +361,18 @@ function RightSide(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        props.ProposalsList.forEach((proposal) => {
-            console.log(props.user);
-            console.log(proposal.id);
+        props.ProposalsList.forEach(async (proposal) => {
           const proposalDate = new Date(proposal.date);
           const oneWeekBefore = new Date();
           oneWeekBefore.setDate(oneWeekBefore.getDate() + 7);
+          console.log(proposalDate + ' deve essere uguale a' + oneWeekBefore);
+
+          if(proposalDate <= new Date()){
+            console.log('proposal has expired: ' + proposal.Title)
+          }
     
           if (proposalDate <= oneWeekBefore && props.user.role === "teacher") {
-            toast.info(`Proposal "${proposal.Title}" is expiring in a week!`, {
+            toast.info(`Proposal "${proposal.Title}" is expiring soon!`, {
               position: 'top-right',
               autoClose: 5000, 
               hideProgressBar: false,
@@ -358,10 +380,11 @@ function RightSide(props) {
               pauseOnHover: false,
               draggable: true,
             });
+            await sendMail(proposal.Title, null, proposal.teacher, 'expiration-week');
           }
         });
         
-      }, [props.ProposalsList]);
+      }, []);
     
 
     if (!props.ProposalsList || props.ProposalsList.length === 0) {

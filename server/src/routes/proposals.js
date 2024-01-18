@@ -47,6 +47,27 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/archiveExpiredProposals", async (req, res) => {
+  try {
+    const dueDate = new Date();
+    const updatedProposals = await proposalsController.archiveExpiredProposals(dueDate);
+    res.status(200).json(updatedProposals);
+  } catch (error) {
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
+});
+
+router.get("/archiveProposal/:id", async (req, res) => {
+  try {
+    id = req.params.id;
+    console.log(id);
+    const updatedProposal = await proposalsController.archiveProposal(id);
+    res.status(200).json(updatedProposal);
+  } catch (error) {
+    res.status(500).json({ error: error.message || "Internal Server Error" });
+  }
+});
+
 router.get("/title/:searchString", async (req, res) => {
   const searchString = req.params.searchString;
 
@@ -158,6 +179,16 @@ router.get("/teacher/:teacherId", async (req, res) => {
 
   try {
     const proposals = await proposalsController.getTeacherProposals(teacherId);
+    res.status(200).json(proposals);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/cosupervisor/:cosupervisorId", async (req, res) => {
+  const cosupervisorId = req.params.cosupervisorId;
+  try {
+    const proposals = await proposalsController.getCoSupervisorProposals(cosupervisorId);
     res.status(200).json(proposals);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
