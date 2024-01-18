@@ -15,6 +15,7 @@ COPY . .
 # run prisma generate on src/services/
 RUN cd src/services/ && npx prisma generate
 
+
 # Expose the port the app will run on
 EXPOSE 3001
 

@@ -19,6 +19,7 @@ services:
       - DATABASE_URL=postgresql://ikhan:password@db:5432/ikhan?schema=public&sslmode=prefer
     depends_on:
       - db
+    command: npm start
 
   react-app:
     build: ./client
