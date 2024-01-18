@@ -78,7 +78,7 @@ model Application {
 }
 
 model Proposal {
-  id                Int            @id @default(autoincrement())
+  id                Int           @id @default(autoincrement())
   title             String
   supervisor        String
   keywords          String[]
@@ -91,19 +91,10 @@ model Proposal {
   expiration        DateTime
   level             String
   cds               String
-  archived          Boolean        @default(false)
-  teacher           Teacher        @relation(fields: [supervisor], references: [id])
+  archived          Boolean       @default(false)
+  teacher           Teacher       @relation(fields: [supervisor], references: [id])
   requiredKnowledge String
-  degree            Degree         @relation(fields: [cds], references: [COD_DEGREE])
-}
-
-model CoSupervisor {
-  id         String   @id @unique
-  name       String
-  surname    String
-  email      String
-  teacherId  String?
-  teacher    Teacher? @relation(fields: [teacherId], references: [id])
+  degree            Degree        @relation(fields: [cds], references: [COD_DEGREE])
 }
 
 model CoSupervisor {

@@ -1,11 +1,11 @@
 version: "3.9"
 services:
-  postgress:
+  db:
     image: postgres:latest
     environment:
-      POSTGRES_DB: TMDB
-      POSTGRES_USER: ibrahim
-      POSTGRES_PASSWORD: password
+      - POSTGRES_DB=ikhan
+      - POSTGRES_USER=ikhan
+      - POSTGRES_PASSWORD=password
     ports:
       - "5432:5432"
 
@@ -15,10 +15,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
-    depends_on:
-      - postgress
     environment:
-      - DATABASE_URL=postgresql://ibrahim:password@localhost:5432/TMDB?schema=public&sslmode=prefer
+      - DATABASE_URL=postgresql://ikhan:password@db:5432/ikhan?schema=public&sslmode=prefer
+    depends_on:
+      - db
 
   react-app:
     build: ./client
