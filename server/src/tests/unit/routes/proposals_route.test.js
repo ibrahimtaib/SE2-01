@@ -581,3 +581,71 @@ describe('Proposals Router', () => {
       expect(response.body).toEqual({ error: 'Failed to get proposals' });
     });
   });
+  describe('Proposals Router', () => {
+  
+    it('should archive expired proposals', async () => {
+      // Mock data for the successful case
+      const mockedUpdatedProposals = [/* mocked data for updated proposals */];
+      proposalsController.archiveExpiredProposals.mockResolvedValue(mockedUpdatedProposals);
+  
+      const response = await request(app)
+        .get('/archiveExpiredProposals')
+        .expect('Content-Type', /json/)
+        .expect(200);
+  
+      expect(proposalsController.archiveExpiredProposals).toHaveBeenCalled();
+      expect(response.body).toEqual(mockedUpdatedProposals);
+    });
+  
+    it('should handle archive expired proposals error', async () => {
+      // Mock the controller to simulate an error
+      const mockError = new Error("Internal Server Error");
+      proposalsController.archiveExpiredProposals.mockRejectedValue(mockError);
+  
+      const response = await request(app)
+        .get('/archiveExpiredProposals')
+        .expect('Content-Type', /json/)
+        .expect(500);
+  
+      expect(proposalsController.archiveExpiredProposals).toHaveBeenCalled();
+      expect(response.body).toEqual({ error: "Internal Server Error" });
+    });
+  
+    it('should archive a proposal by ID', async () => {
+      // Mock data for the successful case
+      const proposalId = 1;
+      const mockedUpdatedProposal = {/* mocked data for updated proposal */};
+      proposalsController.archiveProposal.mockResolvedValue(mockedUpdatedProposal);
+    
+      const response = await request(app)
+        .get(`/archiveProposal/${proposalId}`)
+        .expect('Content-Type', /json/)
+        .expect(200);
+    
+      // Convert proposalId to a number before asserting
+      expect(proposalsController.archiveProposal).toHaveBeenCalledWith(parseInt(proposalId, 10));
+      expect(response.body).toEqual(mockedUpdatedProposal);
+    });
+    
+    it('should handle archive proposal by ID error', async () => {
+      // Mock data for the error case
+      const proposalId = 1;
+      const mockError = new Error("Internal Server Error");
+      proposalsController.archiveProposal.mockRejectedValue(mockError);
+    
+      const response = await request(app)
+        .get(`/archiveProposal/${proposalId}`)
+        .expect('Content-Type', /json/)
+        .expect(500);
+    
+      // Convert proposalId to a number before asserting
+      expect(proposalsController.archiveProposal).toHaveBeenCalledWith(parseInt(proposalId, 10));
+      expect(response.body).toEqual({ error: "Internal Server Error" });
+    });
+    
+    
+  });
+
+  
+
+  

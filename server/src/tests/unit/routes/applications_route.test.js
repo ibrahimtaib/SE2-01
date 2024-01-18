@@ -542,7 +542,7 @@ describe('GET /decisions/:studentId', () => {
   });
 });
 
-describe('GET /proposal/:proposalId/student/:studentId', () => {
+/*describe('GET /proposal/:proposalId/student/:studentId', () => {
   it('should get student application for a valid proposal and student id', async () => {
     const proposalId = '123';
     const studentId = '456';
@@ -581,7 +581,7 @@ describe('GET /proposal/:proposalId/student/:studentId', () => {
     expect(response.body).toEqual({ error: 'Invalid proposal id' });
   });
 });
-
+*/
 describe('POST /', () => {
   it('should create an application', async () => {
     // Mock dei dati della richiesta
@@ -691,6 +691,66 @@ describe('GET /clerk/applications', () => {
 
     expect(applicationController.getAllPendingApplications).toHaveBeenCalledWith({});
     expect(response.body).toEqual({  });
+  });
+});
+
+describe('GET /proposal/:proposalId/student/:studentId', () => {
+  it('should get student application for a valid proposal and student id', async () => {
+    const proposalId = '123'; 
+    const studentId = '456'; 
+    const mockApplicationsData = [
+      // ... Insert mock data for successful scenario
+    ];
+
+    // Mock the controller to simulate successful retrieval
+    applicationController.getStudentApplication = jest.fn().mockResolvedValue(mockApplicationsData);
+
+    const response = await request(app)
+      .get(`/proposal/${proposalId}/student/${studentId}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    // Verify that the controller method was called with the correct parameters
+    expect(applicationController.getStudentApplication).toHaveBeenCalledWith({
+      PROPOSAL_ID: +proposalId,
+      STUDENT_ID: studentId,
+    });
+
+    // Verify the response body
+    expect(response.body).toEqual(mockApplicationsData);
+  });
+
+  it('should handle errors when getting student application', async () => {
+    const proposalId = '123'; 
+    const studentId = '456';
+    const mockError = new Error('Failed to get student application');
+
+    // Mock the controller to simulate an error
+    applicationController.getStudentApplication = jest.fn().mockRejectedValue(mockError);
+
+    const response = await request(app)
+      .get(`/proposal/${proposalId}/student/${studentId}`)
+      .expect('Content-Type', /json/)
+      .expect(500);
+
+    // Verify that the controller method was called with the correct parameters
+    expect(applicationController.getStudentApplication).toHaveBeenCalledWith({
+      PROPOSAL_ID: +proposalId,
+      STUDENT_ID: studentId,
+    });
+
+    // Verify the response body for the error case
+    expect(response.body).toEqual({ error: 'Failed to get student application' });
+  });
+
+  it('should handle invalid proposal or student id', async () => {
+    const response = await request(app)
+      .get('/proposal/invalid/student/invalid')
+      .expect('Content-Type', /json/)
+      .expect(400);
+
+    // Verify the response body for the invalid case
+    expect(response.body).toEqual({ error: 'Invalid proposal id' });
   });
 });
 
