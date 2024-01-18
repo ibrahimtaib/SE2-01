@@ -10,7 +10,6 @@ _This work is under the MIT license. We chose this license to ensure that the or
 
 ## Users
 
-**Right now we don't have synchronization between database data, you should access Database Studio and add manually the following users!**
 
 To access the thesis managment page, you should authenticate with the following users (other fields are not important):
 
