@@ -11,8 +11,7 @@ _This work is under the MIT license. We chose this license to ensure that the or
 ## Users
 
 
-To access the thesis managment page, you should authenticate with the following users (other fields are not important):
-
+To access the thesis managment page, you should authenticate with the following users:
 | User ID                        | Email                      | Role    |
 | ------------------------------ | -------------------------- | ------- |
 | auth0&#124;655fd050022f6b2083b391fe | s123456@studenti.polito.it | student |
