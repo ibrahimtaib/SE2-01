@@ -16,3 +16,19 @@
     padding-right: 40px; /* Sostituisci con il valore di padding desiderato */
     padding-top: 20px; /* Sostituisci con il valore di padding desiderato */
   }
+
+  .form-control::placeholder {
+    font-size: 0.8em; /* Modifica la dimensione del testo del suggerimento */
+  }
+
+  .expired-proposal {
+    opacity: 0.7; /* Riduci l'opacità per indicare che la proposta è scaduta */
+    pointer-events: none; /* Disabilita gli eventi del mouse sulla card */
+    /* Altri stili per indicare che la proposta è scaduta */
+  }
+  .expired-label {
+    color: red;
+    font-weight: bold;
+    margin-left: 20px; 
+  }
+    

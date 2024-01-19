@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,27 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//TODO should we add a Group table? 
-//TODO should the COD_* be a string? ex: a course code is usually a combination
-// of letters and numbers
 model Teacher {
-  id             String     @id @unique
+  id             String          @id @unique
   surname        String
   name           String
   email          String
   COD_GROUP      String
   COD_DEPARTMENT String
   Proposal       Proposal[]
+  thesisRequests ThesisRequest[]
+  coSupervised   CoSupervisor[]
+}
+
+model SecretaryClerk {
+  id      String @id @unique
+  surname String
+  name    String
+  email   String
 }
 
 model Degree {
   COD_DEGREE   String     @id
   TITLE_DEGREE String
-  Student      Student[]
-  Proposal     Proposal[]
+  Students     Student[]
+  Proposals    Proposal[]
 }
 
-//TODO This might be useless (irrelevant table)
 model Courses {
   id           Int    @id @default(autoincrement())
   COD_COURSE   Int    @unique
@@ -50,7 +52,7 @@ model Career {
 }
 
 model Student {
-  id              String        @id @unique
+  id              String          @id @unique
   surname         String
   name            String
   gender          String
@@ -59,18 +61,19 @@ model Student {
   COD_DEGREE      String
   ENROLLMENT_YEAR Int
   applications    Application[]
-  degree          Degree        @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
+  degree          Degree          @relation(fields: [COD_DEGREE], references: [COD_DEGREE])
   Career          Career[]
+  thesisRequests  ThesisRequest[]
 }
 
 model Application {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @default(now())
+  id          Int       @id @default(autoincrement())
+  date        DateTime  @default(now())
   status      String
   comment     String?
   STUDENT_ID  String
   PROPOSAL_ID Int?
-  student     Student  @relation(fields: [STUDENT_ID], references: [id])
+  student     Student   @relation(fields: [STUDENT_ID], references: [id])
   proposal    Proposal? @relation(fields: [PROPOSAL_ID], references: [id])
 }
 
@@ -78,8 +81,8 @@ model Proposal {
   id                Int           @id @default(autoincrement())
   title             String
   supervisor        String
-  coSupervisors     String[]
   keywords          String[]
+  coSupervisors     String[]
   applications      Application[]
   type              String
   groups            String[]
@@ -92,4 +95,26 @@ model Proposal {
   teacher           Teacher       @relation(fields: [supervisor], references: [id])
   requiredKnowledge String
   degree            Degree        @relation(fields: [cds], references: [COD_DEGREE])
+}
+
+model CoSupervisor {
+  id        String   @id @unique
+  name      String
+  surname   String
+  email     String
+  teacherId String?
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+}
+
+model ThesisRequest {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  teacherId   String
+  studentId   String
+  type        String
+  notes       String?
+  status      String
+  teacher     Teacher @relation(fields: [teacherId], references: [id])
+  student     Student @relation(fields: [studentId], references: [id])
 }

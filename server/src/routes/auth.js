@@ -10,7 +10,7 @@ const samlStrategy = new saml.Strategy({
     entryPoint: "https://thesis-managment-01.eu.auth0.com/samlp/3FKY3CY8ZT5RpeywuUnpoexaqFdO9dup",
     path: "/login",
     issuer: "urn:thesis-managment-01.eu.auth0.com",
-    acceptedClockSkewMs: 1000, //FIXME: I thought this opened up a possibility of replay attack but it seems it doesn't,it's needed because of unexpected timestamp synchronization errors on the server.
+    acceptedClockSkewMs: 1000000, //FIXME: I thought this opened up a possibility of replay attack but it seems it doesn't,it's needed because of unexpected timestamp synchronization errors on the server.
     cert: "MIIDGzCCAgOgAwIBAgIJMtT8gPeh5+BdMA0GCSqGSIb3DQEBCwUAMCsxKTAnBgNVBAMTIHRoZXNpcy1tYW5hZ21lbnQtMDEuZXUuYXV0aDAuY29tMB4XDTIzMTEyMzIyMDMwNVoXDTM3MDgwMTIyMDMwNVowKzEpMCcGA1UEAxMgdGhlc2lzLW1hbmFnbWVudC0wMS5ldS5hdXRoMC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC4pJWqPcVKeTneVx9D6cbUCllwlS1ySVUEhTz/bPGcPJyB+Oupd6CM8bpw8zpbEUwMdpOgFjKzVbHnBB07uTusX7QZthjlApRuwoScv0M/RUKDCQepaKD/s2USymdxGT4hr/BMfjW/edR2VZPbdlcqWRZIw3NTVXDaIR9tWwo2P+K8sv8KT5OtQpSQagsor/90xGaik2/xcIpYNuWrFva1pJUxyp95PzU+NKV9C5SqSIbnPntrI+F+HYL1diy1JaXmwEKDZzCBnhZZs9mUXddneEVol8pb9VSveAryANguyHzxFgafB4GLKBN/oqihaRA8oN1CJyjWbZGiSkvACQvZAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFLmcU99dv82R5msXbeSz4fEoHlDGMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAWnyOjbALyCmjyWXW+5KE9x+YjNwRiJJDYOy13d5Wcn2pV94w3E8//0iqxH4Z7UGq2bHxvP873bkXQAocLQ1wiNRcUn16wmm6eIM1WeubgVJdsehSpW8/Gpvk/4EvFH8adVQFrjPjiq6QKq0DQA2ptrB7GCK1SU9y9Ty99hxNb/d7uuCynr6NQTknAR8Ap7gyTuhisjq78sJjq93ecSfFMSRVzr6dI6fgT+O9sETCaTkz4nWl8O0fMcVPEjrucIrh60tksFTIYajCYHNybpJCsP/YlV+ybtFm4U2bBGAuyKn1HeUTN9BtbU0Pd1DbZvS/j1al7vFqW+sYzFOCR03GQw==",
 }, function (profile, done) {
     return done(null, profile);

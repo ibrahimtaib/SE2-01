@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=ikhan
+      - POSTGRES_USER=ikhan
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+
+  express-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001" 
+      - "5555:5555" 
+    depends_on:
+      - db
+    env_file:
+      - server/.env
+      
+  react-app:
+    build: ./client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - express-app

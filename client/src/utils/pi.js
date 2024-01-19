@@ -69,4 +69,32 @@ export default {
   clearApiToken: function () {
     token = null;
   },
+  getVirtualClock: async function () {
+    const response = await api.get("/virtualClock");
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  },
+  setVirtualClock: async function (newDate) {
+    const response = await api.post("/virtualClock", { newDate });
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  },
+  resetVirtualClock: async function () {
+    const response = await api.delete("/virtualClock");
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  },
+  archiveExpiredProposals: async function () {
+    const response = await api.get("/archiveExpired");
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  },
 };

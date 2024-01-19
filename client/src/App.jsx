@@ -1,60 +1,74 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useState } from 'react';
 import "react-datetime/css/react-datetime.css";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import API from './API';
+import CallbackLogin from "./components/CallbackLogin";
 import DefaultRoute from './components/DefaultRoute';
 import Header from './components/Header';
 import NavBar from './components/NavBar';
 import ApplyPage from './pages/ApplyPage';
 import InsertPage from './pages/InsertPage';
 import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
 import LogoutPage from "./pages/LogoutPage";
-import CallbackLogin from "./components/CallbackLogin";
+import MainPage from './pages/MainPage';
+import StudentApplicationsPage from './pages/StudentApplicationPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { faker } from '@faker-js/faker';
 
 
 import './App.css';
 
 
-import ApplicationsPage from "./pages/applicationsPage";
-import StudentDetailsPage from "./pages/StudentDetailsPage";
-import { getUserInfo } from "./api/api";
+import api,{ getUserInfo } from "./api/api";
 import LoadingSpinner from "./components/LoadingSpinner";
+import StudentDetailsPage from "./pages/StudentDetailsPage";
+import StudentRequestPage from "./pages/StudentRequestPage";
+import ThesisRequestsPage from "./pages/ThesisRequestsPage";
+import ApplicationsPage from "./pages/applicationsPage";
 
 function App() {
 
   const proposalStateMock = {
-    title: "Thesis Proposal Title",
-    description: "This is a thesis description, it contains information about the thesis. This should be filled with relevant information that the student must know before applying to the thesis proposal.",
+    title: faker.lorem.words(3),
+    description: faker.lorem.paragraph(),
     expiration: "2024-12-31",
-    degree :{
-      COD_DEGREE : "0"
+    degree: {
+      COD_DEGREE: "0"
     },
-    level: "Master", 
+    level: "Master",
     type: "Experimental",
-    coSupervisors: ["s654321@polito.it", "externalsup@polito.it"], 
+    coSupervisors: ["s654321@polito.it", "externalsup@polito.it"],
     requiredKnowledge: "sample",
-    keywords: ["keywordsample"], 
+    keywords: ["keywordsample"],
   };
+
+  const getDegrees = () => {
+    api.get('/degrees')
+        .then((response) => {
+          if (response.data.length > 0) {
+            const firstDegree = response.data[0];
+            proposalStateMock.degree=response.data[0];
+        }
+        }
+        )
+}
+getDegrees();
 
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
-  //This is the proposal to send to InsertForm, it will contain 
+  const [dirty, setDirty] = useState(false);
+  //This is the proposal to send to InsertForm
   const [proposalToInsert, setProposalToInsert] = useState(proposalStateMock);
-
-  //FIXME: This state, we should put it in the correct component to be loaded after login
   const [ProposalsList, setProposalsList] = useState([]);
 
-  const handleErrors = (err) => {
-    let msg = '';
-    if (err.error) msg = err.error;
-    else if (String(err) === "string") msg = String(err);
-    else msg = "Unknown Error";
-    setMessage(msg);
+  const refetchDynamicContentTeacher = async (teacherId) => {
+    API.getTeacherProposals(teacherId).then((proposals) => setProposalsList(proposals));
   }
 
   const resetProposal = () => {
@@ -62,90 +76,117 @@ function App() {
     setUpdate(false);
   }
 
-  //FIXME: This has to be put in MainPage (WE SHOULD CHANGE THAT NAME!)
   useEffect(() => {
-
     const init = async () => {
+
       try {
         const userInfo = await getUserInfo();
         setLoggedIn(true);
         setUser(userInfo);
-        try {
-          const proposals = await API.getAllProposals();
+        if (userInfo && userInfo.role === "teacher") {
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
+          const teacherId = userInfo.id;
+          const proposals = await API.getTeacherProposals(teacherId);
           setProposalsList(proposals);
           setLoading(false);
-        } catch (proposalError) {
-          console.error("Error fetching proposals:", proposalError);
+        } else if (userInfo && userInfo.role === "student") {
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
+          const proposals = await API.getProposalsByCds(userInfo.cds);
+          setProposalsList(proposals);
+          setLoading(false);
+        } else if(userInfo && userInfo.role === "coSupervisor"){
+          API.archiveExpiredProposals().then((expiredProposals) => console.log(expiredProposals));
+          const coSupervisorId = userInfo.email
+          const proposals = await API.getProposalsByCosupervisor(coSupervisorId);
+          setProposalsList(proposals);
+          setLoading(false);
         }
-      } catch (err) {
+        setDirty(false);
+      } catch (error) {
+        console.error("Error in init:", error);
         setLoggedIn(false);
         setUser(null);
         setLoading(false);
-        console.log(err);
       }
     };
     init();
     console.log(proposalToInsert.degree.COD_DEGREE);
-  }, []);
+  }, [loggedIn, update, proposalToInsert.degree.COD_DEGREE, dirty]);
 
-  if (loading) {
+  if (!loggedIn && loading) {
     return (<LoadingSpinner />);
   }
 
   return (
     <BrowserRouter>
-      <Header/>
-      <NavBar user={user} resetProposal={resetProposal} />
       <Routes>
-        <Route path="/login" element={<LoginPage loggedIn={loggedIn} />} />
-        <Route path="/*" element={<DefaultRoute />} />
-        <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
-        <Route
-          path="/"
-          element={
-            loggedIn ? (
-              <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert}/>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/logout"
-          element={
-            loggedIn ? (
-              <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        {user?.role === "student" && (
-          <>
-            <Route path="/students/:id" element={<StudentDetailsPage />} />
-            <Route
-              path="/proposals/:proposalId/apply"
-              element={
-                loggedIn ? (
-                  <ApplyPage user={user} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-          </>
-        )}
-        {user?.role === "teacher" && (
-          <>
-            <Route path="/add" element={<InsertPage user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert}/>} />
-            <Route path="/applications/*" element={<ApplicationsPage user={user} />} />
-            <Route path="/students/:id" element={<StudentDetailsPage />} />
-          </>
-        )}
+        <Route path="/login" element={<LoginPage loggedIn={loggedIn} setLoading={setLoading} />} />
+        <Route path="/" element={<HeaderPage user={user} resetProposal={resetProposal} setDirty={setDirty} />}>
+          <Route path="/*" element={<DefaultRoute />} />
+          <Route path="/idp/profile/SAML2/Redirect" element={<CallbackLogin setUser={setUser} />} />
+          <Route
+            path="/"
+            element={
+              loggedIn ? user?.role === "secretary" ? (
+                <ThesisRequestsPage user={user} />
+              ):(
+                <MainPage user={user} ProposalsList={ProposalsList} setProposalsList={setProposalsList} setUpdate={setUpdate} setProposalToInsert={setProposalToInsert} refetchDynamicContent={refetchDynamicContentTeacher} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/logout"
+            element={
+              loggedIn ? (
+                <LogoutPage setUser={setUser} setLoggedIn={setLoggedIn} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {user?.role === "student" ? (
+            <>
+              <Route path="/student/applications" element={<StudentApplicationsPage user={user} />} />
+              <Route path="/student/requestForm" element={loggedIn ? (<StudentRequestPage user={user} />) : (<Navigate to="/login" />)}></Route>
+              <Route path="/students/:id" element={loggedIn ? (<StudentDetailsPage />) : (
+                <Navigate to="/login" />
+              )} />
+              <Route
+                path="/proposals/:proposalId/apply"
+                element={
+                  loggedIn ? (
+                    <ApplyPage user={user} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
+            </>
+          ):(
+            <>
+              <Route path="/add" element={<InsertPage refetchDynamicContent={refetchDynamicContentTeacher} user={user} loading={loading} update={update} setLoading={setLoading} proposalToInsert={proposalToInsert} />} />
+              <Route path="/applications/*" element={<ApplicationsPage user={user} setDirty={setDirty} />} />
+              <Route path="/students/:id" element={<StudentDetailsPage />} />
+              <Route path="thesis-requests/*" element={<ThesisRequestsPage user={user} />} />
+            </>
+          )}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
 
+}
+
+function HeaderPage({ user, resetProposal, setDirty }) {
+  return (
+    <>
+      <Header />
+      <NavBar user={user} resetProposal={resetProposal} setDirty={setDirty} />
+      <Outlet />
+    </>
+  )
 }
 
 export default App

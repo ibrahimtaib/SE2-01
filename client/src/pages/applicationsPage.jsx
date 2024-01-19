@@ -6,13 +6,15 @@ import ApplicationsList from '../components/BrowseApplications';
 import ProposalDetails from '../components/ProposalDetails';
 
 
-function ApplicationsPage({user}) {
+function ApplicationsPage({user, setDirty}) {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
 
-  const handleAcceptApplication = async (applicationId) => {
+  const handleAcceptApplication = async (applicationId, proposalId) => {
     try {
-      await API.acceptApplication(applicationId);
+      console.log(proposalId);
+      await API.acceptApplication(applicationId, proposalId);
+      setDirty(true);
       const updatedApplications = await API.getApplicationsByTeacherId(user.id);
       setApplications(updatedApplications);
     } catch (error) {
@@ -57,6 +59,7 @@ function ApplicationsPage({user}) {
               setLoading={setLoading}
               onAccept={handleAcceptApplication}
               onReject={handleRejectApplication}
+              user={user}
             />
           }
         />
