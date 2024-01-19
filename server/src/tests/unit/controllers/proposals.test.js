@@ -18,6 +18,8 @@ const {
   getTeacherProposals,
   getApplicationsBySupervisorId,
   updateProposal,
+  archiveProposal,
+  archiveExpiredProposals
 } = require("../../../controllers/proposals.js");
 const proposalsModule = require("../../../controllers/proposals.js");
 const { PrismaClient } = require("@prisma/client");
@@ -33,6 +35,7 @@ jest.mock("../../../controllers/prisma.js", () => ({
     findMany: jest.fn(() => {}),
     findUnique: jest.fn(() => {}),
     update: jest.fn(() => {}),
+    updateMany: jest.fn(() => {}),
   },
   Teacher: {
     findMany: jest.fn(() => {}),
@@ -1626,5 +1629,108 @@ describe('updateProposal function', () => {
         // other properties
       },
     });
+  });
+});
+
+describe("archiveExpiredProposals function", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should resolve with the updated proposals when expiration date is past due", async () => {
+    const dueDate = new Date("2022-01-15");
+
+    const mockedExpiredProposals = [
+      { id: 1, title: "Expired Proposal 1", expiration: new Date("2022-01-10") },
+      { id: 2, title: "Expired Proposal 2", expiration: new Date("2022-01-12") },
+    ];
+
+    prisma.Proposal.updateMany.mockResolvedValueOnce(mockedExpiredProposals);
+
+    const result = await archiveExpiredProposals(dueDate);
+
+    expect(result).toEqual(mockedExpiredProposals);
+    expect(prisma.Proposal.updateMany).toHaveBeenCalledWith({
+      where: {
+        expiration: {
+          lt: dueDate,
+        },
+      },
+      data: {
+        archived: true,
+      },
+    });
+  });
+
+  it("should reject with an error if there is a database error", async () => {
+    const dueDate = new Date("2022-01-15");
+    const mockedError = new Error("Database error");
+
+    prisma.Proposal.updateMany.mockRejectedValueOnce(mockedError);
+
+    try {
+      await archiveExpiredProposals(dueDate);
+    } catch (error) {
+      expect(error).toEqual({
+        error: "An error occurred while archiving expired proposals",
+      });
+      expect(prisma.Proposal.updateMany).toHaveBeenCalledWith({
+        where: {
+          expiration: {
+            lt: dueDate,
+          },
+        },
+        data: {
+          archived: true,
+        },
+      });
+    }
+  });
+});
+
+describe("archiveProposal function", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should resolve with the updated proposal when archiving a single proposal", async () => {
+    const proposalId = "1";
+
+    const mockedUpdatedProposal = { id: 1, title: "Archived Proposal", archived: true };
+
+    prisma.Proposal.update.mockResolvedValueOnce(mockedUpdatedProposal);
+
+    const result = await archiveProposal(proposalId);
+
+    expect(result).toEqual(mockedUpdatedProposal);
+    expect(prisma.Proposal.update).toHaveBeenCalledWith({
+      where: {
+        id: parseInt(proposalId),
+      },
+      data: {
+        archived: true,
+      },
+    });
+  });
+
+  it("should reject with an error if there is a database error", async () => {
+    const proposalId = "1";
+    const mockedError = new Error("Database error");
+
+    prisma.Proposal.update.mockRejectedValueOnce(mockedError);
+
+    try {
+      await archiveProposal(proposalId);
+    } catch (error) {
+      expect(error.message).toEqual("An error occurred while archiving the proposal");
+      expect(prisma.Proposal.update).toHaveBeenCalledWith({
+        where: {
+          id: parseInt(proposalId),
+        },
+        data: {
+          archived: true,
+        },
+      });
+    }
   });
 });

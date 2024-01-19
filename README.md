@@ -1,5 +1,5 @@
-![Coverage](https://img.shields.io/badge/Coverage-81.4%25-green)
-![Total tests](https://img.shields.io/badge/Total%20tests-199-green)
+![Coverage](https://img.shields.io/badge/Coverage-84.81%25-green)
+![Total tests](https://img.shields.io/badge/Total%20tests-204-green)
 
 
 # SE2-01
@@ -10,10 +10,8 @@ _This work is under the MIT license. We chose this license to ensure that the or
 
 ## Users
 
-**Right now we don't have synchronization between database data, you should access Database Studio and add manually the following users!**
 
-To access the thesis managment page, you should authenticate with the following users (other fields are not important):
-
+To access the thesis managment page, you should authenticate with the following users:
 | User ID                        | Email                      | Role    |
 | ------------------------------ | -------------------------- | ------- |
 | auth0&#124;655fd050022f6b2083b391fe | s123456@studenti.polito.it | student |

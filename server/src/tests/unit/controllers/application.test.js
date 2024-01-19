@@ -128,7 +128,7 @@ describe("createApplication function", () => {
     }).catch((res) => {
       expect(res).toEqual({
         status: 400,
-        error: "Student has already applied to this proposal!",
+        error: "Student has already applied to a proposal!",
       });
     });
   });
