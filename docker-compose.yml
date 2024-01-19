@@ -14,13 +14,13 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
-    environment:
-      - DATABASE_URL=postgresql://ikhan:password@db:5432/ikhan?schema=public&sslmode=prefer
+      - "3001:3001" 
+      - "5555:5555" 
     depends_on:
       - db
-    command: npm start
-
+    env_file:
+      - server/.env
+      
   react-app:
     build: ./client
     ports:
