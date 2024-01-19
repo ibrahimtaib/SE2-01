@@ -52,9 +52,9 @@ this is a notification email following your application for the proposal:  ${pro
 after the evaluation of the Mr ${teacher.name} ${teacher.surname} you have been ${action}ed.
 we invite you to check the platform for further details.
 Best Regards,`;
-
-    const fromEmail = "Thesis-Manager@polito.it";
+    
     const toEmail = process.env.EMAIL_RECIEVER;
+    const fromEmail = "Thesis-Manager@polito.it";
 
     const mailOptions = {
         from: fromEmail,

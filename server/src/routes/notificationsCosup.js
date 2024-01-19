@@ -65,9 +65,9 @@ Best Regards,`;
 
     notificationsController.sendMail(mailOptions)
     .then((info)=> {
-        /*console.log("Email sent successfully To:", toEmail)
+        console.log("Email sent successfully To:", toEmail)
         console.log("With Subject:", subject)
-        console.log("And the following text:", emailText)*/
+        console.log("And the following text:", emailText)
         res.status(200).json({message :'Email sent successfully', info: info.response})
     })
     .catch((error)=> {
